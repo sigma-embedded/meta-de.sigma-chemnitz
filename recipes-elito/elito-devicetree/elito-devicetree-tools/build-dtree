@@ -1,0 +1,90 @@
+#! /bin/bash
+
+: ${STAGINGDIR:="@STAGINGDIR@"}
+: ${MACHINCDIR:="@MACHINCDIR@"}
+: ${MACHDATADIR:="@MACHDATADIR@"}
+: ${TFTPBOOT_DIR:="@TFTPBOOT_DIR@"}
+: ${PROJECT_TOPDIR:="@PROJECT_TOPDIR@"}
+: ${KERNEL_DIR:="@KERNEL_DIR@"}
+: ${KERNEL_DTREE_DIR:="@KERNEL_DTREE_DIR@"}
+: ${SOC:="@SOC@"}
+: ${MAKE:=make}
+
+eval set -- `getopt -o 't:o:p:s' --long tftp:outdir:pins:pinflags:silent -- "$@"`
+
+arg_tftp=
+arg_out=.dtb
+arg_pins=
+arg_pinflags=
+arg_makeflags=( --no-print-directory )
+
+
+while true; do
+    a=$1
+    shift
+    case $a in
+      -t|--tftp)	arg_tftp=$1; shift;;
+      -o|--outdir)	arg_out=$1; shift;;
+      -p|--pins)	arg_pins=$1; shift;;
+      -s|--silent)	arg_makeflags+=( -s );;
+      --pinflags)	arg_pinflags=$1; shift;;
+      --)		break;;
+      *)		echo "internal error" >&2; exit 1;;
+    esac
+done
+
+mx6_split_variants() {
+    local dstvar=$1
+    local old_IFS=$IFS
+
+    IFS=:
+    eval set -- $2
+    IFS=$old_IFS
+
+    eval ${dstvar}_module+=$1
+    eval ${dstvar}_soc+=$2
+    eval ${dstvar}_memory+=$3
+}
+
+doit_mx6() {
+  local dts=$1
+  local variant_module variant_soc variant_memory
+
+  mx6_split_variants variant "$2"
+
+  local pinflags=(
+    VPATH="`pwd`:.:${KERNEL_DTREE_DIR}"
+    VARIANTS="$variant_module"
+    SOC_DTREE_PINS_"${variant_module}=i${variant_soc}-pinfunc.h"
+  )
+
+  eval pinflags+="( $arg_pinflags )"
+
+  local dtbflags=(
+    VPATH="`pwd`:.:$MACHINCDIR"
+    VARIANTS="${dts%%.dts}"
+    MACHINE_INCDIR="${MACHINCDIR##$STAGINGDIR}"
+    DTC_CPPFLAGS="-I `pwd`"
+    KERNEL_DIR="${KERNEL_DIR}"
+  )
+
+  local _make=( ${MAKE} "${arg_makeflags[@]}" -C "$arg_out" )
+
+  "${_make[@]}" -f "$MACHDATADIR/mx6-pins.mk"   "${pinflags[@]}"
+  "${_make[@]}" -f "$MACHDATADIR/devicetree.mk" "${dtbflags[@]}"
+}
+
+set -e
+mkdir -p "$arg_out"
+
+eval "doit_$SOC" "$@"
+
+base=${1%%.dts}
+fname=${base##*/}
+
+rm -f "$arg_out/$fname-rev.dts"
+dtc -I dtb -O dts --sort -o "$arg_out/$fname-rev.dts" "$arg_out/$base.dtb"
+chmod a-w "$arg_out/$fname-rev.dts"
+
+test -z "$arg_tftp" || \
+    cat "$arg_out/$base.dtb" > "$TFTPBOOT_DIR/$arg_tftp"
