@@ -2,12 +2,12 @@ SUMMARY = "Converter for FreeScale IOMUx Tool files"
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
 
-_pv     = "0.1.2"
+_pv     = "0.1.3"
 
 PV   = "${_pv}+gitr${SRCPV}"
 PKGV = "${_pv}+gitr${GITPKGV}"
 
-SRCREV = "6a17f421230bc8e173896a0e879bcea1b89fd86c"
+SRCREV = "74f864dfbcb6380ee5cef6c5c9bb345fd91b25f8"
 SRC_URI = "git://github.com/sigma-embedded/fsliomux-conv.git;protocol=https"
 
 inherit gitpkgv
