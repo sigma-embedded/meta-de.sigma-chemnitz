@@ -44,11 +44,11 @@ DEPENDS += "dtc-native ${MACH_DEPENDS}"
 inherit deploy elito-machdata elito-dtree-base
 
 do_compile() {
-    oe_runmake
+    oe_runmake -e
 }
 
 do_install() {
-    oe_runmake install DESTDIR=${D}
+    oe_runmake -e install DESTDIR=${D}
     install -D -p -m 0644 ${WORKDIR}/Makefile ${D}${MACHDATADIR}/devicetree.mk
 }
 
