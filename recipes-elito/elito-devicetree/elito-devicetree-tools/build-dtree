@@ -49,13 +49,19 @@ mx6_split_variants() {
 doit_mx6() {
   local dts=$1
   local variant_module variant_soc variant_memory
+  local pinfn
 
   mx6_split_variants variant "$2"
+
+  case $variant_soc in
+    mx6s)	pinfn=mx6dl ;;
+    *)		pinfn=$variant_soc ;;
+  esac
 
   local pinflags=(
     VPATH="`pwd`:.:${KERNEL_DTREE_DIR}"
     VARIANTS="$variant_module"
-    SOC_DTREE_PINS_"${variant_module}=i${variant_soc}-pinfunc.h"
+    SOC_DTREE_PINS_"${variant_module}=i${pinfn}-pinfunc.h"
   )
 
   eval pinflags+="( $arg_pinflags )"
