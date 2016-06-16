@@ -1,0 +1,28 @@
+#! /bin/sh
+
+case "$1" in
+  start)
+	echo -n "Starting syslogd/klogd: "
+	start-stop-daemon -S -b -n syslogd -a /sbin/syslogd -- -n
+	start-stop-daemon -S -b -n klogd -a /sbin/klogd -- -n
+	dmesg -n 2
+	echo "done"
+	;;
+
+  stop)
+	echo -n "Stopping syslogd/klogd: "
+	start-stop-daemon -K -n syslogd
+	start-stop-daemon -K -n klogd
+	echo "done"
+	;;
+
+  restart)
+	$0 stop
+	$0 start
+	;;
+
+  *)
+	echo "Usage: syslog { start | stop | restart }" >&2
+	exit 1
+	;;
+esac

@@ -1,0 +1,24 @@
+#! /bin/sh
+
+BLOCKDEVS=
+STREAM_NAME=
+BLOCKDEV_SETTLEDOWN_TM=3
+
+. /etc/elito-rescue.conf
+
+test -n "$BLOCKDEVS" || exit 0
+
+case "$1" in
+  start)
+	success=false
+
+	echo -n "Waiting for block devices to settle down..."
+	sleep $BLOCKDEV_SETTLEDOWN_TM
+	echo ' done'
+
+	for i in $BLOCKDEVS; do
+	    echo -n "Looking for bootstream on $i'... "
+	    /usr/bin/rescue-blockdevice "$i" $STREAM_NAME && success=true
+	    $success && break
+	done
+esac

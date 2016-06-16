@@ -1,0 +1,15 @@
+#! /bin/sh
+
+case "$1" in
+  start)
+
+    echo -n "Scanning for cold-plugged MTD devices..."
+
+    for i in /sys/class/mtd/*/uevent; do
+        test -e "$i" || continue
+	echo add > "$i"
+    done
+
+    echo " done"
+    ;;
+esac

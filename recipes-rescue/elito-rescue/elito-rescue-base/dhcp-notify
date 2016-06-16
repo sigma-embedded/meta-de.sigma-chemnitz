@@ -1,0 +1,20 @@
+#! /bin/sh
+
+notify() {
+  if test -e /dev/fb0; then
+      tee /dev/tty1 > /dev/console
+  else
+      cat > /dev/console
+  fi
+}
+
+case "$1" in
+     renew|bound)
+	notify <<EOF
+
+****
+****  Got IP address $ip ($interface)
+****
+
+EOF
+esac

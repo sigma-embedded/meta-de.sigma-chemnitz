@@ -1,0 +1,15 @@
+#! /bin/sh
+
+case "$1" in
+  start)
+
+    echo -n "Scanning for cold-plugged UBI volumes..."
+
+    for i in /sys/class/ubi/*/uevent; do
+        test -e "$i" || continue
+	echo add > "$i"
+    done
+
+    echo " done"
+    ;;
+esac

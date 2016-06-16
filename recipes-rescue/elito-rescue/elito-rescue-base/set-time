@@ -1,0 +1,4 @@
+#! /bin/sh
+
+test "$stratum" -lt 10 || exit 0
+/sbin/hwclock --systohc

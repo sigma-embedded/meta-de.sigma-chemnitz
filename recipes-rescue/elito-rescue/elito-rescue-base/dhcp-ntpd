@@ -1,0 +1,19 @@
+#! /bin/sh
+
+set -x
+exec 2>/tmp/dhc.log
+
+case "$1" in
+     renew|bound)
+	test -n "$ntpsrv" || exit 0
+
+	killall ntpd 2>/dev/null || :
+
+	set -- -S /usr/bin/rescue-set-time
+	for i in $ntpsrv; do
+	    set -- "$@" -p "$i"
+	done
+
+	exec /usr/sbin/ntpd "$@"
+	;;
+esac
