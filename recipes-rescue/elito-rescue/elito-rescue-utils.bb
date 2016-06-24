@@ -4,9 +4,9 @@ DEPENDS = "libccgi"
 
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
 
-_pv     = "0.2.10"
+_pv     = "0.2.11"
 
-SRCREV  = "6a9b5f324053f19f661c93a598ae4367d62aa48e"
+SRCREV  = "accc3036d7780584a3bcd3295d4cd77e474d0848"
 SRC_URI = "${ELITO_PUBLIC_GIT_REPO}/elito-rescue-utils.git"
 
 PV   = "${_pv}+gitr${SRCPV}"
