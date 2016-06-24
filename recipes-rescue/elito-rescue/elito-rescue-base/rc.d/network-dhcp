@@ -7,9 +7,8 @@ case "$1" in
 	/sbin/ip addr add 127.0.0.1/8 dev lo
 	start-stop-daemon -S -b -x udhcpc -- -i eth0
 	echo "done"
-	/sbin/ifconfig
-
 	;;
+
   stop)
 	echo -n "Stopping networking: "
 	start-stop-daemon -K udhcp
