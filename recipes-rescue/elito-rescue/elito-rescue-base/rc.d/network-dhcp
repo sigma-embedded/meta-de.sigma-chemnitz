@@ -4,7 +4,7 @@
 case "$1" in
   start)
 	echo -n "Starting networking: "
-	/sbin/ip addr add 127.0.0.1/8 dev lo
+	/sbin/ifconfig lo 127.0.0.1 up
 	start-stop-daemon -S -b -x udhcpc -- -i eth0
 	echo "done"
 	;;
