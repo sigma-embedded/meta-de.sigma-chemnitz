@@ -1,7 +1,8 @@
+__SKIPPED := "1"
+
 require recipes-bsp/barebox/barebox.inc
 
-GIT_URL = "git://git.phytec.de/${PN}"
-SRC_URI = "${GIT_URL};branch=${BRANCH}"
+GIT_URL = "git://git.phytec.de/${PN};branch=${BRANCH}"
 
 S = "${WORKDIR}/git"
 
