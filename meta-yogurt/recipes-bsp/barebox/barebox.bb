@@ -1,4 +1,4 @@
-require common/recipes-bsp/barebox/barebox.inc
+require recipes-bsp/barebox/barebox.inc
 
 GIT_URL = "git://git.phytec.de/${PN}"
 SRC_URI = "${GIT_URL};branch=${BRANCH}"
