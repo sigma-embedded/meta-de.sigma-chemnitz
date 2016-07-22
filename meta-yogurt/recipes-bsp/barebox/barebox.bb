@@ -8,6 +8,8 @@ S = "${WORKDIR}/git"
 
 BAREBOX_LOCALVERSION = "-${BSP_VERSION}"
 
+MACHINE_VARIANTS[type] = "list"
+
 MAP ?= ""
 MAP[type] = "list"
 
