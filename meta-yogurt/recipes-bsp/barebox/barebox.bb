@@ -1,6 +1,10 @@
 __SKIPPED := "1"
 
-require recipes-bsp/barebox/barebox.inc
+_orig_path:= "${BASEPATH_sigma}/../meta-phytec/recipes-bsp/barebox"
+
+require ${_orig_path}/barebox.inc
+
+FILESEXTRAPATHS .= ":${_orig_path}/barebox"
 
 GIT_URL = "git://git.phytec.de/${PN};branch=${BRANCH}"
 
