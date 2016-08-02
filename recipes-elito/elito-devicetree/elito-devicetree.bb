@@ -24,7 +24,7 @@ SRC_URI = "\
 
 INHIBIT_DEFAULT_DEPS = "1"
 EXTRA_OEMAKE = "\
-  -f ${WORKDIR}/Makefile \
+  -f ${S}/Makefile \
   MACHINE=${MACHINE} \
   prefix=${prefix} datadir=${datadir} \
   pkgdatadir=${MACHDATADIR} \
@@ -44,6 +44,9 @@ MACH_DEPENDS_mx6 = "${@bb.utils.contains('DISTRO_FEATURES', 'fsl-iomux', \
 
 DEPENDS += "dtc-native ${MACH_DEPENDS} virtual/${TARGET_PREFIX}gcc"
 
+B := "${S}"
+S  = "${WORKDIR}"
+
 inherit deploy elito-machdata elito-dtree-base
 
 do_compile[depends] += "virtual/kernel:do_patch"
@@ -53,7 +56,7 @@ do_compile() {
 
 do_install() {
     oe_runmake -e install DESTDIR=${D}
-    install -D -p -m 0644 ${WORKDIR}/Makefile ${D}${MACHDATADIR}/devicetree.mk
+    install -D -p -m 0644 ${S}/Makefile ${D}${MACHDATADIR}/devicetree.mk
 }
 
 do_deploy() {
