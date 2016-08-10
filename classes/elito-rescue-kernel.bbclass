@@ -17,6 +17,6 @@ do_install_append() {
 }
 
 cml1_do_configure_prepend() {
-	kconfig_set CMDLINE \"console=${KERNEL_CONSOLE},115200n8 quiet\"
+	kconfig_set CMDLINE "\"console=${KERNEL_CONSOLE},115200n8 quiet\""
 	kconfig_set INITRAMFS_SOURCE \"${DEPLOY_DIR_IMAGE}/rescue-image-${MACHINE}.cpio.xz\"
 }
