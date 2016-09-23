@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293
 MACHDEPS = ""
 MACHDEPS_mx6 = "fsliomux-conv mx6-pins"
 
-DEPENDS += "dtc-native elito-devicetree ${MACHDEPS}"
+DEPENDS += "dtc-native elito-devicetree ${MACHDEPS} virtual/${TARGET_PREFIX}gcc"
 
 inherit elito-machdata
 
