@@ -27,7 +27,7 @@ do_configure() {
 	-e 's!@PROJECT_TOPDIR@!${PROJECT_TOPDIR}!g' \
 	-e 's!@KERNEL_DIR@!${STAGING_KERNEL_DIR}!g' \
 	-e 's!@KERNEL_DTREE_DIR@!${KERNEL_DTREE_DIR}!g' \
-	-e 's!@SOC@!${@(d.getVar("SOC_FAMILY") or "").split(":")[0]}!g' \
+	-e 's!@SOC@!${@(d.getVar("SOC_FAMILY", True) or "").split(":")[0]}!g' \
 	${WORKDIR}/build-dtree > build-dtree
 
     touch -r ${WORKDIR}/build-dtree build-dtree || :
