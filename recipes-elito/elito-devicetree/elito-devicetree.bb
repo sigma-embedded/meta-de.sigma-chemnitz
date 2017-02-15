@@ -46,6 +46,7 @@ DEPENDS += "dtc-native ${MACH_DEPENDS} virtual/${TARGET_PREFIX}gcc"
 
 inherit deploy elito-machdata elito-dtree-base
 
+do_compile[depends] += "virtual/kernel:do_patch"
 do_compile() {
     oe_runmake -e
 }
