@@ -45,4 +45,6 @@ do_install_pn-${PN}() {
     install -D -p -m 0755 build-dtree ${D}${bindir}/elito-build-dtree
 }
 
+do_build[depends] += "virtual/kernel:do_patch"
+
 RDEPENDS_${PN} += "bash"
