@@ -7,6 +7,7 @@
 : ${PROJECT_TOPDIR:="@PROJECT_TOPDIR@"}
 : ${KERNEL_DIR:="@KERNEL_DIR@"}
 : ${KERNEL_DTREE_DIR:="@KERNEL_DTREE_DIR@"}
+: ${PKGDATA_DIR="@PKGDATA_DIR@"}
 : ${SOC:="@SOC@"}
 : ${MAKE:=make}
 
@@ -80,7 +81,7 @@ doit_mx6() {
 
   $opt_nopins || \
     "${_make[@]}" -f "$MACHDATADIR/mx6-pins.mk"   "${pinflags[@]}"
-  "${_make[@]}" -f "$MACHDATADIR/devicetree.mk" "${dtbflags[@]}"
+  "${_make[@]}" -f "${PKGDATA_DIR}/devicetree.mk" "${dtbflags[@]}"
 }
 
 set -e

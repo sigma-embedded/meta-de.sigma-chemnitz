@@ -17,14 +17,14 @@ MACHINE_DTS_NAME[type] = "list"
 
 SRC_URI[vardeps] += "MACHINE_DTS_NAME"
 SRC_URI = "\
-  file://Makefile \
   ${@' '.join(map(lambda x: 'file://%s.dts' % x, \
                   oe.data.typed_value('MACHINE_DTS_NAME', d)))} \
 "
 
 INHIBIT_DEFAULT_DEPS = "1"
 EXTRA_OEMAKE = "\
-  -f ${S}/Makefile \
+  -f ${STAGING_DIR_NATIVE}/${datadir}/elito-devicetree-tools/devicetree.mk \
+  abs_top_srcdir='${S}' \
   MACHINE=${MACHINE} \
   prefix=${prefix} datadir=${datadir} \
   pkgdatadir=${MACHDATADIR} \
@@ -43,6 +43,7 @@ MACH_DEPENDS_mx6 = "${@bb.utils.contains('DISTRO_FEATURES', 'fsl-iomux', \
                      'mx6-pins', '', d)}"
 
 DEPENDS += "dtc-native ${MACH_DEPENDS} virtual/${TARGET_PREFIX}gcc"
+DEPENDS += "elito-devicetree-tools-cross-${TARGET_ARCH}"
 
 B := "${S}"
 S  = "${WORKDIR}"
@@ -56,7 +57,6 @@ do_compile() {
 
 do_install() {
     oe_runmake -e install DESTDIR=${D}
-    install -D -p -m 0644 ${S}/Makefile ${D}${MACHDATADIR}/devicetree.mk
 }
 
 do_deploy() {
