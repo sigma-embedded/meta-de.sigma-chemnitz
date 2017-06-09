@@ -22,6 +22,13 @@ SRC_URI = "\
 KERNEL_DTREE_DIR     = "${STAGING_KERNEL_DIR}"
 KERNEL_DTREE_DIR_arm = "${STAGING_KERNEL_DIR}/arch/arm/boot/dts"
 
+python () {
+    override = d.getVar("CLASSOVERRIDE", True) or ""
+    if override == "class-cross":
+        d.appendVar("PN", "-${TARGET_ARCH}")
+        d.setVar("SPECIAL_PKGSUFFIX", "-cross-${TARGET_ARCH}")
+}
+
 B := "${S}"
 S  = "${WORKDIR}"
 
@@ -45,9 +52,9 @@ do_configure() {
     touch -r ${S}/build-dtree build-dtree || :
 }
 
-# hack; use the _pn-${PN} override because do_install() from BBCLASSEXTEND
-# seems to win else
-do_install_pn-${PN}() {
+# hack; use the override because do_install() from BBCLASSEXTEND seems
+# to win else
+do_install_forcevariable() {
     install -D -p -m 0755 build-dtree ${D}${bindir}/elito-build-dtree
     install -D -p -m 0644 ${WORKDIR}/devicetree.mk ${D}${pkgdatadir}/devicetree.mk
 }
