@@ -4,9 +4,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293
 
 MACHDEPS = ""
 MACHDEPS_mx6 = "\
-  fsliomux-conv \
   ${@bb.utils.contains('DISTRO_FEATURES', 'fsl-iomux', \
-                      'mx6-pins', '', d)} \
+                       'fsliomux-conv mx6-pins', '', d)} \
 "
 
 DEPENDS += "dtc-native elito-devicetree ${MACHDEPS}"
