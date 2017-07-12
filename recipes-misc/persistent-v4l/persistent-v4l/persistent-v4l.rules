@@ -1,0 +1,20 @@
+ACTION=="remove",         GOTO="persistent_v4l_end"
+SUBSYSTEM!="video4linux", GOTO="persistent_v4l_end"
+ENV{MAJOR}=="",           GOTO="persistent_v4l_end"
+ATTR{name}=="",		  GOTO="persistent_v4l_end"
+
+# this requires 60-persistent-v4l.rules to be run
+#
+# input and output ports of mem2mem v4l devices are having the same
+# name and can not be distinguished hence; ignore them for now
+ATTR{name}=="imx-ipuv3-scale", GOTO="persistent_v4l_ipuv3_scale"
+
+ATTR{name}!="", SYMLINK+="v4l/by-name/$attr{name}"
+GOTO="persistent_v4l_end"
+
+
+LABEL="persistent_v4l_ipuv3_scale"
+DEVPATH=="*/2400000.ipu/*", SYMLINK+="v4l/by-name/$attr{name}.ipu0"
+DEVPATH=="*/2800000.ipu/*", SYMLINK+="v4l/by-name/$attr{name}.ipu1"
+
+LABEL="persistent_v4l_end"
