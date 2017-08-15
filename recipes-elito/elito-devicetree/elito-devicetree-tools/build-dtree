@@ -84,6 +84,25 @@ doit_mx6() {
   "${_make[@]}" -f "${PKGDATA_DIR}/devicetree.mk" "${dtbflags[@]}"
 }
 
+doit_generic() {
+  local dts=$1
+  local _make=(
+    ${MAKE} -C "$arg_out"
+    "${arg_makeflags[@]}"
+  )
+  local dtbflags=(
+    VPATH="`pwd`:.:$MACHINCDIR"
+    VARIANTS="${dts%%.dts}"
+    MACHINE_INCDIR="${MACHINCDIR##$STAGINGDIR}"
+    DTC_CPPFLAGS="-I `pwd`"
+    KERNEL_DIR="${KERNEL_DIR}"
+    DTC_CPPFLAGS="-I `pwd`"
+    KERNEL_DIR="${KERNEL_DIR}"
+  )
+
+  "${_make[@]}" -f "${PKGDATA_DIR}/devicetree.mk" "${dtbflags[@]}"
+}
+
 set -e
 mkdir -p "$arg_out"
 
