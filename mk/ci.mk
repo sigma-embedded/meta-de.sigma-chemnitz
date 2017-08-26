@@ -13,11 +13,14 @@ ifeq (${BUILDMODE},ci)
 override BUILDMODE = .ci
 T ?= image
 
-.ci-deploy:
+..ci-deploy-ln:
 	ln $S/images/*/* $D/
 
-.ci-deploy-sdk:
+..ci-deploy-sdk-ln:
 	ln $S/sdk/* $D/
+
+.ci-deploy:	..ci-deploy-ln
+.ci-deploy-sdk:	..ci-deploy-sdk-ln
 
 .ci-build:	.ci-prepare
 	$(MAKE) $T
