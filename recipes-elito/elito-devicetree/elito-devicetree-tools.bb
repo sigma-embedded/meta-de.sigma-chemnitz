@@ -8,7 +8,7 @@ MACHDEPS_mx6 = "\
                        'fsliomux-conv mx6-pins', '', d)} \
 "
 
-DEPENDS += "dtc-native ${MACHDEPS}"
+DEPENDS += "dtc-native emit-buildvars ${MACHDEPS}"
 
 inherit elito-machdata
 
