@@ -53,8 +53,6 @@ DEPLOY_DIR_BUILDVARS = "${DEPLOY_DIR}/buildvars/${MACHINE}"
 
 SSTATETASKS += "do_emit_buildvars"
 
-inherit deploy
-
 do_emit_buildvars[vardeps] = "BUILDVARS_EXPORT ${BUILDVARS_EXPORT}"
 do_emit_buildvars[dirs] = "${BUILDVARSDIR}"
 do_emit_buildvars[sstate-inputdirs] = "${BUILDVARSDIR}"
