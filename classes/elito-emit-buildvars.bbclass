@@ -1,39 +1,39 @@
 BUILDVARS_PREFIX ?= "BUILDVAR_"
 
 BUILDVARS_EXPORT = "\
-        BUILD_AR \
+	BUILD_AR \
 	BUILD_CC \
 	BUILD_CFLAGS \
-        BUILD_CCLD \
-        BUILD_CPP \
-        BUILD_CPPFLAGS \
+	BUILD_CCLD \
+	BUILD_CPP \
+	BUILD_CPPFLAGS \
 	BUILD_CXX \
 	BUILD_CXXFLAGS \
-        BUILD_LD \
+	BUILD_LD \
 	BUILD_LDFLAGS \
-        BUILD_NM \
-        BUILD_RANLIB \
-        BUILD_STRIP \
+	BUILD_NM \
+	BUILD_RANLIB \
+	BUILD_STRIP \
 \
-        AR \
+	AR \
 	CC \
 	CFLAGS \
-        CCLD \
-        CPP \
-        CPPFLAGS \
+	CCLD \
+	CPP \
+	CPPFLAGS \
 	CXX \
 	CXXFLAGS \
-        LD \
+	LD \
 	LDFLAGS \
-        NM \
-        RANLIB \
-        STRIP \
+	NM \
+	RANLIB \
+	STRIP \
 \
-        CCACHE \
-        CCACHE_DIR \
+	CCACHE \
+	CCACHE_DIR \
 \
-        EXTRA_OEMAKE \
-        EXTRA_OECONF \
+	EXTRA_OEMAKE \
+	EXTRA_OECONF \
 \
 	HOST_PREFIX \
 	TARGET_PREFIX \
@@ -45,7 +45,7 @@ BUILDVARS_EXPORT = "\
 	STAGING_DIR_TARGET \
 	TMPDIR \
 	TOOLCHAIN_OPTIONS \
-        WORKDIR \
+	WORKDIR \
 "
 
 BUILDVARSDIR = "${WORKDIR}/buildvars-${PN}"
