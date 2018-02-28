@@ -205,7 +205,7 @@ python do_emit_buildvars() {
     if not oe.data.typed_value('BUILDVARS_OMIT_FOOTER', d):
         res.extend(['',
                     'ifdef _BUILDVAR_STYLE',
-                    'include ${BUILDVARS_BUILDVARS_SCRIPT_DIR}/${_BUILDVAR_STYLE}.mk',
+                    'include ${%sBUILDVARS_SCRIPT_DIR}/${_BUILDVAR_STYLE}.mk' % prefix,
                     'endif'])
 
     fname = d.expand("${BUILDVARSDIR}/${PN}.mk")
