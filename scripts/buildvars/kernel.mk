@@ -1,0 +1,21 @@
+include ${BUILDVAR_BUILDVARS_SCRIPT_DIR}/_generic_.mk
+
+INSTALL_MOD_PATH ?= ${BUILDVAR_WORKDIR}/root
+
+KERNEL_ARGS= \
+	ARCH="${BUILDVAR_ARCH}" \
+	CC="${BUILDVAR_KERNEL_CC}" \
+	LD="${BUILDVAR_KERNEL_LD}" \
+	AR="${BUILDVAR_KERNEL_AR}" \
+	CROSS_COMPILE="${BUILDVAR_CROSS_COMPILE}" \
+	INSTALL_MOD_PATH='${INSTALL_MOD_PATH}' \
+
+%:
+	${MAKE} ${KERNEL_ARGS} $@
+
+.generic-build:
+	${MAKE} ${KERNEL_ARGS}
+
+.modules_install:.%:	modules
+	rm -rf "${INSTALL_MOD_PATH}"
+	${MAKE} ${KERNEL_ARGS} $*
