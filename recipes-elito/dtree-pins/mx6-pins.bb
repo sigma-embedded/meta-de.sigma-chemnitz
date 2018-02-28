@@ -5,10 +5,6 @@ DESCRIPTION  = "${MACHINE} pin setup"
 LICENSE      = "GPLv3"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
 
-def get_iomux_files(d):
-    return ' '.join(map(lambda x: 'file://%s-iomux.xml' % x.split(':')[0],
-                        oe.data.typed_value('MACHINE_VARIANTS', d)))
-
 def get_pin_funcs(soc):
     return { 'mx6q'     : 'imx6q-pinfunc.h',
              'mx6dl'    : 'imx6dl-pinfunc.h',
@@ -16,13 +12,10 @@ def get_pin_funcs(soc):
              'mx6sl'    : 'imx6sl-pinfunc.h' }[soc]
 
 def get_makecmd(d):
-    variants = oe.data.typed_value('MACHINE_VARIANTS', d)
-    targets = []
-    vars = []
-    for v in variants:
-        (board, soc, mem) = v.split(':')
-        targets.append(board)
-        vars.append('SOC_DTREE_PINS_%s=%s' % (board, get_pin_funcs(soc)))
+    vars = ["SOC_DTREE_PINS_${MACHINE}=%s" %
+            get_pin_funcs(d.getVar('MACHINE_SOC', True) or "mx6q")]
+
+    targets = ['${MACHINE}']
 
     console = (d.getVar('SERIAL_CONSOLE', True) or "").split()
     uart = None
@@ -39,15 +32,14 @@ def get_makecmd(d):
 
 DEPENDS += "fsliomux-conv-native virtual/kernel"
 
-SRC_URI[vardeps] += "MACHINE_VARIANTS"
 SRC_URI = "\
   file://Makefile \
-  ${@get_iomux_files(d)} \
+  file://${MACHINE}-iomux.xml \
 "
 
 INHIBIT_DEFAULT_DEPS = "1"
 
-EXTRA_OEMAKE[vardeps] += "MACHINE_VARIANTS SERIAL_CONSOLE"
+EXTRA_OEMAKE[vardeps] += "SERIAL_CONSOLE"
 EXTRA_OEMAKE = "\
   -f ${WORKDIR}/Makefile \
   MACHINE=${MACHINE} \
