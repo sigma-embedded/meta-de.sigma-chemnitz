@@ -4,15 +4,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-def get_dts_files(d):
-    return ' '.join(map(lambda x: '%s' % x.split(':')[0],
-                        oe.data.typed_value('MACHINE_VARIANTS', d)))
-
-_machine_dts_name[vardeps] += "MACHINE_VARIANTS"
-_machine_dts_name     = "${MACHINE}"
-_machine_dts_name_mx6 = "${@get_dts_files(d)}"
-
-MACHINE_DTS_NAME ?= "${_machine_dts_name}"
+MACHINE_DTS_NAME ?= "${MACHINE}"
 MACHINE_DTS_NAME[type] = "list"
 
 SRC_URI[vardeps] += "MACHINE_DTS_NAME"
