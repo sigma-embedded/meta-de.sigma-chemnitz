@@ -187,8 +187,8 @@ def _gen_emitbuildvars_value(d):
         res += '\0'
     return res
 
-do_emit_buildvars[vardeps] += "BUILDVARS_EXPORT BUILDVARS_OMIT_FOOTER \
-  BUILDVARS_FOOTER ${BUILDVARS_EXPORT}"
+do_emit_buildvars[vardeps] += "BUILDVARS_EXPORT ${BUILDVARS_EXPORT} \
+  BUILDVARS_OMIT_FOOTER BUILDVARS_FOOTER"
 do_emit_buildvars[vardepvalue] += "${@_gen_emitbuildvars_value(d)}"
 do_emit_buildvars[dirs] = "${BUILDVARSDIR}"
 do_emit_buildvars[sstate-inputdirs] = "${BUILDVARSDIR}"
