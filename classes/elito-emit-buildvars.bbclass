@@ -99,6 +99,7 @@ BUILDVARS_EXPORT = "\
 	TOOLCHAIN_OPTIONS \
 	WORKDIR \
 	?BUILDVARS_SCRIPT_DIR \
+	?BUILDVARS_DEPLOY_DIR \
 "
 BUILDVARS_EXPORT[type] = "list"
 BUILDVARS_EXPORT[doc] = "A list of variables which shall be exported. \
