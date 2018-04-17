@@ -1,0 +1,122 @@
+From 57271217aaa8228b895b80d00147a29ce83f161c Mon Sep 17 00:00:00 2001
+From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+Date: Tue, 14 Oct 2014 15:23:44 +0200
+Subject: [PATCH] added SendClientId option to disable sending of dhcp option
+ 61
+
+Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+
+Conflicts:
+	src/network/networkd-network.c
+---
+ src/libsystemd-network/sd-dhcp-client.c  | 12 +++++++++++-
+ src/network/networkd-dhcp4.c             |  5 +++++
+ src/network/networkd-network-gperf.gperf |  1 +
+ src/network/networkd-network.c           |  1 +
+ src/network/networkd-network.h           |  1 +
+ src/systemd/sd-dhcp-client.h             |  1 +
+ 6 files changed, 20 insertions(+), 1 deletion(-)
+
+Index: git/src/libsystemd-network/sd-dhcp-client.c
+===================================================================
+--- git.orig/src/libsystemd-network/sd-dhcp-client.c
++++ git/src/libsystemd-network/sd-dhcp-client.c
+@@ -59,6 +59,7 @@ struct sd_dhcp_client {
+         union sockaddr_union link;
+         sd_event_source *receive_message;
+         bool request_broadcast;
++        bool skip_client_id;
+         uint8_t *req_opts;
+         size_t req_opts_allocated;
+         size_t req_opts_size;
+@@ -149,6 +150,15 @@ int sd_dhcp_client_set_request_broadcast
+         return 0;
+ }
+ 
++int sd_dhcp_client_set_send_client_id(sd_dhcp_client *client, int send)
++{
++        assert_return(client, -EINVAL);
++
++        client->skip_client_id = !send;
++
++        return 0;
++}
++
+ int sd_dhcp_client_set_request_option(sd_dhcp_client *client, uint8_t option) {
+         size_t i;
+ 
+@@ -553,7 +563,7 @@ static int client_message_init(
+                 memcpy(&packet->dhcp.chaddr, &client->mac_addr, ETH_ALEN);
+ 
+         /* If no client identifier exists, construct an RFC 4361-compliant one */
+-        if (client->client_id_len == 0) {
++        if (client->client_id_len == 0 && !client->skip_client_id) {
+                 size_t duid_len;
+ 
+                 client->client_id.type = 255;
+Index: git/src/network/networkd-dhcp4.c
+===================================================================
+--- git.orig/src/network/networkd-dhcp4.c
++++ git/src/network/networkd-dhcp4.c
+@@ -588,6 +588,11 @@ int dhcp4_configure(Link *link) {
+         if (r < 0)
+                 return r;
+ 
++        r = sd_dhcp_client_set_send_client_id(link->dhcp_client,
++                                              link->network->dhcp_send_client_id);
++        if (r < 0)
++                return r;
++
+         r = sd_dhcp_client_set_mac(link->dhcp_client,
+                                    (const uint8_t *) &link->mac,
+                                    sizeof (link->mac), ARPHRD_ETHER);
+Index: git/src/network/networkd-network-gperf.gperf
+===================================================================
+--- git.orig/src/network/networkd-network-gperf.gperf
++++ git/src/network/networkd-network-gperf.gperf
+@@ -93,6 +93,7 @@ Route.GatewayOnlink,
+ Route.IPv6Preference,                   config_parse_ipv6_route_preference,             0,                             0
+ Route.Protocol,                         config_parse_route_protocol,                    0,                             0
+ DHCP.ClientIdentifier,                  config_parse_dhcp_client_identifier,            0,                             offsetof(Network, dhcp_client_identifier)
++DHCP.SendClientId,                      config_parse_bool,                              0,                             offsetof(Network, dhcp_send_client_id)
+ DHCP.UseDNS,                            config_parse_bool,                              0,                             offsetof(Network, dhcp_use_dns)
+ DHCP.UseNTP,                            config_parse_bool,                              0,                             offsetof(Network, dhcp_use_ntp)
+ DHCP.UseMTU,                            config_parse_bool,                              0,                             offsetof(Network, dhcp_use_mtu)
+Index: git/src/network/networkd-network.c
+===================================================================
+--- git.orig/src/network/networkd-network.c
++++ git/src/network/networkd-network.c
+@@ -162,6 +162,7 @@ static int network_load_one(Manager *man
+         network->dhcp_use_dns = true;
+         network->dhcp_use_hostname = true;
+         network->dhcp_use_routes = true;
++        network->dhcp_send_client_id = true;
+         network->dhcp_send_hostname = true;
+         network->dhcp_route_metric = DHCP_ROUTE_METRIC;
+         network->dhcp_client_identifier = DHCP_CLIENT_ID_DUID;
+Index: git/src/network/networkd-network.h
+===================================================================
+--- git.orig/src/network/networkd-network.h
++++ git/src/network/networkd-network.h
+@@ -128,6 +128,7 @@ struct Network {
+         unsigned dhcp_route_metric;
+         uint32_t dhcp_route_table;
+         uint16_t dhcp_client_port;
++        bool dhcp_send_client_id;
+         bool dhcp_send_hostname;
+         bool dhcp_broadcast;
+         bool dhcp_critical;
+Index: git/src/systemd/sd-dhcp-client.h
+===================================================================
+--- git.orig/src/systemd/sd-dhcp-client.h
++++ git/src/systemd/sd-dhcp-client.h
+@@ -100,6 +100,9 @@ int sd_dhcp_client_set_request_address(
+ int sd_dhcp_client_set_request_broadcast(
+                 sd_dhcp_client *client,
+                 int broadcast);
++int sd_dhcp_client_set_send_client_id(
++                sd_dhcp_client *client,
++                int send);
+ int sd_dhcp_client_set_ifindex(
+                 sd_dhcp_client *client,
+                 int interface_index);
