@@ -13,13 +13,18 @@ ifeq (${BUILDMODE},ci)
 override BUILDMODE = .ci
 T ?= image
 
-.ci-deploy:
+.ci-deploy .ci-deploy-sdk .ci-build:%:				.%-pre .% .%-post
+..ci-deploy-pre ..ci-deploy-sdk-pre ..ci-build-pre:%-pre:
+..ci-deploy-post ..ci-deploy-sdk-post ..ci-build-post:%-post:	%
+..ci-deploy ..ci-deploy-sdk ..ci-build:%:			%-pre
+
+..ci-deploy:
 	ln $S/images/*/* $D/
 
-.ci-deploy-sdk:
+..ci-deploy-sdk:
 	ln $S/sdk/* $D/
 
-.ci-build:	.ci-prepare
+..ci-build:		.ci-prepare
 	$(MAKE) $T
 	touch ${BUILDDIR}/conf/.ok
 	${CI_DIR}/source-distribute /cache/sources
