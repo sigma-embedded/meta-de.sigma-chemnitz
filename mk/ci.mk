@@ -11,15 +11,32 @@ ci-build:
 
 ifeq (${BUILDMODE},ci)
 override BUILDMODE = .ci
+
+ifeq (${CI_MULTI_MACHINE},)
 T ?= image
+CI_DEPLOY_MACHINES ?=
+else
+T ?= all-images
+CI_DEPLOY_MACHINES ?= ${MACHINES}
+endif
 
 .ci-deploy .ci-deploy-sdk .ci-build:%:				.%-pre .% .%-post
 ..ci-deploy-pre ..ci-deploy-sdk-pre ..ci-build-pre:%-pre:
 ..ci-deploy-post ..ci-deploy-sdk-post ..ci-build-post:%-post:	%
 ..ci-deploy ..ci-deploy-sdk ..ci-build:%:			%-pre
 
+ifeq (${CI_DEPLOY_MACHINES},)
 ..ci-deploy:
 	ln $S/images/*/* $D/
+else
+..ci-deploy:	$(addprefix ..ci-deploy_machine-,${CI_DEPLOY_MACHINES})
+endif
+
+$(addprefix ..ci-deploy_machine-,${CI_DEPLOY_MACHINES}):	..ci-deploy-pre
+
+$(addprefix ..ci-deploy_machine-,${CI_DEPLOY_MACHINES}):..ci-deploy_machine-%:
+	install -d -m 0755 '$D/$*'
+	ln $S/images/'$*'/* '$D/$*/'
 
 ..ci-deploy-sdk:
 	ln $S/sdk/* $D/
