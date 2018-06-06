@@ -4,7 +4,7 @@ ci-deploy ci-deploy-rescue ci-deploy-sdk ci-deploy-doc:
 	rm -rf $D
 	mkdir -p $D
 	$(MAKE) .$@ BUILDMODE=ci BUILDVARS='${BUILDVARS}'
-	ls -l "$D"/
+	ls -lR "$D"/
 
 ci-build:
 	$(MAKE) .$@ BUILDMODE=ci BUILDDIR="../build${CI_FLAVOR}-${CI_DIST}" C="build${CI_FLAVOR}" top_srcdir="$(abspath .)"
