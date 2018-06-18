@@ -95,7 +95,6 @@ doit_generic() {
     VARIANTS="${dts%%.dts}"
     MACHINE_INCDIR="${MACHINCDIR##$STAGINGDIR}"
     DTC_CPPFLAGS="-I `pwd`"
-    KERNEL_DIR="${KERNEL_DIR}"
     DTC_CPPFLAGS="-I `pwd`"
     KERNEL_DIR="${KERNEL_DIR}"
   )
