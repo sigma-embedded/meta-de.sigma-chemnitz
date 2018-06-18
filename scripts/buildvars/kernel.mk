@@ -34,4 +34,7 @@ KERNEL_ARGS= \
 	rm -rf "${INSTALL_MOD_PATH}"/lib/modules
 	${MAKE} ${KERNEL_ARGS} $*
 
+check-syntax:
+	${MAKE} ${KERNEL_ARGS} -f flymake.mk
+
 .NOTPARALLEL:
