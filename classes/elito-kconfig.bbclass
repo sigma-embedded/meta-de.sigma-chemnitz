@@ -9,13 +9,15 @@ def find_cfgs(d):
 
 CFG_SRC = "${@find_cfgs(d)}"
 
+KCONFIG_DEFCONFIG ?= "${WORKDIR}/defconfig"
+
 kernel_do_configure() {
 	touch ${B}/.scmversion ${S}/.scmversion
 
 	rm -f ${B}/.config
 
 	${S}/scripts/kconfig/merge_config.sh -m -O ${B} \
-		${WORKDIR}/defconfig ${CFG_SRC}
+		"${KCONFIG_DEFCONFIG}" ${CFG_SRC}
 
 	${KERNEL_CONFIG_COMMAND}
 }
