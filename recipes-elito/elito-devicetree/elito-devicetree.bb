@@ -61,6 +61,7 @@ do_install() {
     oe_runmake -e install DESTDIR=${D}
 }
 
+do_deploy[cleandirs] = "${DEPLOYDIR}"
 do_deploy() {
     for i in *.dtb; do
 	dname=${i%%.dtb}-"${EXTENDPKGV}".dtb
