@@ -2,7 +2,7 @@ export PATH := ${BUILDVAR_PATH}:${PATH}
 
 SHELL_TARGET ?= shell
 EXEC_TARGET ?= exec
-SHELL_SHELL ?= bash
+SHELL_SHELL ?= bash -l
 
 SHELL_PS1 ?= [\[\033[1;34m\]${BUILDVAR_PN}\[\033[0;39m\]|\u@\h \W]\044\040
 
