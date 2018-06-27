@@ -35,6 +35,6 @@ KERNEL_ARGS= \
 	${MAKE} ${KERNEL_ARGS} $*
 
 check-syntax:
-	${MAKE} ${KERNEL_ARGS} -f flymake.mk
+	@${MAKE} -s ${KERNEL_ARGS} -f flymake.mk
 
 .NOTPARALLEL:
