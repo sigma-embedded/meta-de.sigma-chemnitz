@@ -9,4 +9,4 @@ BUILD_FLAGS = \
 	${MAKE} ${BUILD_FLAGS} $@
 
 check-syntax:
-	${MAKE} ${BUILD_FLAGS} -f flymake.mk
+	@${MAKE} -s ${BUILD_FLAGS} -f flymake.mk
