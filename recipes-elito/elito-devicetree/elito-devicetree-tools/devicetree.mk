@@ -16,7 +16,7 @@ AM_DTC_CPPFLAGS = \
   -nostdinc -undef -x assembler-with-cpp \
   -I . -I='$(MACHINE_INCDIR)' \
   -I${KERNEL_DIR}/include \
-  -I${KERNEL_DIR}/arch/arm/boot/dts \
+  -I${KERNEL_DTREE_DIR} \
 
 DTC_FLAGS = -R 4
 
