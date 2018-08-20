@@ -1,0 +1,3 @@
+KERNEL_DTREE_DIR     = "${STAGING_KERNEL_DIR}"
+KERNEL_DTREE_DIR_arm = "${STAGING_KERNEL_DIR}/arch/arm/boot/dts"
+KERNEL_DTREE_DIR_aarch64 = "${STAGING_KERNEL_DIR}/arch/arm64/boot/dts"

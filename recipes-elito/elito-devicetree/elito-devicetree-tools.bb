@@ -10,6 +10,7 @@ MACHDEPS_mx6 = "\
 
 DEPENDS += "dtc-native ${MACHDEPS}"
 
+require elito-devicetree-common.inc
 inherit elito-machdata
 
 BBCLASSEXTEND = "cross crosssdk"
@@ -18,9 +19,6 @@ SRC_URI = "\
   file://devicetree.mk \
   file://build-dtree \
 "
-
-KERNEL_DTREE_DIR     = "${STAGING_KERNEL_DIR}"
-KERNEL_DTREE_DIR_arm = "${STAGING_KERNEL_DIR}/arch/arm/boot/dts"
 
 python () {
     override = d.getVar("CLASSOVERRIDE", True) or ""
