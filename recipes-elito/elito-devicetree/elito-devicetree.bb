@@ -31,11 +31,12 @@ EXTRA_OEMAKE = "\
   KERNEL_DIR=${STAGING_KERNEL_DIR} \
   MACHINE_INCDIR=${MACHINCDIR} \
   VARIANTS='${MACHINE_DTS_NAME}' \
+  KERNEL_DTREE_DIR=${KERNEL_DTREE_DIR} \
 "
 
 EXTRA_OEMAKE_append_mx28 = " SOC_FAMILY=mx28"
 
-COMPATIBLE_MACHINE = "(mx28|mx6|mx7|ti33x)"
+COMPATIBLE_MACHINE = "(mx28|mx6|mx7|mx8|ti33x)"
 
 MACH_DEPENDS = ""
 MACH_DEPENDS_mx28 = "mx28-pins"
@@ -48,6 +49,7 @@ DEPENDS += "elito-devicetree-tools-cross-${TARGET_ARCH}"
 B := "${S}"
 S  = "${WORKDIR}"
 
+require elito-devicetree-common.inc
 inherit deploy elito-machdata elito-dtree-base
 
 do_emit_buildvars[depends] += "virtual/kernel:do_patch"
