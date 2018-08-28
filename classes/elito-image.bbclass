@@ -7,7 +7,7 @@ elito_add_devel_history() {
 	for p in "$h" "$d" ""; do
 		f='${PROJECT_TOPDIR}'/files/bash_history$p
 		test -e "$f" || continue
-		install -D -p -m 0600 "$f" ${IMAGE_ROOTFS}/root/.bash_history
+		install -D -p -m 0600 "$f" '${IMAGE_ROOTFS}${ROOT_HOME}'/.bash_history
 		break
 	done
 }
