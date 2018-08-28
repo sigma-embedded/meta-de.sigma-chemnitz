@@ -5,7 +5,7 @@ elito_add_devel_history() {
 	h=`hostname -f 2>/dev/null || hostname` && h=-$h
 
 	for p in "$h" "$d" ""; do
-		f="${PROJECT_TOPDIR}"/files/bash_history$p
+		f='${PROJECT_TOPDIR}'/files/bash_history$p
 		test -e "$f" || continue
 		install -D -p -m 0600 "$f" ${IMAGE_ROOTFS}/root/.bash_history
 		break
