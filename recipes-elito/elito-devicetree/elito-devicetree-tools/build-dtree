@@ -36,6 +36,17 @@ while true; do
     esac
 done
 
+## _extend_dtc_cppflags <include-paths>
+_extend_dtc_cppflags() {
+    local IFS=:
+    local i
+
+    eval set -- $*
+    for i; do
+	DTC_CPPFLAGS+=" -I $i"
+    done
+}
+
 mx6_split_variants() {
     local dstvar=$1
     local old_IFS=$IFS
@@ -73,7 +84,6 @@ doit_mx6() {
     VPATH="`pwd`:.:$MACHINCDIR"
     VARIANTS="${dts%%.dts}"
     MACHINE_INCDIR="${MACHINCDIR##$STAGINGDIR}"
-    DTC_CPPFLAGS="-I `pwd`"
     KERNEL_DIR="${KERNEL_DIR}"
     KERNEL_DTREE_DIR="${KERNEL_DTREE_DIR}"
   )
@@ -95,7 +105,6 @@ doit_generic() {
     VPATH="`pwd`:.:$MACHINCDIR"
     VARIANTS="${dts%%.dts}"
     MACHINE_INCDIR="${MACHINCDIR##$STAGINGDIR}"
-    DTC_CPPFLAGS="-I `pwd`"
     KERNEL_DIR="${KERNEL_DIR}"
     KERNEL_DTREE_DIR="${KERNEL_DTREE_DIR}"
   )
@@ -105,6 +114,9 @@ doit_generic() {
 
 set -e
 mkdir -p "$arg_out"
+
+export DTC_CPPFLAGS=
+_extend_dtc_cppflags "`pwd`" "${DTC_INC_PATH}"
 
 eval "doit_$SOC" "$@"
 
