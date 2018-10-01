@@ -5,6 +5,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=ff95bfe019feaf92f524b73dd79e76eb"
 
 SRC_URI = "\
   ${GNU_MIRROR}/gengetopt/${BPN}-${PV}.tar.gz \
+  file://libdep.patch \
 "
 
 SRC_URI[md5sum] = "29749a48dda69277ab969c510597a14e"

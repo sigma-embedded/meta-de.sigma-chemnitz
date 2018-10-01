@@ -1,0 +1,23 @@
+Fix dep on internal lib
+
+fixes
+
+| make[4]: Leaving directory '....gengetopt-native/2.22.6-r0/build/src/tests'
+| make[4]: Entering directory '....gengetopt-native/2.22.6-r0/build/src'
+| make[4]: *** No rule to make target '../src/libgengetopt.la', needed by 'gengetopt'.  Stop.
+| make[4]: Leaving directory '....gengetopt-native/2.22.6-r0/build/src'
+
+
+Index: gengetopt-2.22.6/src/Makefile.am
+===================================================================
+--- gengetopt-2.22.6.orig/src/Makefile.am
++++ gengetopt-2.22.6/src/Makefile.am
+@@ -51,7 +51,7 @@ libgengetopt_la_LIBADD = $(top_builddir)
+ 	@LTLIBOBJS@ \
+ 	skels/libgen.la
+ 
+-LDADD = $(top_builddir)/src/libgengetopt.la
++LDADD = libgengetopt.la
+ 
+ EXTRA_DIST = parser.h argsdef.h gengetopt.h ggos.h gm.h gnugetopt.h \
+ cmdline.c cmdline.h \
