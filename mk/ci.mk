@@ -45,7 +45,7 @@ $(addprefix ci-deploy_machine-,${CI_DEPLOY_MACHINES}):ci-deploy_machine-%:
 	$(MAKE) $T
 	touch ${BUILDDIR}/conf/.ok
 	${CI_DIR}/source-distribute /cache/sources
-	$(MAKE) "ci-deploy${CI_FLAVOR}" D="_deploy${CI_FLAVOR}" S=${BUILDDIR}/deploy
+	$(MAKE) "ci-deploy${CI_FLAVOR}" D="_deploy${CI_FLAVOR}" S=${DEPLOY_DIR}
 
 .ci-prepare:	tmpl.conf
 ifneq ($(CI_FLAVOR),)
