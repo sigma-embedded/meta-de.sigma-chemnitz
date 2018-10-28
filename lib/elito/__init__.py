@@ -4,7 +4,7 @@ _orig_decode = None
 
 def get_alternate_dir(base, suffix):
     if not base.endswith(suffix) or os.path.exists(base):
-        return False
+        return base
 
     tmp = base[:-len(suffix)]
     if os.path.exists(tmp):
