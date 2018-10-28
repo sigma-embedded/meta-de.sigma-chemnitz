@@ -1,5 +1,7 @@
 IMAGE_FEATURES[validitems] += "devel-history devel-sshkey no-root-bash"
 
+USER_CONFIG_DIR = "~${USER}/.config/elito"
+
 elito_add_devel_history() {
 	d=`hostname -d 2>/dev/null` && d=-$d
 	h=`hostname -f 2>/dev/null || hostname` && h=-$h
@@ -32,7 +34,7 @@ _elito_search_devel_sshkey() {
 }
 
 elito_add_devel_sshkey() {
-	f=`env PSEUDO_UNLOAD=1 bash -c 'echo ~${USER}/.config/elito/authorized_keys'`
+	f=`env PSEUDO_UNLOAD=1 bash -c 'echo ${USER_CONFIG_DIR}/authorized_keys'`
 	if ! test -e "$f"; then
 		_elito_search_devel_sshkey
 	fi
