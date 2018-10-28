@@ -1,6 +1,6 @@
 IMAGE_FEATURES[validitems] += "devel-history devel-sshkey no-root-bash"
 
-USER_CONFIG_DIR = "~${USER}/.config/elito"
+USER_CONFIG_DIR = "~${USER}/.config/oe"
 
 elito_add_devel_history() {
 	d=`hostname -d 2>/dev/null` && d=-$d
