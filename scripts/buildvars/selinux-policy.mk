@@ -23,6 +23,7 @@ ${POLICY_FILE}:	${POLICY_FILE_SRC}
 
 ${POLICY_FILE_SRC}:	$(wildcard *.pp)
 	${SEMODULE} -X ${MODULE_PRIO} -i *.pp
+	${SEMODULE} -n -B
 	rm -rf ${BUILDVAR_SE_POLICY_ROOT}/var/lib/selinux/${BUILDVAR_SE_POLICY_NAME}/active/modules/${MODULE_PRIO}
 
 .stamp-selinux-dir:
