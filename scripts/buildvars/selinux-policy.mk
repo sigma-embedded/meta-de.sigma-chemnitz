@@ -9,7 +9,7 @@ SEMODULE = semodule \
   -s '${BUILDVAR_SE_POLICY_NAME}' \
   -n
 
-modules:
+modules: | .stamp-selinux-dir
 	${MAKE} ${BUILDVAR_SE_OEMAKE} all
 
 policy:	modules
@@ -24,5 +24,11 @@ ${POLICY_FILE}:	${POLICY_FILE_SRC}
 ${POLICY_FILE_SRC}:	$(wildcard *.pp)
 	${SEMODULE} -X ${MODULE_PRIO} -i *.pp
 	rm -rf ${BUILDVAR_SE_POLICY_ROOT}/var/lib/selinux/${BUILDVAR_SE_POLICY_NAME}/active/modules/${MODULE_PRIO}
+
+.stamp-selinux-dir:
+	rm -rf .selinux
+	mkdir -p .selinux
+	ln -s ${BUILDVAR_SE_HEADERDIR} .selinux/inc
+	@touch $@
 
 .PHONY:	modules policy
