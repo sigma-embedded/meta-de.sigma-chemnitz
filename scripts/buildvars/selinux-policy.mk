@@ -29,7 +29,7 @@ ${FCTX_FILE}:	${FCTX_FILE_SRC}
 
 ${POLICY_FILE_SRC}:	$(addsuffix .pp,${BUILDVAR_SE_LOCAL_POLICY_MODULES})
 	${SEMODULE} -X ${MODULE_PRIO} -i $^
-	${SEMODULE} -n -B
+	${SEMODULE} -B
 	rm -rf ${BUILDVAR_SE_POLICY_ROOT}/var/lib/selinux/${BUILDVAR_SE_POLICY_NAME}/active/modules/${MODULE_PRIO}
 
 .stamp-selinux-dir:
