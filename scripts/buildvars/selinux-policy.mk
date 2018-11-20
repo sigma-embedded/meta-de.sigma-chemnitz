@@ -27,8 +27,8 @@ ${POLICY_FILE}:	${POLICY_FILE_SRC}
 ${FCTX_FILE}:	${FCTX_FILE_SRC}
 	install -p -m 0644 $< $@
 
-${POLICY_FILE_SRC}:	$(wildcard *.pp)
-	${SEMODULE} -X ${MODULE_PRIO} -i *.pp
+${POLICY_FILE_SRC}:	$(addsuffix .pp,${BUILDVAR_SE_LOCAL_POLICY_MODULES})
+	${SEMODULE} -X ${MODULE_PRIO} -i $^
 	${SEMODULE} -n -B
 	rm -rf ${BUILDVAR_SE_POLICY_ROOT}/var/lib/selinux/${BUILDVAR_SE_POLICY_NAME}/active/modules/${MODULE_PRIO}
 
