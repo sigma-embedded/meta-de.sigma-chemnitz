@@ -24,8 +24,10 @@ kernel_do_configure() {
 	${KERNEL_CONFIG_COMMAND}
 }
 
+do_kconfig_savedefconfig[dirs] = "${B}"
 do_kconfig_savedefconfig() {
-    oe_runmake -C ${B} savedefconfig
+	oe_runmake savedefconfig
+	test -s defconfig
 }
 addtask do_kconfig_savedefconfig after do_configure
 
