@@ -109,14 +109,14 @@ def prepare(d):
 
         for (rel,f) in c.get_lnks(True):
             #bb.warn("LNK: %s" % f)
-            m.update(rel)
-            m.update(os.readlink(f))
+            m.update(bytes(rel, 'ascii', 'ignore'))
+            m.update(bytes(os.readlink(f), 'ascii', 'ignore'))
 
         for (rel,f) in c.get_content(True):
             #bb.warn("REG: %s" % f)
             bb.parse.mark_dependency(d, f)
-            m.update(rel)
-            m.update("%u" % bb.parse.cached_mtime(f))
+            m.update(bytes(rel, 'ascii', 'ignore'))
+            m.update(bytes("%u" % bb.parse.cached_mtime(f), "ascii"))
 
     res = [m.hexdigest(), content]
     #bb.info("==> %s" % (res,))
