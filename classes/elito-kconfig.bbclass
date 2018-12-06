@@ -16,8 +16,10 @@ kernel_do_configure() {
 
 	rm -f ${B}/.config
 
+	touch .empty.cfg
+
 	${S}/scripts/kconfig/merge_config.sh -m -O ${B} \
-		"${KCONFIG_DEFCONFIG}" ${CFG_SRC}
+		"${KCONFIG_DEFCONFIG}" .empty.cfg ${CFG_SRC}
 
 	${KERNEL_CONFIG_COMMAND}
 }
