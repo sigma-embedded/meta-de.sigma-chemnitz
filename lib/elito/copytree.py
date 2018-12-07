@@ -78,8 +78,8 @@ def prepare(d):
 
     here = d.getVar('THISDIR', True)
     mode = d.getVar('ELITO_COPY_MODE', True)
-    content = map(lambda x: copy_info(os.path.join(here, x), mode),
-                  oe.data.typed_value('ELITO_COPY_TOPDIRS', d))
+    content = list(map(lambda x: copy_info(os.path.join(here, x), mode),
+                       oe.data.typed_value('ELITO_COPY_TOPDIRS', d)))
     patterns = set(oe.data.typed_value('ELITO_COPY_IGNORE_PATTERN', d))
 
     try:
