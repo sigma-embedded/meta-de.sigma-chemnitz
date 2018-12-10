@@ -18,6 +18,7 @@ IMAGE_INSTALL = "\
                        'mtd-utils elito-rescue-base-sysv-scan-mtd', '', d)} \
 "
 
+KERNELDEPMODDEPEND = ""
 ROOTFS_POSTINSTALL_COMMAND += "rescue_fixup_rootfs"
 IMAGE_PREPROCESS_COMMAND += "rescue_cleanup_rootfs"
 BAD_RECOMMENDATIONS += "busybox-syslog-systemd systemd"
