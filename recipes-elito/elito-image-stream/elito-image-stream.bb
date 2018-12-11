@@ -21,7 +21,7 @@ PACKAGECONFIG[x509-gnutls]   = "X509_PROVIDER=gnutls,,gnutls,"
 PACKAGECONFIG[x509-noop]     = "X509_PROVIDER=noop,,,"
 PACKAGECONFIG[compression-noop] = "COMPRESSION_PROVIDER=noop,,,"
 
-DEPENDS += "gnutls"
+DEPENDS += "gnutls zlib"
 
 EXTRA_OEMAKE += "\
   prefix=${prefix} \
