@@ -37,7 +37,7 @@ FILES_${PN}-encode = "${bindir}/*-encode"
 FILES_${PN}-decode = "${bindir}/*-decode"
 FILES_${PN}-utils = "${bindir}/*-dump-progress"
 
-BBCLASSEXTEND = "native"
+BBCLASSEXTEND = "native nativesdk"
 
 do_install_append() {
 	install -D -p -m 0755 dump-progress ${D}${bindir}/elito-stream-dump-progress
