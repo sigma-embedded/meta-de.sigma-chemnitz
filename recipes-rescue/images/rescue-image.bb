@@ -19,8 +19,8 @@ IMAGE_INSTALL = "\
 "
 
 KERNELDEPMODDEPEND = ""
-ROOTFS_POSTINSTALL_COMMAND += "rescue_fixup_rootfs"
-IMAGE_PREPROCESS_COMMAND += "rescue_cleanup_rootfs"
+ROOTFS_POSTINSTALL_COMMAND += "rescue_fixup_rootfs;"
+IMAGE_PREPROCESS_COMMAND += "rescue_cleanup_rootfs;"
 BAD_RECOMMENDATIONS += "busybox-syslog-systemd systemd"
 
 PACKAGE_INSTALL_remove = "kernel-modules"
