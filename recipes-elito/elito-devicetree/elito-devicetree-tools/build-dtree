@@ -10,6 +10,7 @@
 : ${PKGDATA_DIR="@PKGDATA_DIR@"}
 : ${SOC:="@SOC@"}
 : ${MAKE:=make}
+: ${srcdir:=.}
 
 eval set -- `getopt -o 't:o:Pp:s' --long tftp:outdir:pins:nopins:pinflags:silent -- "$@"`
 
@@ -73,7 +74,7 @@ doit_mx6() {
   esac
 
   local pinflags=(
-    VPATH="`pwd`:.:${KERNEL_DTREE_DIR}"
+    VPATH="`pwd`:${srcdir}:${KERNEL_DTREE_DIR}"
     VARIANTS="$variant_module"
     SOC_DTREE_PINS_"${variant_module}=i${pinfn}-pinfunc.h"
   )
@@ -81,7 +82,7 @@ doit_mx6() {
   eval pinflags+="( $arg_pinflags )"
 
   local dtbflags=(
-    VPATH="`pwd`:.:$MACHINCDIR"
+    VPATH="`pwd`:${srcdir}:$MACHINCDIR"
     VARIANTS="${dts%%.dts}"
     MACHINE_INCDIR="${MACHINCDIR##$STAGINGDIR}"
     KERNEL_DIR="${KERNEL_DIR}"
@@ -102,7 +103,7 @@ doit_generic() {
     "${arg_makeflags[@]}"
   )
   local dtbflags=(
-    VPATH="`pwd`:.:$MACHINCDIR"
+    VPATH="`pwd`:${srcdir}:$MACHINCDIR"
     VARIANTS="${dts%%.dts}"
     MACHINE_INCDIR="${MACHINCDIR##$STAGINGDIR}"
     KERNEL_DIR="${KERNEL_DIR}"
