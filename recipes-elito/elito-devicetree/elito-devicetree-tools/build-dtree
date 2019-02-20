@@ -10,6 +10,7 @@
 : ${PKGDATA_DIR="@PKGDATA_DIR@"}
 : ${SOC:="@SOC@"}
 : ${MAKE:=make}
+: ${DTC_CPPFLAGS:=}
 : ${srcdir:=.}
 
 eval set -- `getopt -o 't:o:Pp:s' --long tftp:outdir:pins:nopins:pinflags:silent -- "$@"`
@@ -116,7 +117,7 @@ doit_generic() {
 set -e
 mkdir -p "$arg_out"
 
-export DTC_CPPFLAGS=
+export DTC_CPPFLAGS
 _extend_dtc_cppflags "`pwd`" "${DTC_INC_PATH}"
 
 eval "doit_$SOC" "$@"
