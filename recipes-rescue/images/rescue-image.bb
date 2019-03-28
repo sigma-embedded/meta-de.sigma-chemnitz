@@ -33,6 +33,17 @@ inherit image
 PROVIDES += "virtual/rescue-image"
 DEPENDS += "sysvinit"
 
+SERIAL_CONSOLE ?= "${@get_first_serial_console(d.getVar('SERIAL_CONSOLES', True) or '')}"
+
+def get_first_serial_console(consoles):
+    consoles = consoles.strip()
+    consoles = consoles.split()
+    if not consoles:
+        raise Exception("Missing serial console")
+
+    console  = consoles[0].split(';')
+    return console[1]
+
 rootfs_install_all_locales() {
     :
 }
