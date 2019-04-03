@@ -42,7 +42,7 @@ def get_first_serial_console(consoles):
         raise Exception("Missing serial console")
 
     console  = consoles[0].split(';')
-    return console[1]
+    return "%s %s" % (console[0], console[1])
 
 rootfs_install_all_locales() {
     :
