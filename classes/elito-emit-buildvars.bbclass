@@ -102,6 +102,14 @@ BUILDVARS_EXPORT = "\
 	WORKDIR \
 	?BUILDVARS_SCRIPT_DIR \
 	?BUILDVARS_DEPLOY_DIR \
+\
+	prefix \
+	bindir \
+	sbindir \
+	libdir \
+	baselibdir \
+	libexecdir \
+	datadir \
 "
 BUILDVARS_EXPORT[type] = "list"
 BUILDVARS_EXPORT[doc] = "A list of variables which shall be exported. \
