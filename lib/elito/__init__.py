@@ -16,12 +16,12 @@ def proto_decodeurl(url):
     res = _orig_decode(url)
     #bb.warn("%s -> %s" % (url, res))
 
-    scheme = res[0]
-    if scheme.startswith('git+'):
-        res = list(res)
-        protocol = scheme[4:]
+    (scheme, protocol) = (res[0].split('+', 1) + [None, None])[:2]
 
-        res[0] = 'git'
+    if protocol is not None:
+        res = list(res)
+
+        res[0] = scheme
         res[5]['protocol'] = protocol
 
         if protocol == 'file':
