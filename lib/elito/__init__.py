@@ -27,6 +27,8 @@ def proto_decodeurl(url):
         if protocol == 'file':
                 res[2] = get_alternate_dir(res[2], '.git')
 
+        #bb.note("%s -> %s" % (url, res))
+
     return tuple(res)
 
 def enhance_decodeuri():
