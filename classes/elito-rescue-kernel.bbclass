@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_append = ":${BASEPATH_sigma}/files"
+FILESEXTRAPATHS_append = ":${BASEPATH_de.sigma-chemnitz.core}/files"
 
 SRC_URI_append = "\
   file://rescue-kernel.cfg \
