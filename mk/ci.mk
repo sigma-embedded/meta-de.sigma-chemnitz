@@ -6,7 +6,7 @@ ci-deploy ci-deploy-rescue ci-deploy-sdk ci-deploy-doc:
 	$(MAKE) .$@ BUILDMODE=ci BUILDVARS='${BUILDVARS}'
 	ls -lR "$D"/
 
-ci-build:
+ci-build ci-info:
 	$(MAKE) .$@ BUILDMODE=ci BUILDDIR="../build${CI_FLAVOR}-${CI_DIST}" C="build${CI_FLAVOR}" top_srcdir="$(abspath .)"
 
 ifeq (${BUILDMODE},ci)
@@ -46,6 +46,10 @@ $(addprefix ci-deploy_machine-,${CI_DEPLOY_MACHINES}):ci-deploy_machine-%:
 	touch ${BUILDDIR}/conf/.ok
 	${CI_DIR}/source-distribute /cache/sources
 	$(MAKE) "ci-deploy${CI_FLAVOR}" D="_deploy${CI_FLAVOR}" S=${DEPLOY_DIR}
+
+.ci-info:		.ci-prepare
+	${MAKE} -s bitbake BITBAKE=bitbake-layers T= BO=show-layers
+	${MAKE} -s bitbake BITBAKE=bitbake-layers T= BO=show-overlayed
 
 .ci-prepare:	tmpl.conf
 ifneq ($(CI_FLAVOR),)

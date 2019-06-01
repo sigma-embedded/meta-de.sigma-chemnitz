@@ -13,10 +13,11 @@ S = "${WORKDIR}/git"
 EXTRA_OEMAKE = "\
     -f ${S}/Makefile \
     DECODE_PKGDATA_DIR='${STAGING_DATADIR_NATIVE}/decode-registers' \
-    bin_PROGRAMS='${DECODERS}' \
+    ${@oe.utils.ifelse(d.getVar('ALL_DECODERS', True), "bin_PROGRAMS='${DECODERS}'", '')} \
 "
 
 DEPENDS += "elito-decode-registers-cross-${TARGET_ARCH}"
+
 
 _DECODERS_CPU = ""
 _DECODERS_CPU_mx8mq = "decode-mx8m"
@@ -25,6 +26,11 @@ _DECODERS_CPU_mx6dl = "decode-mx6dl"
 
 DECODERS = "${_DECODERS_CPU}"
 
+ALL_DECODERS ?= "${@oe.utils.ifelse(d.getVar('DECODERS', True).strip(), '1', '')}"
+DECODERS_RDEPS ?= " \
+    ${@oe.utils.ifelse(d.getVar('ALL_DECODERS', True), '', 'bash')} \
+"
+
 do_compile() {
 	oe_runmake all
 }
@@ -32,3 +38,5 @@ do_compile() {
 do_install() {
 	oe_runmake install DESTDIR=${D}
 }
+
+RDEPENDS_${PN} += "${DECODERS_RDEPS}"
