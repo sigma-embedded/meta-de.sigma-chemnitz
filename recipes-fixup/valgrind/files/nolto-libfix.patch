@@ -1,0 +1,28 @@
+Fixes
+
+| arm-oe-linux-gnueabi-ar: libnolto_coregrind_arm_linux_a-m_libcsetjmp.o: No such file or directory
+| make[3]: *** [Makefile:2791: libcoregrind-arm-linux.a] Error 1
+
+Index: valgrind-3.14.0/coregrind/Makefile.am
+===================================================================
+--- valgrind-3.14.0.orig/coregrind/Makefile.am
++++ valgrind-3.14.0/coregrind/Makefile.am
+@@ -511,6 +511,8 @@ libcoregrind_@VGCONF_ARCH_PRI@_@VGCONF_O
+ endif
+ libcoregrind_@VGCONF_ARCH_PRI@_@VGCONF_OS@_a_LIBADD = \
+     $(libnolto_coregrind_@VGCONF_ARCH_PRI@_@VGCONF_OS@_a_OBJECTS)
++libcoregrind_@VGCONF_ARCH_PRI@_@VGCONF_OS@_a_DEPENDENCIES = \
++    ${libnolto_coregrind-@VGCONF_ARCH_PRI@-@VGCONF_OS@.a}
+ 
+ if VGCONF_HAVE_PLATFORM_SEC
+ libcoregrind_@VGCONF_ARCH_SEC@_@VGCONF_OS@_a_SOURCES = \
+@@ -531,6 +533,9 @@ libcoregrind_@VGCONF_ARCH_SEC@_@VGCONF_O
+ endif
+ libcoregrind_@VGCONF_ARCH_SEC@_@VGCONF_OS@_a_LIBADD = \
+     $(libnolto_coregrind_@VGCONF_ARCH_SEC@_@VGCONF_OS@_a_OBJECTS)
++
++libcoregrind_@VGCONF_ARCH_SEC@_@VGCONF_OS@_a_DEPENDENCIES = \
++    ${libnolto_coregrind-@VGCONF_ARCH_SEC@-@VGCONF_OS@.a}
+ endif
+ 
+ #----------------------------------------------------------------------------

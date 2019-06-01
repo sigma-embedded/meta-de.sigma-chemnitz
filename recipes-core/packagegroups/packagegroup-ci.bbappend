@@ -10,5 +10,6 @@ RRECOMMENDS_${PN} = "\
     libccgi \
     systemd \
     unfs3 \
+    valgrind \
     persistent-v4l \
 "
