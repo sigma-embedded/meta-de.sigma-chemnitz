@@ -14,7 +14,7 @@ buildhistory_emit_pkghistory_append() {
 def buildhistory_ext_emit_features(d):
     bb.debug(2, "Writing recipe feature history")
 
-    pkghistdir = d.getVar('BUILDHISTORY_DIR_PACKAGE')
+    pkghistdir = d.getVar('BUILDHISTORY_DIR_PACKAGE', True)
 
     infofile = os.path.join(pkghistdir, "latest")
     pcfg     = d.getVar('PACKAGECONFIG', True)
