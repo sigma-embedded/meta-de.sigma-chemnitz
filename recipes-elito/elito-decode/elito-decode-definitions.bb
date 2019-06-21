@@ -9,6 +9,7 @@ SRCREV  = "1098658843a2febd7e0ce7d64314061dcea5af29"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 S = "${WORKDIR}/git"
+B = "${WORKDIR}/build"
 
 EXTRA_OEMAKE = "\
     -f ${S}/Makefile \
