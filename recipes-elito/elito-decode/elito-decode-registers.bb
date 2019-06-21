@@ -8,10 +8,13 @@ SRCREV  = "849320637814f70c45c74e64ae781f7525ecf0db"
 
 S = "${WORKDIR}/git"
 
+_PYTHON3 = "/usr/bin/env python3"
+_PYTHON3_class-target = "${bindir}/${PYTHON_PN}"
+
 ## do not use ${PYTHON} here; the shebang line becomes too large else
 EXTRA_OEMAKE = "\
     -f ${S}/Makefile \
-    PYTHON3='/usr/bin/env python3' \
+    PYTHON3='${_PYTHON3}' \
 "
 
 BBCLASSEXTEND += "cross crosssdk"
