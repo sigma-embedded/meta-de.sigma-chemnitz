@@ -35,3 +35,17 @@ do_compile() {
 do_install() {
 	oe_runmake install DESTDIR=${D}
 }
+
+PACKAGE_BEFORE_PN += "${PN}-tools"
+
+FILES_${PN}-dev += "\
+    ${datadir}/decode-registers/c \
+    ${datadir}/decode-registers/mk \
+"
+
+FILES_${PN}-tools += "\
+    ${datadir}/decode-registers/py \
+    ${bindir}/decode-registers-gendesc \
+"
+
+RDEPENDS_${PN}-tools += "${PYTHON_PN}-core"
