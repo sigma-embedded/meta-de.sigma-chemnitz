@@ -4,7 +4,7 @@ SUMMARY = "Register defintions for use with elito-decode-registers"
 HOMEPAGE = "https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-definitions"
 
 SRC_URI = "git+https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-definitions"
-SRCREV  = "1098658843a2febd7e0ce7d64314061dcea5af29"
+SRCREV  = "177673d2c79233d2d635e44437013196522f334b"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
@@ -32,12 +32,18 @@ DECODERS_RDEPS ?= " \
     ${@oe.utils.ifelse(d.getVar('ALL_DECODERS', True), 'bash', '')} \
 "
 
+do_configure() {
+	oe_runmake clean
+}
+
 do_compile() {
 	oe_runmake all
 }
 
 do_install() {
 	oe_runmake install DESTDIR=${D}
+	install -d -m 0755 ${D}${datadir}/${PN}
+	install -p -m 0644 regstream-*.bin ${D}${datadir}/${PN}/
 }
 
-RDEPENDS_${PN} += "${DECODERS_RDEPS}"
+RDEPENDS_${PN} += "${DECODERS_RDEPS} elito-decode-registers"
