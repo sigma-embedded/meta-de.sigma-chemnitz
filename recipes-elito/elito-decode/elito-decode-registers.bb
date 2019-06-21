@@ -4,9 +4,10 @@ SUMMARY = "Tool to interpret register contents"
 HOMEPAGE = "https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-registers"
 
 SRC_URI = "git+https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-registers.git"
-SRCREV  = "849320637814f70c45c74e64ae781f7525ecf0db"
+SRCREV  = "9f350baed546d6067df3d83f9d5ceab11a489f34"
 
 S = "${WORKDIR}/git"
+#B = "${WORKDIR}/build"
 
 _PYTHON3 = "/usr/bin/env python3"
 _PYTHON3_class-target = "${bindir}/${PYTHON_PN}"
@@ -26,6 +27,10 @@ python () {
     if override == "class-cross":
         d.appendVar("PN", "-${TARGET_ARCH}")
         d.setVar("SPECIAL_PKGSUFFIX", "-cross-${TARGET_ARCH}")
+}
+
+do_configure() {
+	oe_runmake clean
 }
 
 do_compile() {
