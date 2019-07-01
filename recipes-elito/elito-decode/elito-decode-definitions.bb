@@ -4,32 +4,40 @@ SUMMARY = "Register defintions for use with elito-decode-registers"
 HOMEPAGE = "https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-definitions"
 
 SRC_URI = "git+https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-definitions"
-SRCREV  = "ac4614429089c5f6940a3e163d2c6de4e606ab80"
+SRCREV  = "fa15a3be1e907011b0247df32403e773527cb17a"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 S = "${WORKDIR}/git"
+B = "${WORKDIR}/build"
+
+_OEMAKE_DECODERS = "\
+    DEVICES='${DECODERS}' \
+"
 
 EXTRA_OEMAKE = "\
     -f ${S}/Makefile \
     DECODE_PKGDATA_DIR='${STAGING_DATADIR_NATIVE}/decode-registers' \
-    ${@oe.utils.ifelse(d.getVar('ALL_DECODERS', True), "bin_PROGRAMS='${DECODERS}'", '')} \
+    ${@oe.utils.ifelse(d.getVar('ALL_DECODERS', True), '', d.getVar('_OEMAKE_DECODERS', False))} \
 "
 
 DEPENDS += "elito-decode-registers-cross-${TARGET_ARCH}"
 
-
 _DECODERS_CPU = ""
-_DECODERS_CPU_mx8mq = "decode-mx8m"
-_DECODERS_CPU_mx6q  = "decode-mx6q"
-_DECODERS_CPU_mx6dl = "decode-mx6dl"
+_DECODERS_CPU_mx8mq = "mx8m"
+_DECODERS_CPU_mx6q  = "mx6q"
+_DECODERS_CPU_mx6dl = "mx6dl"
 
 DECODERS = "${_DECODERS_CPU}"
 
-ALL_DECODERS ?= "${@oe.utils.ifelse(d.getVar('DECODERS', True).strip(), '1', '')}"
+ALL_DECODERS ?= "${@oe.utils.ifelse(d.getVar('DECODERS', True).strip(), '', '1')}"
 DECODERS_RDEPS ?= " \
-    ${@oe.utils.ifelse(d.getVar('ALL_DECODERS', True), '', 'bash')} \
+    ${@oe.utils.ifelse(d.getVar('ALL_DECODERS', True), 'bash', '')} \
 "
+
+do_configure() {
+	oe_runmake clean
+}
 
 do_compile() {
 	oe_runmake all
@@ -37,6 +45,7 @@ do_compile() {
 
 do_install() {
 	oe_runmake install DESTDIR=${D}
+	install -d -m 0755 ${D}${datadir}/${PN}
 }
 
-RDEPENDS_${PN} += "${DECODERS_RDEPS}"
+RDEPENDS_${PN} += "${DECODERS_RDEPS} elito-decode-registers"
