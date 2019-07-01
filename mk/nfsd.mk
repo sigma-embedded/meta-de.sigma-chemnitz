@@ -7,15 +7,16 @@ _nfsd_mk_dir := $(dir $(lastword ${MAKEFILE_LIST}))
 include ${_nfsd_mk_dir}/nfs-opt.mk
 include ${BUILDVARS_DATA}
 
-UNFSD ?=	unfsd
-UNFSD_PIDFILE = ${BUILDVAR_WORKDIR}/unfsd.pid
-
-UNFSD_CMD = \
+PSEUDO_CMD = \
 	env \
 	PATH=${BUILDVAR_PATH}:$${PATH} \
 	${BUILDVAR_FAKEROOTENV} \
 	${BUILDVAR_FAKEROOTCMD} \
-	${UNFSD}
+
+UNFSD ?=	unfsd
+UNFSD_PIDFILE = ${BUILDVAR_WORKDIR}/unfsd.pid
+
+UNFSD_CMD = ${PSEUDO_CMD} ${UNFSD}
 
 UNFSD_FLAGS = \
 	-t \
@@ -32,6 +33,7 @@ start-daemon:
 
 stop-daemon:
 	test ! -e "${UNFSD_PIDFILE}" || kill "`cat ${UNFSD_PIDFILE}`"
+	-@${PSEUDO_CMD} -S
 
 status-daemon:
 	@if test -s "${UNFSD_PIDFILE}" && kill -0 "`cat ${UNFSD_PIDFILE}`"; then \
