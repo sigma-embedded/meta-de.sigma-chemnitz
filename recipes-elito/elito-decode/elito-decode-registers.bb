@@ -4,7 +4,7 @@ SUMMARY = "Tool to interpret register contents"
 HOMEPAGE = "https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-registers"
 
 SRC_URI = "git+https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-registers.git"
-SRCREV  = "cebcca2ca53c2a162222151df39c3bda4c17a2d8"
+SRCREV  = "52ec3fbc6bd622ecb72565f8705217b6bc351218"
 
 S = "${WORKDIR}/git"
 #B = "${WORKDIR}/build"
