@@ -10,6 +10,7 @@ def find_cfgs(d):
 CFG_SRC = "${@find_cfgs(d)}"
 
 KCONFIG_DEFCONFIG ?= "${WORKDIR}/defconfig"
+KCONFIG_LOCK = "${WORKDIR}/kconfig.lock"
 
 kernel_do_configure() {
 	touch ${B}/.scmversion ${S}/.scmversion
@@ -23,6 +24,14 @@ kernel_do_configure() {
 
 	${KERNEL_CONFIG_COMMAND}
 }
+
+## prevent races while executing 'do_kconfig_savedefconfig'
+do_configure[lockfiles] += "${KCONFIG_LOCK}"
+do_compile[lockfiles] += "${KCONFIG_LOCK}"
+do_compile_kernelmodules[lockfiles] += "${KCONFIG_LOCK}"
+do_install[lockfiles] += "${KCONFIG_LOCK}"
+do_savedefconfig[lockfiles] += "${KCONFIG_LOCK}"
+do_kconfig_savedefconfig[lockfiles] += "${KCONFIG_LOCK}"
 
 do_kconfig_savedefconfig[dirs] = "${B}"
 do_kconfig_savedefconfig() {
