@@ -1,6 +1,29 @@
 IMAGE_FEATURES[validitems] += "devel-history devel-sshkey no-root-bash"
 
-USER_CONFIG_DIR = "~${USER}/.config/elito"
+USER_CONFIG_DIRS ?= "~${USER}/.config/openembedded ~${USER}/.config/oe ~${USER}/.config/elito"
+USER_CONFIG_DIRS[doc] = "list of space separated paths where user configuration will be searched"
+USER_CONFIG_DIRS[type] = "list"
+
+USER_CONFIG_DIRS_EXPANDED = "${@' '.join(map(lambda x: host_expanduser(x), oe.data.typed_value('USER_CONFIG_DIRS', d)))}"
+USER_CONFIG_DIRS_EXPANDED[type] = "list"
+
+USER_CONFIG_DIR ?= "${@find_first_directory(oe.data.typed_value('USER_CONFIG_DIRS_EXPANDED', d))}"
+
+def host_expanduser(dir):
+    ## we have to expand it in an extra subprocess with clean environment
+    ## because function might be run within PSEUDO context
+    cmd = [sys.executable, '-c', 'import sys, os.path; sys.stdout.write(os.path.expanduser(sys.argv[1]))', dir]
+    env = { 'PSEUDO_DISABLED' : '1' }
+
+    res = bb.process.Popen(cmd, shell = False, env = env).communicate()[0]
+    return res.decode('ascii')
+
+def find_first_directory(dirs):
+    for d in dirs:
+        if os.path.isdir(d):
+            return d
+
+    return ""
 
 elito_add_devel_history() {
 	d=`hostname -d 2>/dev/null` && d=-$d
@@ -34,7 +57,7 @@ _elito_search_devel_sshkey() {
 }
 
 elito_add_devel_sshkey() {
-	f=`env PSEUDO_UNLOAD=1 bash -c 'echo ${USER_CONFIG_DIR}/authorized_keys'`
+	f='${USER_CONFIG_DIR}/authorized_keys'
 	if ! test -e "$f"; then
 		_elito_search_devel_sshkey
 	fi
