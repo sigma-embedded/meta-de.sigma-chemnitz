@@ -18,5 +18,7 @@ RRECOMMENDS_${PN} = "\
 "
 
 DEPENDS += "\
+    qemu-native \
+    qemu-system-native \
     unfs3-native \
 "
