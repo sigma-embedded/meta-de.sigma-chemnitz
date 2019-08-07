@@ -18,5 +18,4 @@ RRECOMMENDS_${PN} = "\
 "
 
 DEPENDS += "\
-    unfs3-native \
 "
