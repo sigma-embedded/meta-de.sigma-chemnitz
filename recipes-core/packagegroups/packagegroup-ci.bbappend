@@ -1,7 +1,11 @@
 ## override default implementation in -ci layer
 PV = "5.0"
 
+_ARCHPKGS = "\
+"
+
 RRECOMMENDS_${PN} = "\
+    ${_ARCHPKGS} \
     e2fsprogs \
     elito-decode-definitions \
     elito-fbtest \
@@ -11,4 +15,8 @@ RRECOMMENDS_${PN} = "\
     systemd \
     unfs3 \
     persistent-v4l \
+"
+
+DEPENDS += "\
+    unfs3-native \
 "
