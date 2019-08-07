@@ -71,6 +71,8 @@ BUILDVARS_EXPORT = "\
 	LD \
 	LDFLAGS \
 	NM \
+	OBJCOPY \
+	OBJDUMP \
 	RANLIB \
 	STRIP \
 \
