@@ -12,3 +12,7 @@ RRECOMMENDS_${PN} = "\
     unfs3 \
     persistent-v4l \
 "
+
+DEPENDS += "\
+    unfs3-native \
+"
