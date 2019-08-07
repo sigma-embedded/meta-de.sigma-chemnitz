@@ -41,7 +41,7 @@ do_kconfig_savedefconfig() {
 addtask do_kconfig_savedefconfig after do_configure
 
 do_kconfig_emit_buildhistory() {
-	if "${@bb.utils.contains('INHERIT', 'buildhistory', 'true', 'false', d)}" && \
+	if "${@bb.utils.contains_any('INHERIT', 'buildhistory buildhistory-ext', 'true', 'false', d)}" && \
            "${@bb.utils.contains('BUILDHISTORY_FEATURES', 'image', 'true', 'false', d)}"; then
 		install -D -p -m 0644 ${B}/.config   ${BUILDHISTORY_DIR_IMAGE}/${PN}-config
 		install -D -p -m 0644 ${B}/defconfig ${BUILDHISTORY_DIR_IMAGE}/${PN}-defconfig
