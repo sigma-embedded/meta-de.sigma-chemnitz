@@ -54,3 +54,4 @@ FILES_${PN}-tools += "\
 "
 
 RDEPENDS_${PN}-tools += "${PYTHON_PN}-core"
+RRECOMMENDS_${PN} += "less"
