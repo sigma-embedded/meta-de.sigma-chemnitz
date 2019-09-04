@@ -44,9 +44,9 @@ S  = "${WORKDIR}"
 require elito-devicetree-common.inc
 inherit deploy elito-machdata elito-dtree-base
 
-do_emit_buildvars[depends] += "virtual/kernel:do_patch"
+do_emit_buildvars[depends] += "virtual/kernel:do_symlink_kernsrc"
 
-do_compile[depends] += "virtual/kernel:do_patch"
+do_compile[depends] += "virtual/kernel:do_symlink_kernsrc"
 do_compile() {
     oe_runmake -e
 }
