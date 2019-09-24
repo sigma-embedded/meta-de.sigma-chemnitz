@@ -25,7 +25,7 @@ EXTRA_OEMAKE = "\
 
 do_configure() {
 	oe_runmake clean
-	rm -f fbgrap
+	rm -f fbgrab
 	ln ${S}/fbgrab ${B}/
 }
 
