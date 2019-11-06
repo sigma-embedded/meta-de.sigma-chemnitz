@@ -18,7 +18,8 @@ AM_DTC_CPPFLAGS = \
   -I${KERNEL_DIR}/include \
   -I${KERNEL_DTREE_DIR} \
 
-DTC_FLAGS = -R 4
+DTC_RESERVE ?= 4
+DTC_FLAGS = -R ${DTC_RESERVE}
 
 define _linkfile
 ln -s '$1' '$2/'
