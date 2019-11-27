@@ -46,7 +46,7 @@ class SStateAPI(ABC):
 
         if sstate_server_disabled:
             return False
-        elif (d.getVar('SSTATE_SERVER_API') or "").strip() == "":
+        elif (d.getVar('SSTATE_SERVER_API', True) or "").strip() == "":
             return False
         elif oe.data.typed_value('SSTATE_SERVER_DISABLED', d):
             return False
@@ -233,7 +233,7 @@ class Upload(SStateAPI):
 
         res = map(lambda u: Upload(ftype  = info[0],
                                    fname  = u,
-                                   path   = os.path.join(d.getVar("DL_DIR"), u),
+                                   path   = os.path.join(d.getVar("DL_DIR", True), u),
                                    scmrev = getattr(ud, 'revision', None)),
                   info[1])
 
@@ -301,7 +301,7 @@ def handle_event(e):
         Stats().run(e.data)
 
     elif isinstance(e, bb.build.TaskSucceeded):
-        if e.task in (e.data.getVar('SSTATETASKS') or "").split():
+        if e.task in (e.data.getVar('SSTATETASKS', True) or "").split():
             post_create(e.data)
 
         if e.task == "do_fetch":
@@ -326,13 +326,13 @@ def post_fetch(d):
 def post_create(d):
     import tempfile
 
-    if d.getVar('SSTATE_SKIP_CREATION') == '1':
+    if d.getVar('SSTATE_SKIP_CREATION', True) == '1':
         return
 
     if not Upload.is_enabled(d):
         return
 
-    is_signed = not not d.getVar('SSTATE_SIG_KEY')
+    is_signed = not not d.getVar('SSTATE_SIG_KEY', True)
 
     # unfortunately, only ${SSTATE_PKG} contains the correct path but
     # not SSTATE_PKGNAME.  Strip away the ${SSTATE_DIR} to generate

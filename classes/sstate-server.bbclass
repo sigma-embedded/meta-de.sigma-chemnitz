@@ -38,7 +38,7 @@ SSTATE_SERVER_DISABLED[type] = "boolean"
 BB_HASHBASE_WHITELIST += "SSTATE_SERVER_PATH SSTATE_SERVER_SESSION SSTATE_SERVER_API sstate_server_post_create"
 
 def sstate_server_get_mirrors(d, var):
-    if (d.getVar('SSTATE_SERVER_API') or '').strip() == "":
+    if (d.getVar('SSTATE_SERVER_API', True) or '').strip() == "":
         return ""
     else:
         return '${' + var + '}'
