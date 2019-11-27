@@ -294,7 +294,7 @@ def handle_event(e):
     if isinstance(e, bb.event.BuildStarted):
         SetInfo().run(e.data)
 
-    elif isinstance(e, bb.event.HeartbeatEvent):
+    elif isinstance(e, bb.build.TaskProgress):
         Ping().run(e.data)
 
     elif isinstance(e, bb.event.BuildCompleted):
