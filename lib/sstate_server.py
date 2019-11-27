@@ -108,7 +108,7 @@ class SStateAPI(ABC):
             res = self._run(d, session)
 
             if res.status != 304 and (res.status < 200 or res.status > 299):
-                raise Exception("'%' failed with code: %s" % (self.op(), res.status))
+                raise Exception("'%' failed with code: %s" % (self._op(), res.status))
 
             self._postfunc(d, res)
         except Exception as e:
