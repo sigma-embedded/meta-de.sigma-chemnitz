@@ -57,7 +57,7 @@ class SStateAPI(ABC):
     def get_session(d):
         """Returns the session id for pull requests."""
         session = d.getVar('SSTATE_SERVER_SESSION', True)
-        if not session:
+        if not session or session == "":
             bb.debug(2, "sstate-server session not available")
             return None
 
