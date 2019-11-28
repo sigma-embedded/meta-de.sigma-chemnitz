@@ -57,7 +57,7 @@ class SStateAPI(ABC):
     def get_session(d):
         """Returns the session id for pull requests."""
         session = d.getVar('SSTATE_SERVER_SESSION', True)
-        if not session:
+        if not session or session == "":
             bb.debug(2, "sstate-server session not available")
             return None
 
@@ -108,7 +108,7 @@ class SStateAPI(ABC):
             res = self._run(d, session)
 
             if res.status != 304 and (res.status < 200 or res.status > 299):
-                raise Exception("'%' failed with code: %s" % (self.op(), res.status))
+                raise Exception("'%' failed with code: %s" % (self._op(), res.status))
 
             self._postfunc(d, res)
         except Exception as e:
