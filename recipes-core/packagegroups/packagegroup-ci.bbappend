@@ -14,6 +14,7 @@ RRECOMMENDS_${PN} = "\
     libccgi \
     systemd \
     unfs3 \
+    fbcat \
     persistent-v4l \
 "
 
