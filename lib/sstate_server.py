@@ -57,7 +57,7 @@ class SStateAPI(ABC):
     def get_session(d):
         """Returns the session id for pull requests."""
         session = d.getVar('SSTATE_SERVER_SESSION', True)
-        if not session:
+        if not session or session == "":
             bb.debug(2, "sstate-server session not available")
             return None
 
@@ -93,6 +93,19 @@ class SStateAPI(ABC):
         by subclasses."""
         pass
 
+    def _generic_403(self, res):
+        if res.status != 403:
+            return
+
+        global sstate_server_disabled
+
+        ## TODO: this does not work; 'd' (and module global
+        ## variables) are not shared between recipes
+
+        bb.note("unauthorized; disabling sstate-server globally")
+        d.setVar('SSTATE_SERVER_DISABLED', 'true')
+        sstate_server_disabled = True
+
     def run(self, d):
         """Executes the API subcall.  Function will check whether function
         should be called, gets the session and calls the internal
@@ -108,7 +121,7 @@ class SStateAPI(ABC):
             res = self._run(d, session)
 
             if res.status != 304 and (res.status < 200 or res.status > 299):
-                raise Exception("'%' failed with code: %s" % (self.op(), res.status))
+                raise Exception("'%' failed with code: %s" % (self._op(), res.status))
 
             self._postfunc(d, res)
         except Exception as e:
@@ -140,7 +153,10 @@ class Ping(SStateAPI):
 
         conn.request('GET', url = uri.path, headers = hdrs)
 
-        return conn.getresponse()
+        res = conn.getresponse()
+        self._generic_403(res)
+
+        return res
 
 ## Transmits some metadata
 class SetInfo(SStateAPI):
@@ -275,16 +291,6 @@ class Upload(SStateAPI):
             conn.request('PUT', url = uri.path, body = f, headers = hdrs)
 
         res = conn.getresponse()
-
-        if res.status == 403:
-            global sstate_server_disabled
-
-            ## TODO: this does not work; 'd' (and module global
-            ## variables) are not shared between recipes
-
-            bb.warn("unauhtorized for uploading; disabling sstate-server globally")
-            d.setVar('SSTATE_SERVER_DISABLED', 'true')
-            sstate_server_disabled = True
 
         return res
 

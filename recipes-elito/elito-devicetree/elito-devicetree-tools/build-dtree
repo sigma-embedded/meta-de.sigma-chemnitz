@@ -19,7 +19,6 @@ arg_tftp=
 arg_out=.dtb
 arg_pins=
 arg_pinflags=
-opt_nopins=false
 arg_makeflags=( --no-print-directory )
 
 
@@ -30,7 +29,7 @@ while true; do
       -t|--tftp)	arg_tftp=$1; shift;;
       -o|--outdir)	arg_out=$1; shift;;
       -p|--pins)	arg_pins=$1; shift;;
-      -P|--nopins)	opt_nopins=true;;
+      -P|--nopins)	echo "WARNING: -P|--nopins are not supported anymore and will be removed in later versions" > &2;;
       -s|--silent)	arg_makeflags+=( -s );;
       --pinflags)	arg_pinflags=$1; shift;;
       --)		break;;
@@ -92,8 +91,6 @@ doit_mx6() {
 
   local _make=( ${MAKE} "${arg_makeflags[@]}" -C "$arg_out" )
 
-  $opt_nopins || \
-    "${_make[@]}" -f "$MACHDATADIR/mx6-pins.mk"   "${pinflags[@]}"
   "${_make[@]}" -f "${PKGDATA_DIR}/devicetree.mk" "${dtbflags[@]}"
 }
 
