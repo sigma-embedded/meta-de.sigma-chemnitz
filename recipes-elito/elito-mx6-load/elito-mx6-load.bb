@@ -2,10 +2,7 @@ SUMMARY = "imx6 rescue system loader"
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
 
-_pv     = "0.1.0"
-
-PV   = "${_pv}+gitr${SRCPV}"
-PKGV = "${_pv}+gitr${GITPKGV}"
+PV   = "0.1.0+gitr${SRCPV}"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
@@ -24,7 +21,7 @@ B = "${WORKDIR}/build"
 
 DEPENDS += "elito-devicetree virtual/bootloader dtc-native"
 
-inherit gitpkgv elito-machdata deploy
+inherit elito-machdata deploy
 
 MX6_LOAD_VARIANTS ?= ""
 MX6_LOAD_SOCTYPES ?= ""
