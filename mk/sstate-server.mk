@@ -24,7 +24,19 @@ _sstate_server_curl =	curl -sSf '${SSTATE_SERVER_API}$2' $(if $1,-H 'X-Session: 
 sstate_server_curl =	$(call _sstate_server_curl,${SSTATE_SERVER_SESSION},$1,$2)
 
 ## Step 1: create the session; this requires SSTATE_SERVER_TOKEN
-ifneq (${SSTATE_SERVER_TOKEN},)
+ifeq (${SSTATE_SERVER_TOKEN},)
+
+sstate-session: FORCE
+	@echo "=======================================================" >&2
+	@echo "ERROR: sstate-server token not defined; please execute" >&2
+	@echo >&2
+	@echo "  echo > ~/.config/openembedded/sstate-server.mk 'SSTATE_SERVER_TOKEN = ...'" >&2
+	@echo >&2
+	@echo "and retry the command." >&2
+	@echo "=======================================================" >&2
+	@exit 1
+
+else     # non-empty SSTATE_SERVER_TOKEN
 
 _SSTATE_SERVER_API ?=		http://ensc-virt.intern.sigma-chemnitz.de:21001/api
 _SSTATE_SERVER_GIT_BRANCH =	$(shell git rev-parse --abbrev-ref HEAD)
@@ -52,6 +64,7 @@ sstate-session:	FORCE
 	@sed 's!^session=\([0-9a-zA-Z]\+\)!export SSTATE_SERVER_SESSION = \1!p;d' ${_SSTATE_SERVER_SESSION_FILE}.tmp >> ${_SSTATE_SERVER_SESSION_FILE}.mk
 	@sed 's!^dlpath=\([0-9a-zA-Z]\+\)!export SSTATE_SERVER_PATH = \1!p;d'     ${_SSTATE_SERVER_SESSION_FILE}.tmp >> ${_SSTATE_SERVER_SESSION_FILE}.mk
 	@rm -f ${_SSTATE_SERVER_SESSION_FILE}.tmp
+	@echo "session created"
 
 endif
 
