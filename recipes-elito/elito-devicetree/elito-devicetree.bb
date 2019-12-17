@@ -32,6 +32,8 @@ COMPATIBLE_MACHINE = "(mx28|mx6|mx7|mx8|ti33x)"
 
 MACH_DEPENDS = ""
 MACH_DEPENDS_mx28 = "mx28-pins"
+MACH_DEPENDS_mx6 = "${@bb.utils.contains('DISTRO_FEATURES', 'fsl-iomux', \
+                     'mx6-pins', '', d)}"
 
 DEPENDS += "dtc-native ${MACH_DEPENDS} virtual/${TARGET_PREFIX}gcc"
 DEPENDS += "elito-devicetree-tools-cross-${TARGET_ARCH}"

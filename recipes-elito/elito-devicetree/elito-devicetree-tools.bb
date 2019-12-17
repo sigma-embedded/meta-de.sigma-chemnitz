@@ -3,6 +3,10 @@ LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
 
 MACHDEPS = ""
+MACHDEPS_mx6 = "\
+  ${@bb.utils.contains('DISTRO_FEATURES', 'fsl-iomux', \
+                       'fsliomux-conv mx6-pins', '', d)} \
+"
 
 DEPENDS += "dtc-native ${MACHDEPS}"
 
