@@ -6,9 +6,9 @@ KERNEL_REFSPEC ?= ";branch=linux-${BASE_PV}.y"
 #KERNEL_REFSPEC ?= ";branch=master"
 KERNEL_URI ?= "${KERNEL_BASE_URI}${KERNEL_REFSPEC}"
 
-SRCREV_kernel_vanilla_4.14 ?= "e1f7d50ae3a3ec342e87a9b1ce6787bfb8b3c08b"
-SRCREV_kernel_vanilla_4.19 ?= "672481c2deffb371d8a7dfdc009e44c09864a869"
-SRCREV_kernel_vanilla_5.4  ?= "957a16c3e6e19777865c2d629408d8b4396d6a4b"
+SRCREV_kernel_vanilla_4.14 ?= "b0cdffaa546e24acf92ab3b0d4e917a51aff6a82"
+SRCREV_kernel_vanilla_4.19 ?= "cb1f9a169a0e197f93816ace48a6520e8640809d"
+SRCREV_kernel_vanilla_5.4  ?= "7a02c193298ec15f2ba1344b6bcd5d578a41b2e0"
 # use separate entry for include/uapi to avoid unnecessary rebuilds of
 # linux-libc-headers on kernel updates
 SRCREV_kernel_uapihdr_4.14 ?= "a46102f47dfe7da531facb9eacc5020e86ae7229"
