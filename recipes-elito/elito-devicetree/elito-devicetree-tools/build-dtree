@@ -29,7 +29,7 @@ while true; do
       -t|--tftp)	arg_tftp=$1; shift;;
       -o|--outdir)	arg_out=$1; shift;;
       -p|--pins)	arg_pins=$1; shift;;
-      -P|--nopins)	echo "WARNING: -P|--nopins are not supported anymore and will be removed in later versions" > &2;;
+      -P|--nopins)	echo "WARNING: -P|--nopins are not supported anymore and will be removed in later versions" >&2;;
       -s|--silent)	arg_makeflags+=( -s );;
       --pinflags)	arg_pinflags=$1; shift;;
       --)		break;;
