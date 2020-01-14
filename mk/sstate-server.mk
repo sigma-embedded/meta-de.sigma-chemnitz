@@ -25,6 +25,8 @@ sstate_server_curl =	$(call _sstate_server_curl,${SSTATE_SERVER_SESSION},$1,$2)
 
 sstate-check:
 
+sstate-session-try:	$(if ${SSTATE_SERVER_TOKEN}${SSTATE_SERVER_API},sstate-session)
+
 ## Step 1: create the session; this requires SSTATE_SERVER_TOKEN
 ifeq (${SSTATE_SERVER_TOKEN},)
 
