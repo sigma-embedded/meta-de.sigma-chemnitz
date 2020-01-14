@@ -23,6 +23,8 @@ _SSTATE_SERVER_SESSION_FILE =	${BUILDDIR}/.sstate-server-session
 _sstate_server_curl =	curl -sSf '${SSTATE_SERVER_API}$2' $(if $1,-H 'X-Session: $1') $3
 sstate_server_curl =	$(call _sstate_server_curl,${SSTATE_SERVER_SESSION},$1,$2)
 
+sstate-check:
+
 ## Step 1: create the session; this requires SSTATE_SERVER_TOKEN
 ifeq (${SSTATE_SERVER_TOKEN},)
 
@@ -48,6 +50,9 @@ _SSTATE_SERVER_DISTRO =		$(shell if   test -e /etc/lsb-release;    then ${__SSTA
 					elif test -e /etc/redhat-release; then ${__SSTATE_SERVER_DISTRO_RH}; \
 					else echo ""; fi)
 
+SSTATE_SERVER_SESSION_PING_PARAMS = \
+	-H 'X-Session: ${SSTATE_SERVER_SESSION}'
+
 SSTATE_SERVER_SESSION_NEW_PARAMS = \
 	-X POST \
 	-H 'X-Token: ${SSTATE_SERVER_TOKEN}'\
@@ -71,6 +76,8 @@ endif
 ## Step 2: operate on an existing session
 ifneq (${SSTATE_SERVER_SESSION},)
 
+SSTATE_CHECK_TARGETS += all bitbake image
+
 BB_ENV_EXTRAWHITE += \
 	SSTATE_SERVER_PATH SSTATE_SERVER_SESSION SSTATE_SERVER_API \
 	BB_GENERATE_MIRROR_TARBALLS
@@ -90,6 +97,11 @@ $(addprefix sstate-disable-,${__SSTATE_SERVER_DISABLE_OPTS}):sstate-disable-%:	F
 
 $(addprefix sstate-filter-,${__SSTATE_SERVER_FILTER_OPTS}):sstate-filter-%:	FORCE
 	${Q}$(call sstate_server_curl,/v1/session/filter/$*,-X POST)
+
+${SSTATE_CHECK_TARGETS}:	sstate-check
+
+sstate-check:	FORCE
+	${Q}$(call _sstate_server_curl,,/v1/session/ping,${SSTATE_SERVER_SESSION_PING_PARAMS} --output /dev/null)
 
 sstate-close:	FORCE
 	${Q}$(call sstate_server_curl,/v1/session/close,-X POST)
