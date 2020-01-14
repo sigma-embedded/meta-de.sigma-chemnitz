@@ -69,7 +69,7 @@ sstate-session:	FORCE
 	@sed 's!^session=\([0-9a-zA-Z]\+\)!export SSTATE_SERVER_SESSION = \1!p;d' ${_SSTATE_SERVER_SESSION_FILE}.tmp >> ${_SSTATE_SERVER_SESSION_FILE}.mk
 	@sed 's!^dlpath=\([0-9a-zA-Z]\+\)!export SSTATE_SERVER_PATH = \1!p;d'     ${_SSTATE_SERVER_SESSION_FILE}.tmp >> ${_SSTATE_SERVER_SESSION_FILE}.mk
 	@rm -f ${_SSTATE_SERVER_SESSION_FILE}.tmp
-	@echo "session created"
+	@echo "session created at ${SSTATE_SERVER_API}"
 
 endif
 
