@@ -107,5 +107,7 @@ sstate-check:	FORCE
 
 sstate-close:	FORCE
 	${Q}$(call sstate_server_curl,/v1/session/close,-X POST)
+	@rm -f ${_SSTATE_SERVER_SESSION_FILE}.mk
+	@echo 'export SSTATE_SERVER_API = ${SSTATE_SERVER_API}'  > ${_SSTATE_SERVER_SESSION_FILE}.mk
 
 endif
