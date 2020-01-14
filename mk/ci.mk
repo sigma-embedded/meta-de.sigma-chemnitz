@@ -9,6 +9,8 @@ ci-deploy ci-deploy-rescue ci-deploy-sdk ci-deploy-doc:
 ci-build ci-info:
 	$(MAKE) .$@ BUILDMODE=ci BUILDDIR="../build${CI_FLAVOR}-${CI_DIST}" C="build${CI_FLAVOR}" top_srcdir="$(abspath .)"
 
+ci-build:	sstate-check
+
 ifeq (${BUILDMODE},ci)
 override BUILDMODE = .ci
 
