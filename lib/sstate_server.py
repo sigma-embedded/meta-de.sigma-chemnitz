@@ -225,6 +225,31 @@ class Upload(SStateAPI):
         self.is_signed = is_signed
 
     @staticmethod
+    def _skip_file(dl_dir, fname):
+        global start_tm
+
+        ## TOOD: this method is hacky;
+
+        path      = os.path.join(dl_dir, fname)
+        done_file = path + ".done"
+
+        if not os.path.exists(path):
+            bb.warn("source %s does not exist; skipping" % (fname,))
+            return True
+
+        try:
+            st = os.lstat(done_file)
+        except:
+            bb.warn("%s.done file does not exist; skipping" % (done_file,))
+            return True
+
+        if st.st_mtime < start_tm:
+            bb.debug(1, "%s.done file created before actual session; skipping" % (fname,))
+            return True
+
+        return False
+
+    @staticmethod
     def from_srcuri(uri, ud):
         info = None
 
@@ -248,11 +273,15 @@ class Upload(SStateAPI):
         if not info:
             return []
 
+        dl_dir = d.getVar("DL_DIR", True)
+        files  = filter(lambda u: not Upload._skip_file(dl_dir, u),
+                        info[1])
+
         res = map(lambda u: Upload(ftype  = info[0],
                                    fname  = u,
-                                   path   = os.path.join(d.getVar("DL_DIR", True), u),
+                                   path   = os.path.join(dl_dir, u),
                                    scmrev = getattr(ud, 'revision', None)),
-                  info[1])
+                  files)
 
         return list(res)
 
