@@ -16,6 +16,7 @@ PING_DELAY = 120
 last_ping = time.monotonic() - PING_DELAY
 
 sstate_server_disabled = False
+start_tm = None
 
 ## Generic object with some helper functions
 class SStateAPI(ABC):
@@ -297,7 +298,14 @@ class Upload(SStateAPI):
 ## TODO: use 'eventmask' to filter for bb.event.TaskSucceeded instead
 ## of comparing it manually
 def handle_event(e):
-    if isinstance(e, bb.event.BuildStarted):
+    global start_tm
+
+    if isinstance(e, bb.event.ConfigParsed):
+        # this must be done in an early event; else 'e.data' is local
+        # and not carried to other events
+        e.data.setVarFlag('_SSTATE_SERVER_INFO', 'start_time', time.time())
+
+    elif isinstance(e, bb.event.BuildStarted):
         SetInfo().run(e.data)
 
     elif isinstance(e, bb.build.TaskProgress):
@@ -307,6 +315,9 @@ def handle_event(e):
         Stats().run(e.data)
 
     elif isinstance(e, bb.build.TaskSucceeded):
+        start_tm = e.data.getVarFlag('_SSTATE_SERVER_INFO', 'start_time', True)
+        assert(start_tm != None)
+
         if e.task in (e.data.getVar('SSTATETASKS', True) or "").split():
             post_create(e.data)
 
