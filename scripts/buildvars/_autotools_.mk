@@ -17,7 +17,8 @@ CONFIGURE_EXTRA_FLAGS ?=
 AUTORECONF ?= autoreconf -i -f
 CONFIGURE ?=  ./configure
 
-autoreconf: export ACLOCAL=${_BUILDVAR_ACLOCAL}
+export ACLOCAL = ${_BUILDVAR_ACLOCAL}
+
 autoreconf:
 	${AUTORECONF}
 
