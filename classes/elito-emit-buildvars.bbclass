@@ -144,6 +144,10 @@ be written into."
 
 BUILDVARSDIR = "${WORKDIR}/buildvars-${PN}"
 
+BUILDVARS_STYLE[type] = "string"
+BUILDVARS_STYLE[doc] = "Buildvars style; supported values are _autotools_, \
+    _meson_ and _qmake'"
+
 SSTATETASKS += "do_emit_buildvars"
 
 ## Splite BUILDVARS_EXPORT and honor special prefixes
@@ -203,6 +207,18 @@ def _gen_emitbuildvars_value(d):
         res += '\0'
     return res
 
+def _get_buildvars_style(d):
+    style = d.getVar('BUILDVARS_STYLE', True)
+
+    if style and len(style) > 0:
+        return style
+
+    for k in ('autotools', 'meson'):
+        if bb.data.inherits_class(k, d):
+            return '_%s_' % k
+
+    return None
+
 do_emit_buildvars[vardeps] += "BUILDVARS_EXPORT ${BUILDVARS_EXPORT} \
   BUILDVARS_OMIT_FOOTER BUILDVARS_FOOTER"
 do_emit_buildvars[vardepvalue] += "${@_gen_emitbuildvars_value(d)}"
@@ -220,8 +236,15 @@ python do_emit_buildvars() {
             return '%s%s %s %s' % (prefix, self.name, self.eq, self.v)
 
     res = []
+    style = _get_buildvars_style(d)
+
     prefix = d.getVar("BUILDVARS_PREFIX", True)
     values = _emitbuildvars_split_vars(d)
+
+    if style:
+        style = RawString('BUILDVARS_STYLE', '?=', style)
+        values[style.name] = style
+
     for name in sorted(values):
         val = values[name].emit(d, prefix)
         if val:
@@ -230,8 +253,13 @@ python do_emit_buildvars() {
     if not oe.data.typed_value('BUILDVARS_OMIT_FOOTER', d):
         res.extend(['',
                     'ifdef _BUILDVAR_STYLE',
-                    'include ${%sBUILDVARS_SCRIPT_DIR}/${_BUILDVAR_STYLE}.mk' % prefix,
-                    'endif'])
+                    'include ${%sBUILDVARS_SCRIPT_DIR}/${_BUILDVAR_STYLE}.mk' % prefix])
+
+        if style:
+            res.extend(['else ifneq (${%s%s},)' % (prefix, style.name),
+                        'include ${%sBUILDVARS_SCRIPT_DIR}/${%s%s}.mk' % (prefix, prefix, style.name)])
+
+        res.extend(['endif'])
 
     fname = d.expand("${BUILDVARSDIR}/${PN}.mk")
     with open(fname, "w") as f:
