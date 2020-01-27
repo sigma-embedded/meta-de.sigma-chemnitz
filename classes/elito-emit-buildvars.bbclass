@@ -210,6 +210,15 @@ do_emit_buildvars[dirs] = "${BUILDVARSDIR}"
 do_emit_buildvars[sstate-inputdirs] = "${BUILDVARSDIR}"
 do_emit_buildvars[sstate-outputdirs] = "${BUILDVARS_DEPLOY_DIR}"
 python do_emit_buildvars() {
+    class RawString:
+        def __init__(self, name, eq, v):
+            self.v = v
+            self.eq = eq
+            self.name = name
+
+        def emit(self, d, prefix):
+            return '%s%s %s %s' % (prefix, self.name, self.eq, self.v)
+
     res = []
     prefix = d.getVar("BUILDVARS_PREFIX", True)
     values = _emitbuildvars_split_vars(d)
