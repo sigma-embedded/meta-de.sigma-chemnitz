@@ -1,14 +1,14 @@
 ## --*- bitbake -*--
 SECTION = "kernel"
 
-CFGSET ?= ""
-PATCHSET ?= ""
+CFGSET ??= ""
+PATCHSET ??= ""
 
 PROVIDES = "virtual/kernel"
 
 SRC_URI = "${KERNEL_URI} ${PATCHSET} ${CFGSET}"
 
-KERNEL_REVISION ?= "${SRCREV_kernel_${BASE_PV}}"
+KERNEL_REVISION ??= "${SRCREV_kernel_${BASE_PV}}"
 SRCREV = "${KERNEL_REVISION}"
 
 # to be overridden in .bbappend
