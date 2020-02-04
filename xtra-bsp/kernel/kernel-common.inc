@@ -1,10 +1,9 @@
 ## --*- bitbake -*--
 LICENSE = "GPLv2"
 
-KERNEL_BASE_URI ?= "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
-KERNEL_REFSPEC ?= ";branch=linux-${BASE_PV}.y"
-#KERNEL_REFSPEC ?= ";branch=master"
-KERNEL_URI ?= "${KERNEL_BASE_URI}${KERNEL_REFSPEC}"
+KERNEL_BASE_URI ??= "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
+KERNEL_REFSPEC  ??= ";branch=linux-${BASE_PV}.y"
+KERNEL_URI ??= "${KERNEL_BASE_URI}${KERNEL_REFSPEC}"
 
 SRCREV_kernel_vanilla_4.14 ?= "b0cdffaa546e24acf92ab3b0d4e917a51aff6a82"
 SRCREV_kernel_vanilla_4.19 ?= "cb1f9a169a0e197f93816ace48a6520e8640809d"
