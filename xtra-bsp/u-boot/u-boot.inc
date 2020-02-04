@@ -1,8 +1,8 @@
 ## --*- bitbake -*--
-UBOOT_REVISION ?= "${SRCREV_uboot_${BASE_PV}}"
+UBOOT_REVISION ??= "${SRCREV_uboot_${BASE_PV}}"
 
-CFGSET ?= ""
-PATCHSET ?= ""
+CFGSET ??= ""
+PATCHSET ??= ""
 SRC_URI = "\
     ${UBOOT_BASE_URI}${UBOOT_REFSPEC} \
     ${PATCHSET} \

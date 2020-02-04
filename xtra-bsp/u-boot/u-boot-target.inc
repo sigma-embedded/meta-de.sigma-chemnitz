@@ -7,7 +7,7 @@ PROVIDES = "virtual/bootloader u-boot"
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 # to be overridden in .bbappend
-COMPATIBLE_MACHINE ?= "none"
+COMPATIBLE_MACHINE ??= "none"
 
 CFGSET = "\
 "
