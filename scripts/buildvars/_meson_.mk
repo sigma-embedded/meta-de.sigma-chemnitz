@@ -16,7 +16,8 @@ MESON_CDB_CLEANUP = \
 
 meson-setup:	export PKG_CONFIG_LIBDIR=${BUILDVAR_PKG_CONFIG_LIBDIR}
 meson-setup:
-	${MESON} setup --wipe ${MESON_ARGS} '.' '$S'
+	w=; test ! -e "meson-private/cmd_line.txt" || w=--wipe; \
+	${MESON} setup $$w ${MESON_ARGS} '.' '$S'
 
 meson-build:
 	${NINJA}
