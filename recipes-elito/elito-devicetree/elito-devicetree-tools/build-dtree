@@ -123,7 +123,7 @@ base=${1%%.dts}
 fname=${base##*/}
 
 rm -f "$arg_out/$fname-rev.dts"
-dtc -I dtb -O dts --sort -o "$arg_out/$fname-rev.dts" "$arg_out/$base.dtb"
+dtc -I dtb -O dts -q --sort -o "$arg_out/$fname-rev.dts" "$arg_out/$base.dtb"
 chmod a-w "$arg_out/$fname-rev.dts"
 
 test -z "$arg_tftp" || \
