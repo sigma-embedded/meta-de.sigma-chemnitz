@@ -21,7 +21,7 @@ Index: git/src/libsystemd-network/sd-dhcp-client.c
 ===================================================================
 --- git.orig/src/libsystemd-network/sd-dhcp-client.c
 +++ git/src/libsystemd-network/sd-dhcp-client.c
-@@ -48,6 +48,7 @@ struct sd_dhcp_client {
+@@ -47,6 +47,7 @@ struct sd_dhcp_client {
          union sockaddr_union link;
          sd_event_source *receive_message;
          bool request_broadcast;
@@ -29,7 +29,7 @@ Index: git/src/libsystemd-network/sd-dhcp-client.c
          uint8_t *req_opts;
          size_t req_opts_allocated;
          size_t req_opts_size;
-@@ -167,6 +168,15 @@ int sd_dhcp_client_set_request_broadcast
+@@ -168,6 +169,15 @@ int sd_dhcp_client_set_request_broadcast
          return 0;
  }
  
@@ -45,7 +45,7 @@ Index: git/src/libsystemd-network/sd-dhcp-client.c
  int sd_dhcp_client_set_request_option(sd_dhcp_client *client, uint8_t option) {
          size_t i;
  
-@@ -656,7 +666,7 @@ static int client_message_init(
+@@ -693,7 +703,7 @@ static int client_message_init(
                  memcpy(&packet->dhcp.chaddr, &client->mac_addr, ETH_ALEN);
  
          /* If no client identifier exists, construct an RFC 4361-compliant one */
@@ -58,7 +58,7 @@ Index: git/src/network/networkd-dhcp4.c
 ===================================================================
 --- git.orig/src/network/networkd-dhcp4.c
 +++ git/src/network/networkd-dhcp4.c
-@@ -1096,6 +1096,11 @@ int dhcp4_configure(Link *link) {
+@@ -1208,6 +1208,11 @@ int dhcp4_configure(Link *link) {
          if (r < 0)
                  return log_link_error_errno(link, r, "DHCP4 CLIENT: Failed to attach event: %m");
  
@@ -74,9 +74,9 @@ Index: git/src/network/networkd-network-gperf.gperf
 ===================================================================
 --- git.orig/src/network/networkd-network-gperf.gperf
 +++ git/src/network/networkd-network-gperf.gperf
-@@ -142,6 +142,7 @@ Route.QuickAck,
- Route.FastOpenNoCookie,                 config_parse_fast_open_no_cookie,                0,                             0
- Route.TTLPropagate,                     config_parse_route_ttl_propagate,                0,                             0
+@@ -150,6 +150,7 @@ Route.TTLPropagate,
+ NextHop.Id,                             config_parse_nexthop_id,                         0,                             0
+ NextHop.Gateway,                        config_parse_nexthop_gateway,                    0,                             0
  DHCPv4.ClientIdentifier,                config_parse_dhcp_client_identifier,             0,                             offsetof(Network, dhcp_client_identifier)
 +DHCPv4.SendClientId,                    config_parse_bool,                               0,                             offsetof(Network, dhcp_send_client_id)
  DHCPv4.UseDNS,                          config_parse_bool,                               0,                             offsetof(Network, dhcp_use_dns)
@@ -86,31 +86,31 @@ Index: git/src/network/networkd-network.c
 ===================================================================
 --- git.orig/src/network/networkd-network.c
 +++ git/src/network/networkd-network.c
-@@ -366,6 +366,7 @@ int network_load_one(Manager *manager, c
+@@ -376,6 +376,7 @@ int network_load_one(Manager *manager, O
                  .dhcp_use_dns = true,
                  .dhcp_use_hostname = true,
                  .dhcp_use_routes = true,
 +                .dhcp_send_client_id = true,
                  /* NOTE: this var might be overwritten by network_apply_anonymize_if_set */
                  .dhcp_send_hostname = true,
-                 /* To enable/disable RFC7844 Anonymity Profiles */
+                 .dhcp_send_release = true,
 Index: git/src/network/networkd-network.h
 ===================================================================
 --- git.orig/src/network/networkd-network.h
 +++ git/src/network/networkd-network.h
-@@ -87,6 +87,7 @@ struct Network {
-         uint32_t dhcp_route_table;
-         uint16_t dhcp_client_port;
+@@ -98,6 +98,7 @@ struct Network {
+         int dhcp_critical;
+         int ip_service_type;
          bool dhcp_anonymize;
 +        bool dhcp_send_client_id;
          bool dhcp_send_hostname;
          bool dhcp_broadcast;
-         int dhcp_critical;
+         bool dhcp_use_dns;
 Index: git/src/systemd/sd-dhcp-client.h
 ===================================================================
 --- git.orig/src/systemd/sd-dhcp-client.h
 +++ git/src/systemd/sd-dhcp-client.h
-@@ -114,6 +114,9 @@ int sd_dhcp_client_set_request_address(
+@@ -116,6 +116,9 @@ int sd_dhcp_client_set_request_address(
  int sd_dhcp_client_set_request_broadcast(
                  sd_dhcp_client *client,
                  int broadcast);
