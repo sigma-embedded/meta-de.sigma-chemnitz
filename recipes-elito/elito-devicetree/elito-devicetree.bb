@@ -48,6 +48,9 @@ do_emit_buildvars[depends] += "virtual/kernel:do_patch"
 
 do_compile[depends] += "virtual/kernel:do_patch"
 do_compile() {
+    ## avoid broken deps on not anymore existing files by removing dep
+    ## stamp file
+    rm -f .*.dts.d
     oe_runmake -e
 }
 
