@@ -7,7 +7,7 @@ ci-deploy ci-deploy-rescue ci-deploy-sdk ci-deploy-doc:
 	ls -lR "$D"/
 
 ci-build ci-info:
-	$(MAKE) .$@ BUILDMODE=ci BUILDDIR="../build${CI_FLAVOR}-${CI_DIST}" C="build${CI_FLAVOR}" top_srcdir="$(abspath .)"
+	$(MAKE) .$@ BUILDMODE=ci BUILDDIR="../tmp-build" top_srcdir="$(abspath .)"
 
 ci-build:	sstate-check
 
@@ -53,11 +53,9 @@ $(addprefix ci-deploy_machine-,${CI_DEPLOY_MACHINES}):ci-deploy_machine-%:
 	${MAKE} -s bitbake BITBAKE=bitbake-layers T= BO=show-layers
 	${MAKE} -s bitbake BITBAKE=bitbake-layers T= BO=show-overlayed
 
+.ci-prepare:	export PROJECT_ROOT=${top_srcdir}
 .ci-prepare:	tmpl.conf
-ifneq ($(CI_FLAVOR),)
-	ln -s build "build${CI_FLAVOR}"
-endif
-	${CI_DIR}/oe-conf "$C" "${BUILDDIR}" "$(abspath $<)" "local-local.conf" 0
+	${CI_DIR}/oe-conf 'build/' "${BUILDDIR}" "$(abspath $<)"
 ifneq (${CI_MACHINE},)
 	sed -i -e "1i\\" -e "MACHINE = \"${CI_MACHINE}\"" ${BUILDDIR}/conf/local.conf
 endif
