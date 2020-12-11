@@ -53,6 +53,7 @@ $(addprefix ci-deploy_machine-,${CI_DEPLOY_MACHINES}):ci-deploy_machine-%:
 	${MAKE} -s bitbake BITBAKE=bitbake-layers T= BO=show-layers
 	${MAKE} -s bitbake BITBAKE=bitbake-layers T= BO=show-overlayed
 
+.ci-prepare:	export OECORE_DIR:=${OECORE_DIR}
 .ci-prepare:	export PROJECT_ROOT=${top_srcdir}
 .ci-prepare:	tmpl.conf
 	${CI_DIR}/oe-conf 'build/' "${BUILDDIR}" "$(abspath $<)"
