@@ -64,6 +64,7 @@ SSTATE_SERVER_SESSION_NEW_PARAMS = \
 	$(if ${SSTATE_SERVER_SESSION},-H "X-Try-Session: ${SSTATE_SERVER_SESSION}")
 
 sstate-session:	FORCE
+	@mkdir -p '$(dir ${_SSTATE_SERVER_SESSION_FILE})'
 	@rm -f ${_SSTATE_SERVER_SESSION_FILE}.tmp
 	${Q}$(call _sstate_server_curl,,/v1/session/new,${SSTATE_SERVER_SESSION_NEW_PARAMS} --output ${_SSTATE_SERVER_SESSION_FILE}.tmp)
 	@rm -f ${_SSTATE_SERVER_SESSION_FILE}.mk
