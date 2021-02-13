@@ -20,19 +20,35 @@ AM_DTC_CPPFLAGS = \
 
 DTC_EXTRA_FLAGS ?=
 DTC_RESERVE ?= 4
-DTC_FLAGS = -R ${DTC_RESERVE} ${DTC_EXTRA_FLAGS}
+DTC_PADDING_SIZE ?= 0x3000
+DTB_SUFFIX ?= .dtb
+
+ifdef DTC_FLAGS
+$(error deprecated DTC_FLAGS used; rename them to DTC_BFLAGS
+endif
+
+DTC_BFLAGS = \
+	$(if ${DTC_RESERVE},-R '${DTC_RESERVE}') \
+	$(if ${DTC_PADDING_SIZE},-p '${DTC_PADDING_SIZE}') \
+	${DTC_EXTRA_FLAGS}
+
+DTC_OFLAGS = \
+	-p 0 -@ -H epapr
 
 define _linkfile
 ln -s '$1' '$2/'
 
 endef
 
-_dtbs = $(addsuffix .dtb,${VARIANTS})
+_dtbs = $(addsuffix ${DTB_SUFFIX},${VARIANTS})
 
 all:		${_dtbs}
 
 %.dtb:	%-preproc.dts
-	$(DTC) $(DTC_FLAGS) -I dts $(abspath $<) -o $(abspath $@) -O dtb
+	$(DTC) $(DTC_BFLAGS) -I dts $(abspath $<) -o $(abspath $@) -O dtb
+
+%.dtbo:	%-preproc.dts
+	$(DTC) $(DTC_OFLAGS) -I dts $(abspath $<) -o $(abspath $@) -O dtb
 
 %-preproc.dts:	%.dts
 	@-rm -f $@
@@ -51,3 +67,4 @@ clean:
 	rm -f ${_dtbs}
 
 .SECONDARY:	$(patsubst %.dtb,%-preproc.dts,${_dtbs})
+.SECONDARY:	$(patsubst %.dtbo,%-preproc.dts,${_dtbs})
