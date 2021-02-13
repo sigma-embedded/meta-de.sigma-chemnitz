@@ -32,9 +32,6 @@ _DECODERS_CPU_mx6dl = "mx6dl"
 DECODERS = "${_DECODERS_CPU}"
 
 ALL_DECODERS ?= "${@oe.utils.ifelse(d.getVar('DECODERS', True).strip(), '', '1')}"
-DECODERS_RDEPS ?= " \
-    ${@oe.utils.ifelse(d.getVar('ALL_DECODERS', True), 'bash', '')} \
-"
 
 do_configure() {
 	oe_runmake clean
@@ -49,4 +46,4 @@ do_install() {
 	install -d -m 0755 ${D}${datadir}/${PN}
 }
 
-RDEPENDS_${PN} += "${DECODERS_RDEPS} elito-decode-registers"
+RDEPENDS_${PN} += "bash elito-decode-registers"
