@@ -12,5 +12,6 @@ SRCREV_barebox_2017.12 = "d67aed662306dff4b2ab3064ebf81ef86cae1172"
 SRCREV_barebox_2019.03 = "c7a3ae7ec058e72adc0dae3ab41e47e475295d41"
 SRCREV_barebox_2019.11 = "5f16eba7068a7f04e6a7f8734cbff909440a1ef0"
 SRCREV_barebox_2020.06 = "4e5372bb1f15146bcf9d1df89bf45fb78e39f30c"
+SRCREV_barebox_2021.01 = "9f8e6f6a38a8f9351ea110eae9ff0dc62fde5220"
 
 PV = "${BASE_PV}+git${SRCPV}"
