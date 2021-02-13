@@ -13,7 +13,7 @@ AM_CPP_DEPGENFLAGS = \
 
 AM_DTC_CPPFLAGS = \
   $(AM_CPP_DEPGENFLAGS) \
-  -nostdinc -undef -x assembler-with-cpp \
+  -nostdinc -undef -D__DTS__ -x assembler-with-cpp \
   -I . -I='$(MACHINE_INCDIR)' \
   -I${KERNEL_DIR}/include \
   -I${KERNEL_DTREE_DIR} \
