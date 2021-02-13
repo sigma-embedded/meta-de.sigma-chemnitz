@@ -13,7 +13,7 @@
 : ${DTC_CPPFLAGS:=}
 : ${srcdir:=.}
 
-eval set -- `getopt -o 't:o:Pp:s' --long tftp:outdir:pins:nopins:pinflags:silent -- "$@"`
+eval set -- `getopt -o 't:o:Pp:s' --long tftp:outdir:pins:nopins:pinflags:silent,overlay -- "$@"`
 
 arg_tftp=
 arg_out=.dtb
@@ -21,7 +21,7 @@ arg_pins=
 arg_pinflags=
 opt_nopins=false
 arg_makeflags=( --no-print-directory )
-
+is_overlay=false
 
 while true; do
     a=$1
@@ -33,6 +33,7 @@ while true; do
       -P|--nopins)	opt_nopins=true;;
       -s|--silent)	arg_makeflags+=( -s );;
       --pinflags)	arg_pinflags=$1; shift;;
+      --overlay)	is_overlay=true;;
       --)		break;;
       *)		echo "internal error" >&2; exit 1;;
     esac
@@ -109,6 +110,7 @@ doit_generic() {
     MACHINE_INCDIR="${MACHINCDIR##$STAGINGDIR}"
     KERNEL_DIR="${KERNEL_DIR}"
     KERNEL_DTREE_DIR="${KERNEL_DTREE_DIR}"
+    DTB_SUFFIX=".$DTB_SUFFIX"
   )
 
   "${_make[@]}" -f "${PKGDATA_DIR}/devicetree.mk" "${dtbflags[@]}"
@@ -116,6 +118,12 @@ doit_generic() {
 
 set -e
 mkdir -p "$arg_out"
+
+if $is_overlay; then
+    DTB_SUFFIX=dtbo
+else
+    DTB_SUFFIX=dtb
+fi
 
 export DTC_CPPFLAGS
 _extend_dtc_cppflags "`pwd`" "${DTC_INC_PATH}"
@@ -126,8 +134,8 @@ base=${1%%.dts}
 fname=${base##*/}
 
 rm -f "$arg_out/$fname-rev.dts"
-dtc -I dtb -O dts -q --sort -o "$arg_out/$fname-rev.dts" "$arg_out/$base.dtb"
+dtc -I dtb -O dts -q --sort -o "$arg_out/$fname-rev.dts" "$arg_out/$base.${DTB_SUFFIX}"
 chmod a-w "$arg_out/$fname-rev.dts"
 
 test -z "$arg_tftp" || \
-    cat "$arg_out/$base.dtb" > "$TFTPBOOT_DIR/$arg_tftp"
+    cat "$arg_out/$base.${DTB_SUFFIX}" > "$TFTPBOOT_DIR/$arg_tftp"

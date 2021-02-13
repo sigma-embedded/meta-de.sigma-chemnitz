@@ -13,6 +13,11 @@ SRC_URI = "\
                   oe.data.typed_value('MACHINE_DTS_NAME', d)))} \
 "
 
+DTBS = " \
+    ${@dtb_suffix(d, 'MACHINE_DTS_NAME', 'dtb')} \
+    ${@dtb_suffix(d, 'MACHINE_DTSO_NAME', 'dtbo')} \
+"
+
 INHIBIT_DEFAULT_DEPS = "1"
 EXTRA_OEMAKE = "\
   -f ${STAGING_DIR_NATIVE}/${datadir}/elito-devicetree-tools/devicetree.mk \
@@ -24,6 +29,7 @@ EXTRA_OEMAKE = "\
   MACHINE_INCDIR=${MACHINCDIR} \
   VARIANTS='${MACHINE_DTS_NAME}' \
   KERNEL_DTREE_DIR=${KERNEL_DTREE_DIR} \
+  _dtbs='${DTBS}' \
 "
 
 EXTRA_OEMAKE_append_mx28 = " SOC_FAMILY=mx28"
@@ -44,6 +50,10 @@ S  = "${WORKDIR}"
 require elito-devicetree-common.inc
 inherit deploy elito-machdata elito-dtree-base
 
+def dtb_suffix(d, varname, sfx):
+    dts = (d.getVar(varname, True) or '').split()
+    return ' '.join(map(lambda x: '%s.%s' % (x, sfx), dts))
+
 do_emit_buildvars[depends] += "virtual/kernel:do_patch"
 
 do_compile[depends] += "virtual/kernel:do_patch"
@@ -60,14 +70,17 @@ do_install() {
 
 do_deploy[cleandirs] = "${DEPLOYDIR}"
 do_deploy() {
-    for i in *.dtb; do
-	dname=${i%%.dtb}-"${EXTENDPKGV}".dtb
-	install -D -p -m 0644 "$i" ${DEPLOYDIR}/"$dname"
-	rm -f ${DEPLOYDIR}/"$i"
-	ln -s "$dname" ${DEPLOYDIR}/"$i"
+    for sfx in dtb dtbo; do
+        for i in *.$sfx; do
+	    test -e "$i" || continue
+	    dname=${i%%.$sfx}-"${EXTENDPKGV}".$sfx
+	    install -D -p -m 0644 "$i" ${DEPLOYDIR}/"$dname"
+	    rm -f ${DEPLOYDIR}/"$i"
+	    ln -s "$dname" ${DEPLOYDIR}/"$i"
+        done
     done
 }
 addtask deploy before do_package after do_compile
 
-FILES_${PN}-dev += "${MACHDATADIR}/*.dtb  ${MACHDATADIR}/*.mk"
+FILES_${PN}-dev += "${MACHDATADIR}/*.dtb*  ${MACHDATADIR}/*.mk"
 RDEPENDS_${PN}-dev += "make"
