@@ -1,0 +1,44 @@
+Fixes
+
+| make[1]: ...././gcc/xgcc: Command not found
+| make[1]: *** [..../gcc/cp/Make-lang.in:178: s-selftest-c++] Error 127
+| make[1]: *** Waiting for unfinished jobs....
+| make[1]: Leaving directory '..../gcc'
+| make: *** [Makefile:4328: all-gcc] Error 2
+
+Makefile does
+
+| include c/Make-lang.in
+|   ...
+|   C_SELFTEST_DEPS = cc1$(exeext) $(SELFTEST_DEPS)
+|   ...
+|   s-selftest-c: $(C_SELFTEST_DEPS)
+| 
+| SELFTEST_DEPS = $(GCC_PASSES) stmp-int-hdrs $(srcdir)/testsuite/selftests
+
+which means that $(SELFTEST_DEPS) are expanded in the language fragment
+files before they are defined in the main make file.
+
+
+Index: gcc-9.2.0/gcc/Makefile.in
+===================================================================
+--- gcc-9.2.0.orig/gcc/Makefile.in
++++ gcc-9.2.0/gcc/Makefile.in
+@@ -1686,6 +1686,8 @@ $(FULL_DRIVER_NAME): ./xgcc
+ 	rm -f $@
+ 	$(LN_S) $< $@
+ 
++SELFTEST_DEPS = $(GCC_PASSES) stmp-int-hdrs $(srcdir)/testsuite/selftests
++
+ #
+ # Language makefile fragments.
+ 
+@@ -1950,8 +1953,6 @@ DEVNULL=$(if $(findstring mingw,$(build)
+ SELFTEST_FLAGS = -nostdinc $(DEVNULL) -S -o $(DEVNULL) \
+ 	-fself-test=$(srcdir)/testsuite/selftests
+ 
+-SELFTEST_DEPS = $(GCC_PASSES) stmp-int-hdrs $(srcdir)/testsuite/selftests
+-
+ # Run the selftests during the build once we have a driver and the frontend,
+ # so that self-test failures are caught as early as possible.
+ # Use "s-selftest-FE" to ensure that we only run the selftests if the
