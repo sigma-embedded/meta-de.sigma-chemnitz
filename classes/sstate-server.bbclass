@@ -35,10 +35,15 @@ SSTATE_SERVER_SESSION ??= "-"
 SSTATE_SERVER_DISABLED ??= "false"
 SSTATE_SERVER_DISABLED[type] = "boolean"
 
-BB_HASHEXCLUDE_COMMON += "\
+SSTATE_HASHEXCLUDE_COMMON += "\
     SSTATE_SERVER_PATH SSTATE_SERVER_SESSION SSTATE_SERVER_API _SSTATE_SERVER_INFO \
     sstate_server_post_create \
 "
+
+## BB_HASHEXCLUDE_COMMON support was added in mid-dunfell and might
+## not be available in early checkouts.  Whitelist entries manually
+BB_HASHBASE_WHITELIST += "${SSTATE_HASHEXCLUDE_COMMON}"
+BB_HASHCONFIG_WHITELIST += "${SSTATE_HASHEXCLUDE_COMMON}"
 
 def sstate_server_get_mirrors(d, var):
     if (d.getVar('SSTATE_SERVER_API') or '').strip() == "":
