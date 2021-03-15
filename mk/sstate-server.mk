@@ -42,9 +42,11 @@ sstate-session: FORCE
 
 else     # non-empty SSTATE_SERVER_TOKEN
 
+_SSTATE_TOPDIR ?=		$(if ${top_srcdir},${top_srcdir},.)
+_SSTATE_GIT ?=			git -C '${_SSTATE_TOPDIR}'
 _SSTATE_SERVER_API ?=		http://ensc-virt.intern.sigma-chemnitz.de:21001/api
-_SSTATE_SERVER_GIT_BRANCH =	$(shell git rev-parse --abbrev-ref HEAD)
-_SSTATE_SERVER_GIT_REF =	$(shell git rev-parse HEAD)
+_SSTATE_SERVER_GIT_BRANCH =	$(shell ${_SSTATE_GIT} rev-parse --abbrev-ref HEAD)
+_SSTATE_SERVER_GIT_REF =	$(shell ${_SSTATE_GIT} rev-parse HEAD)
 __SSTATE_SERVER_DISTRO_RH =	sed 's!^\([^ ]\+\) release \([0-9]\+\).*!\1 \2!' /etc/redhat-release
 __SSTATE_SERVER_DISTRO_LSB =	source /etc/lsb-release && echo "$${DISTRIB_ID} $${DISTRIB_RELEASE}"
 
