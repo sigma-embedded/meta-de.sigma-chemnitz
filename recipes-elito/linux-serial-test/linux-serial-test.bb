@@ -9,6 +9,6 @@ SRC_URI = "\
     git+https://github.com/cbrake/linux-serial-test.git;branch=master \
 "
 
-S = "${WORKDIR}/git/"
+S = "${WORKDIR}/git"
 
 inherit cmake
