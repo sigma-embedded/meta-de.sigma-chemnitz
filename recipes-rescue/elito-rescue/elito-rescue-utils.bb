@@ -2,7 +2,7 @@ SUMMARY = "rescue system updater"
 LICENSE = "GPLv3"
 DEPENDS = "libccgi"
 
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293b95dea7b07891"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0-only;md5=c79ff39f19dfec6d293b95dea7b07891"
 
 PV   = "0.2.12+git${SRCPV}"
 
