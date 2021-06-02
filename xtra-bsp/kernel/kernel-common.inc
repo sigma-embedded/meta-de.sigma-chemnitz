@@ -5,16 +5,16 @@ KERNEL_BASE_URI ??= "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-
 KERNEL_REFSPEC  ??= ";branch=linux-${BASE_PV}.y"
 KERNEL_URI ??= "${KERNEL_BASE_URI}${KERNEL_REFSPEC}"
 
-SRCREV_kernel_vanilla_4.14 ?= "cf256fbcbe347b7d0ff58fe2dfa382a156bd3694"
-SRCREV_kernel_vanilla_4.19 ?= "2965db2e004cf9c92b87c1f559e9812c0ae878c1"
-SRCREV_kernel_vanilla_5.4  ?= "a7eb81c1d11ae311c25db88c25a7d5228fe5680a"
-SRCREV_kernel_vanilla_5.10 ?= "aea70bd5a45591de27aac367af94d184892c06ab"
+SRCREV_kernel_vanilla_4.14 ?= "ad8397a84e1e425e3f8221638cee2bfa237d9b2c"
+SRCREV_kernel_vanilla_4.19 ?= "6b7b0056defc6eb5c87bbe4690ccda547b2891aa"
+SRCREV_kernel_vanilla_5.4  ?= "103f1dbea1ae44731edca02cd7fcfa4a33742cd2"
+SRCREV_kernel_vanilla_5.10 ?= "33069919e2dce440d3b8cd101b18f37bb35bdddf"
 # use separate entry for include/uapi to avoid unnecessary rebuilds of
 # linux-libc-headers on kernel updates
-SRCREV_kernel_uapihdr_4.14 ?= "f4e7325060fe9d7f6b223fee7d2a28bf91ba8cb9"
-SRCREV_kernel_uapihdr_4.19 ?= "eac35ed3f8349727259ce15f1d68ca87e1adf1a3"
-SRCREV_kernel_uapihdr_5.4  ?= "c92aebf2b0f311ec19f70ebe3669a2534ef1c203"
-SRCREV_kernel_uapihdr_5.10 ?= "0e3f14755111522018c0e325d1ce768dd609641a"
+SRCREV_kernel_uapihdr_4.14 ?= "9c1fbf6d3ef2ad60292660ba3d0c48184ee3239a"
+SRCREV_kernel_uapihdr_4.19 ?= "20bff2f8c3e47d17214126e39db88747f7fd7399"
+SRCREV_kernel_uapihdr_5.4  ?= "9e3cbdc52318ae4e40fa88ade746b29def80ce0f"
+SRCREV_kernel_uapihdr_5.10 ?= "75ea982469035153cd494337b0de0f09b8e5bdf2"
 
 SRCREV_kernel_4.14 ?= "${SRCREV_kernel_vanilla_4.14}"
 SRCREV_kernel_4.19 ?= "${SRCREV_kernel_vanilla_4.19}"
