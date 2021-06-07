@@ -175,10 +175,13 @@ class SetInfo(SStateAPI):
     def _run(self, d, session):
         (conn, uri) = self.connect(d, "/v1/session/set-info")
 
+        distro = (d.getVar("DISTRO_CODENAME", True) or
+                  (d.getVar('LAYERSERIES_CORENAMES', True).split() or [None])[-1])
+
         hdrs = {
             "x-session"   : session,
             "x-lsb"       : d.getVar("NATIVELSBSTRING", True),
-            "x-oerev"     : d.getVar("LAYERSERIES_CORENAMES", True),
+            "x-corename"  : distro,
         }
 
         conn.request('PATCH', url = uri.path, headers = hdrs)
