@@ -56,6 +56,9 @@ _SSTATE_SERVER_DISTRO =		$(shell if   test -e /etc/lsb-release;    then ${__SSTA
 					elif test -e /etc/debian_version; then ${__SSTATE_SERVER_DISTRO_DEB}; \
 					else echo ""; fi)
 
+# TODO: this assumes gitlab ci variables
+SSTATE_SERVER_BUILD_URI ?=	${CI_JOB_URL}
+
 SSTATE_SERVER_SESSION_PING_PARAMS = \
 	-H 'X-Session: ${SSTATE_SERVER_SESSION}'
 
@@ -65,6 +68,7 @@ SSTATE_SERVER_SESSION_NEW_PARAMS = \
 	-H 'X-Branch: ${_SSTATE_SERVER_GIT_BRANCH}' \
 	-H 'X-Ref: ${_SSTATE_SERVER_GIT_REF}' \
 	-H 'X-Distro: ${_SSTATE_SERVER_DISTRO}' \
+	$(if ${SSTATE_SERVER_BUILD_URI},-H "X-Build-Uri: ${SSTATE_SERVER_BUILD_URI}") \
 	$(if ${SSTATE_SERVER_SESSION},-H "X-Try-Session: ${SSTATE_SERVER_SESSION}")
 
 sstate-session:	FORCE
