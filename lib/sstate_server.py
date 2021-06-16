@@ -218,13 +218,14 @@ class Stats(SStateAPI):
 ## Uploads a file
 class Upload(SStateAPI):
     def __init__(self, ftype, fname, path, scmrev = None, tags = None,
-                 is_signed = False):
+                 is_signed = False, task = None):
         super()
         self.ftype     = ftype
         self.fname     = fname
         self.path      = path
         self.scmrev    = None
         self.tags      = None
+        self.task      = task
         self.is_signed = is_signed
 
     @staticmethod
@@ -315,6 +316,7 @@ class Upload(SStateAPI):
                 "x-pkg-scmrev"     : self.scmrev,
                 "x-ftime"          : "%s" % st.st_mtime,
                 "x-filename"       : self.fname,
+                "x-task"           : self.task,
                 "x-is-signed"      : ["nil", "t"][self.is_signed],
             }
 
@@ -351,7 +353,7 @@ def handle_event(e):
         assert(start_tm != None)
 
         if e.task in (e.data.getVar('SSTATETASKS') or "").split():
-            post_create(e.data)
+            post_create(e.data, e.task)
 
         if e.task == "do_fetch":
             post_fetch(e.data)
@@ -372,7 +374,7 @@ def post_fetch(d):
 ## function is part of SSTATEPOSTCREATEFUNCS and called after creating
 ## the sstate file and (optionally) its signature, but *before* the
 ## .siginfo file is there
-def post_create(d):
+def post_create(d, task = None):
     import tempfile
 
     if d.getVar('SSTATE_SKIP_CREATION') == '1':
@@ -395,6 +397,7 @@ def post_create(d):
            path      = sstate_pkg,
            scmrev    = None,
            tags      = None,
+           task      = task,
            is_signed = is_signed).run(d)
 
     if is_signed:
@@ -403,6 +406,7 @@ def post_create(d):
                path      = sstate_pkg + ".sig",
                scmrev    = None,
                tags      = None,
+               task      = task,
                is_signed = is_signed).run(d)
 
     ## TODO: generating .siginfo here is hacky...  the .siginfo file
@@ -421,4 +425,5 @@ def post_create(d):
                path      = path,
                scmrev    = None,
                tags      = None,
+               task      = task,
                is_signed = is_signed).run(d)
