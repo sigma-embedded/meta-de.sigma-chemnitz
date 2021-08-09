@@ -6,7 +6,7 @@ LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 BRANCH = "master"
-SRC_URI = "git://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb.git;protocol=https;branch=${BRANCH}"
+SRC_URI = "git+https://gitlab-ext.sigma-chemnitz.de/ensc/bayer2rgb.git;branch=${BRANCH}"
 
 S = "${WORKDIR}/git"
 
