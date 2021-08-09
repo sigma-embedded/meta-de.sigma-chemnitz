@@ -16,6 +16,9 @@ RRECOMMENDS_${PN} = "\
     unfs3 \
     fbcat \
     persistent-v4l \
+    bayer2rgb-neon \
+    gstreamer1.0-plugin-bayer2rgb-neon \
+    gstreamer1.0-plugins-good \
 "
 
 DEPENDS += "\
