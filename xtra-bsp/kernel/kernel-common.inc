@@ -29,4 +29,4 @@ PV = "${BASE_PV}+git${SRCPV}"
 ## ignore where kernel is coming from; git rev is unique enough...
 SRC_URI[vardepsexclude] += "KERNEL_REFSPEC KERNEL_BASE_URI KERNEL_URI"
 
-RDEPENDS_${KERNEL_PACKAGE_NAME}-base = ""
+RDEPENDS:${KERNEL_PACKAGE_NAME}-base = ""

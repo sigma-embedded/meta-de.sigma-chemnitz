@@ -30,12 +30,12 @@ EXTRA_OEMAKE += "\
 S = "${WORKDIR}/git"
 
 PACKAGES =+ "${PN}-encode ${PN}-decode ${PN}-utils"
-FILES_${PN}-encode = "${bindir}/*-encode"
-FILES_${PN}-decode = "${bindir}/*-decode"
-FILES_${PN}-utils = "${bindir}/*-dump-progress"
+FILES:${PN}-encode = "${bindir}/*-encode"
+FILES:${PN}-decode = "${bindir}/*-decode"
+FILES:${PN}-utils = "${bindir}/*-dump-progress"
 
 BBCLASSEXTEND = "native nativesdk"
 
-do_install_append() {
+do_install:append() {
 	install -D -p -m 0755 dump-progress ${D}${bindir}/elito-stream-dump-progress
 }

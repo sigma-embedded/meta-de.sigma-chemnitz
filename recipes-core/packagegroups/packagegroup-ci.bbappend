@@ -4,7 +4,7 @@ PV = "5.0"
 _ARCHPKGS = "\
 "
 
-RRECOMMENDS_${PN} = "\
+RRECOMMENDS:${PN} = "\
     ${_ARCHPKGS} \
     e2fsprogs \
     elito-decode-definitions \

@@ -14,8 +14,8 @@ S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
 CROSS_COMPILE = ""
-CROSS_COMPILE_class-target = "${TARGET_PREFIX}"
-CROSS_COMPILE_class-nativesdk = "${HOST_PREFIX}"
+CROSS_COMPILE:class-target = "${TARGET_PREFIX}"
+CROSS_COMPILE:class-nativesdk = "${HOST_PREFIX}"
 
 UBOOT_CC = "${KERNEL_CC}${TOOLCHAIN_OPTIONS}"
 

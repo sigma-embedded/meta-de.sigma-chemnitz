@@ -28,16 +28,16 @@ do_unpackextra() {
 }
 addtask unpackextra after do_unpack before do_configure
 
-RDEPENDS_${PN} += "elito-image-stream-decode virtual/rescue-conf"
+RDEPENDS:${PN} += "elito-image-stream-decode virtual/rescue-conf"
 
 PACKAGES += "${PN}-http"
 
-FILES_${PN}-dbg += "/srv/www/cgi-bin/.debug"
+FILES:${PN}-dbg += "/srv/www/cgi-bin/.debug"
 
-FILES_${PN} = "${datadir}/elito-rescue ${bindir}/*"
+FILES:${PN} = "${datadir}/elito-rescue ${bindir}/*"
 
-RDEPENDS_${PN}-http += "${PN}"
-FILES_${PN}-http += "\
+RDEPENDS:${PN}-http += "${PN}"
+FILES:${PN}-http += "\
   ${wwwdir}/index.html \
   ${wwwdir}/cgi-bin/image-update.cgi \
 "

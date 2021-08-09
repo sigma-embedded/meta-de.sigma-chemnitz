@@ -49,11 +49,11 @@ python () {
         fname = "rescue-" + name
 
         pkgs.append(pkg)
-        d.setVar("INITSCRIPT_NAME_" + pkg, fname)
-        d.setVar("INITSCRIPT_PARAMS_" + pkg, "defaults %u %u" % (prio, 99-prio))
-        d.setVar("FILES_" + pkg, "${INIT_D_DIR}/" + fname)
-        d.setVar("RDEPENDS_" + pkg, "update-rc.d " + deps)
-        d.setVar("RPROVIDES_" + pkg, "virtual/rescue-init-%s" % name)
+        d.setVar("INITSCRIPT_NAME:" + pkg, fname)
+        d.setVar("INITSCRIPT_PARAMS:" + pkg, "defaults %u %u" % (prio, 99-prio))
+        d.setVar("FILES:" + pkg, "${INIT_D_DIR}/" + fname)
+        d.setVar("RDEPENDS:" + pkg, "update-rc.d " + deps)
+        d.setVar("RPROVIDES:" + pkg, "virtual/rescue-init-%s" % name)
 
     extend_var("INITSCRIPT_PACKAGES", " ".join(pkgs))
     extend_var("PACKAGES", " ".join(pkgs), True)
@@ -78,13 +78,13 @@ do_install() {
 }
 
 PACKAGES += "${PN}-dhcp-notify ${PN}-dhcp-ntpd"
-RPROVIDES_${PN} += "virtual/rescue-conf"
+RPROVIDES:${PN} += "virtual/rescue-conf"
 
-RRECOMMENDS_${PN} += "${PN}-sysv-sysinit"
+RRECOMMENDS:${PN} += "${PN}-sysv-sysinit"
 
-CONFFILES_${PN} = "${sysconfdir}/elito-rescue.conf"
-FILES_${PN} = "/init ${sysconfdir}/elito-rescue.conf"
-FILES_${PN}-dhcp-notify = "${sysconfdir}/udhcpc.d/90notify"
-RDEPENDS_${PN}-dhcp-notify = "virtual/rescue-init-network-dhcp"
+CONFFILES:${PN} = "${sysconfdir}/elito-rescue.conf"
+FILES:${PN} = "/init ${sysconfdir}/elito-rescue.conf"
+FILES:${PN}-dhcp-notify = "${sysconfdir}/udhcpc.d/90notify"
+RDEPENDS:${PN}-dhcp-notify = "virtual/rescue-init-network-dhcp"
 
-FILES_${PN}-dhcp-ntpd = "${sysconfdir}/udhcpc.d/80ntpd ${bindir}/rescue-set-time"
+FILES:${PN}-dhcp-ntpd = "${sysconfdir}/udhcpc.d/80ntpd ${bindir}/rescue-set-time"

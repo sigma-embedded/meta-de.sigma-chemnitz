@@ -10,7 +10,7 @@ S = "${WORKDIR}/git"
 #B = "${WORKDIR}/build"
 
 _PYTHON3 = "/usr/bin/env python3"
-_PYTHON3_class-target = "${bindir}/${PYTHON_PN}"
+_PYTHON3:class-target = "${bindir}/${PYTHON_PN}"
 
 ## do not use ${PYTHON} here; the shebang line becomes too large else
 EXTRA_OEMAKE = "\
@@ -43,15 +43,15 @@ do_install() {
 
 PACKAGE_BEFORE_PN += "${PN}-tools"
 
-FILES_${PN}-dev += "\
+FILES:${PN}-dev += "\
     ${datadir}/decode-registers/c \
     ${datadir}/decode-registers/mk \
 "
 
-FILES_${PN}-tools += "\
+FILES:${PN}-tools += "\
     ${datadir}/decode-registers/py \
     ${bindir}/decode-registers-gendesc \
 "
 
-RDEPENDS_${PN}-tools += "${PYTHON_PN}-core"
-RRECOMMENDS_${PN} += "less"
+RDEPENDS:${PN}-tools += "${PYTHON_PN}-core"
+RRECOMMENDS:${PN} += "less"

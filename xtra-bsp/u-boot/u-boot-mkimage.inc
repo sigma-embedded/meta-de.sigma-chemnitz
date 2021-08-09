@@ -1,9 +1,9 @@
 ## --*- bitbake -*--
-KERNEL_CC_append_class-native    = " ${BUILD_LDFLAGS}"
-KERNEL_CC_append_class-nativesdk  = " ${BUILD_LDFLAGS}"
+KERNEL_CC:append:class-native    = " ${BUILD_LDFLAGS}"
+KERNEL_CC:append:class-nativesdk  = " ${BUILD_LDFLAGS}"
 
-TOOLCHAIN_OPTIONS_class-native    = " -isystem${STAGING_INCDIR_NATIVE}"
-TOOLCHAIN_OPTIONS_class-nativesdk = " -isystem${STAGING_INCDIR_NATIVE}"
+TOOLCHAIN_OPTIONS:class-native    = " -isystem${STAGING_INCDIR_NATIVE}"
+TOOLCHAIN_OPTIONS:class-nativesdk = " -isystem${STAGING_INCDIR_NATIVE}"
 
 HOST_CC_KERNEL_ARCH = "${HOST_CC_ARCH}"
 

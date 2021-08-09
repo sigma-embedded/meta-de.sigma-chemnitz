@@ -1,13 +1,13 @@
 inherit buildhistory
 
-buildhistory_get_imageinfo_append() {
+buildhistory_get_imageinfo:append() {
 	cat << "EOF" > ${BUILDHISTORY_DIR_IMAGE}/image-features.txt
 DISTRO_FEATURES = ${@' '.join(sorted(set(d.getVar('DISTRO_FEATURES', True).split())))}
 MACHINE_FEATURES = ${@' '.join(sorted(set(d.getVar('MACHINE_FEATURES', True).split())))}
 EOF
 }
 
-buildhistory_emit_pkghistory_append() {
+buildhistory_emit_pkghistory:append() {
     buildhistory_ext_emit_features(d)
 }
 

@@ -23,8 +23,8 @@ ROOTFS_POSTINSTALL_COMMAND += "rescue_fixup_rootfs;"
 IMAGE_PREPROCESS_COMMAND += "rescue_cleanup_rootfs;"
 BAD_RECOMMENDATIONS += "busybox-syslog-systemd systemd"
 
-PACKAGE_INSTALL_remove = "kernel-modules"
-MACHINE_EXTRA_RRECOMMENDS_remove = "kernel-modules"
+PACKAGE_INSTALL:remove = "kernel-modules"
+MACHINE_EXTRA_RRECOMMENDS:remove = "kernel-modules"
 
 PR = "r1"
 

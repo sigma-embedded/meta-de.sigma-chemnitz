@@ -1,11 +1,11 @@
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 MACHINCDIR = "${includedir}/mach-${MACHINE}"
-MACHINCDIR_class-cross = "${STAGING_DIR_TARGET}${target_includedir}/mach-${MACHINE}"
+MACHINCDIR:class-cross = "${STAGING_DIR_TARGET}${target_includedir}/mach-${MACHINE}"
 
 STAGING_MACHINCDIR = "${STAGING_DIR_TARGET}${MACHINCDIR}"
 
 MACHDATADIR = "${datadir}/mach-${MACHINE}"
-MACHDATADIR_class-cross = "${STAGING_DIR_TARGET}${target_datadir}/mach-${MACHINE}"
+MACHDATADIR:class-cross = "${STAGING_DIR_TARGET}${target_datadir}/mach-${MACHINE}"
 
 STAGING_MACHDATADIR = "${STAGING_DIR_TARGET}${MACHDATADIR}"

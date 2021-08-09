@@ -88,7 +88,7 @@ ROOTFS_POSTPROCESS_COMMAND += "${@\
   bb.utils.contains('IMAGE_FEATURES', 'no-root-bash', \
 		    '', 'elito_set_rootbash ;', d)}"
 
-ROOTFS_POSTPROCESS_COMMAND_remove = "${@\
+ROOTFS_POSTPROCESS_COMMAND:remove = "${@\
   bb.utils.contains('IMAGE_FEATURES', 'devel-sshkey', \
   bb.utils.contains('IMAGE_FEATURES', 'allow-empty-password', \
                     '', 'ssh_allow_empty_password;', d), '', d)}"

@@ -42,6 +42,6 @@ do_deploy() {
 }
 addtask deploy before do_build after do_install
 
-FILES_${PN} = "/boot"
+FILES:${PN} = "/boot"
 
-INSANE_SKIP_${PN} = "textrel"
+INSANE_SKIP:${PN} = "textrel"

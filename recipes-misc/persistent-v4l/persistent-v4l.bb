@@ -8,4 +8,4 @@ do_install() {
 		${D}/lib/udev/rules.d/61-persistent-v4l.rules
 }
 
-FILES_${PN} = "/lib/udev/rules.d/*.rules"
+FILES:${PN} = "/lib/udev/rules.d/*.rules"

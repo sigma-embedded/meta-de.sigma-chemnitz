@@ -14,7 +14,7 @@ SRCREV = "${KERNEL_REVISION}"
 # to be overridden in .bbappend
 COMPATIBLE_MACHINE  = "(-)"
 
-RDEPENDS_${KERNEL_PACKAGE_NAME}-base = ""
+RDEPENDS:${KERNEL_PACKAGE_NAME}-base = ""
 
 inherit kernel
 inherit elito-kconfig
@@ -31,6 +31,6 @@ kernel_deploy_dot_config() {
 	done
 }
 
-do_deploy_append() {
+do_deploy:append() {
 	kernel_deploy_dot_config
 }

@@ -31,7 +31,7 @@ EXTRA_OEMAKE = "\
   _dtbs='${DTBS}' \
 "
 
-EXTRA_OEMAKE_append_mx28 = " SOC_FAMILY=mx28"
+EXTRA_OEMAKE:append_mx28 = " SOC_FAMILY=mx28"
 
 COMPATIBLE_MACHINE = "(mx28|mx6|mx7|mx8|ti33x)"
 
@@ -79,5 +79,5 @@ do_deploy() {
 }
 addtask deploy before do_package after do_compile
 
-FILES_${PN}-dev += "${MACHDATADIR}/*.dtb*  ${MACHDATADIR}/*.mk"
-RDEPENDS_${PN}-dev += "make"
+FILES:${PN}-dev += "${MACHDATADIR}/*.dtb*  ${MACHDATADIR}/*.mk"
+RDEPENDS:${PN}-dev += "make"

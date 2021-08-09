@@ -48,11 +48,11 @@ do_configure() {
 
 # hack; use the override because do_install() from BBCLASSEXTEND seems
 # to win else
-do_install_forcevariable() {
+do_install:forcevariable() {
     install -D -p -m 0755 build-dtree ${D}${bindir}/elito-build-dtree
     install -D -p -m 0644 ${WORKDIR}/devicetree.mk ${D}${pkgdatadir}/devicetree.mk
 }
 
 do_build[depends] += "virtual/kernel:do_patch"
 
-RDEPENDS_${PN} += "bash"
+RDEPENDS:${PN} += "bash"

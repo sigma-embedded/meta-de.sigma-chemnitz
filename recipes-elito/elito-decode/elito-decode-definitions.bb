@@ -47,4 +47,4 @@ do_install() {
 	install -d -m 0755 ${D}${datadir}/${PN}
 }
 
-RDEPENDS_${PN} += "bash elito-decode-registers"
+RDEPENDS:${PN} += "bash elito-decode-registers"

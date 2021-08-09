@@ -7,7 +7,7 @@
 
 
 ## SSTATE_MIRRORS
-SSTATE_MIRRORS_prepend = "${@sstate_server_get_mirrors(d, 'SSTATE_SERVER_SSTATE_MIRRORS')}"
+SSTATE_MIRRORS:prepend = "${@sstate_server_get_mirrors(d, 'SSTATE_SERVER_SSTATE_MIRRORS')}"
 
 SSTATE_SERVER_SSTATE_MIRRORS[vardepsexclude] += "PN SSTATE_SERVER_API SSTATE_SERVER_PATH"
 SSTATE_SERVER_SSTATE_MIRRORS[doc] = "SSTATE_MIRRORS used when sstate-server is activated"
@@ -16,7 +16,7 @@ SSTATE_SERVER_SSTATE_MIRRORS = "\
 "
 
 ## PREMIRRORS
-PREMIRRORS_prepend = "${@sstate_server_get_mirrors(d, 'SSTATE_SERVER_PREMIRRORS')}"
+PREMIRRORS:prepend = "${@sstate_server_get_mirrors(d, 'SSTATE_SERVER_PREMIRRORS')}"
 
 SSTATE_SERVER_PREMIRRORS[vardepsexclude] += "PN SSTATE_SERVER_API SSTATE_SERVER_PATH"
 SSTATE_SERVER_PREMIRRORS[doc] = "PREMIRRORS used when sstate-server is activated"
@@ -84,7 +84,7 @@ addhandler sstate_server_eventhandler
 ## TODO: when running 'SSTATEPOSTCREATEFUNCS', the .siginfo' files are
 ##       not created yet
 # SSTATEPOSTCREATEFUNCS[vardepvalueexclude] .= "| sstate_server_post_create"
-# SSTATEPOSTCREATEFUNCS_append = " sstate_server_post_create"
+# SSTATEPOSTCREATEFUNCS:append = " sstate_server_post_create"
 
 ## TODO: does not work; 'postfuncs' of 'postfuncs' are not supported
 # python () {
