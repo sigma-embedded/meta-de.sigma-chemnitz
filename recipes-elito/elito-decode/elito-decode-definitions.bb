@@ -24,11 +24,11 @@ EXTRA_OEMAKE = "\
 DEPENDS += "elito-decode-registers-cross-${TARGET_ARCH}"
 
 _DECODERS_CPU = ""
-_DECODERS_CPU_mx8mq = "mx8mq"
-_DECODERS_CPU_mx8mm = "mx8mm"
-_DECODERS_CPU_mx6q  = "mx6q"
-_DECODERS_CPU_mx6dl = "mx6dl"
-_DECODERS_CPU_mx6s  = "mx6dl"
+_DECODERS_CPU:mx8mq = "mx8mq"
+_DECODERS_CPU:mx8mm = "mx8mm"
+_DECODERS_CPU:mx6q  = "mx6q"
+_DECODERS_CPU:mx6dl = "mx6dl"
+_DECODERS_CPU:mx6s  = "mx6dl"
 
 DECODERS = "${_DECODERS_CPU}"
 
