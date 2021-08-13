@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293
 PV = "0.4.1+git${SRCPV}"
 
 SRC_URI		=  "git://github.com/sigma-embedded/fbtest.git;protocol=https"
-SRCREV		=  "c32e1c6e0c91ed0bcc3ee4c6e9ceaa579c353f63"
+SRCREV		=  "14963f67997f5b01d258acdfa2b6c9d6e3fcba13"
 S		=  "${WORKDIR}/git"
 
 do_compile() {
