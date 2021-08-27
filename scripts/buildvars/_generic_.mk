@@ -8,6 +8,18 @@ SHELL_PS1 ?= [\[\033[1;34m\]${BUILDVAR_PN}\[\033[0;39m\]|\u@\h \W]\044\040
 
 .DEFAULT_GOAL = all
 
+define _export_var
+export $1 = $${BUILDVAR_$1}
+endef
+
+define _export_var_target
+$2:	export $1 = $${BUILDVAR_$1}
+endef
+
+## Usage: $(call export_vars, <variables>, [<targets>])
+export_vars = $(foreach v,$1 x,$(eval \
+	$(call $(if $2,_export_var_target,_export_var),$v,$2)))
+
 ${SHELL_TARGET}: export CC=${BUILDVAR_CC}
 ${SHELL_TARGET}: export CFLAGS=${BUILDVAR_CFLAGS}
 ${SHELL_TARGET}: export CPPFLAGS=${BUILDVAR_CPPFLAGS}
