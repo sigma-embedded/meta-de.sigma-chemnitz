@@ -19,6 +19,7 @@ RRECOMMENDS_${PN} = "\
     bayer2rgb-neon \
     gstreamer1.0-plugin-bayer2rgb-neon \
     gstreamer1.0-plugins-good \
+    strace \
 "
 
 DEPENDS += "\
