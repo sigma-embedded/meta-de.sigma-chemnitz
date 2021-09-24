@@ -104,7 +104,7 @@ __SSTATE_SERVER_FILTER_OPTS = \
 	owner non-guest
 
 $(addprefix sstate-disable-,${__SSTATE_SERVER_DISABLE_OPTS}):sstate-disable-%:	FORCE
-	${Q}$(call sstate_curl,/v1/session/disable/$*,-X POST)
+	${Q}$(call sstate_server_curl,/v1/session/disable/$*,-X POST)
 
 $(addprefix sstate-filter-,${__SSTATE_SERVER_FILTER_OPTS}):sstate-filter-%:	FORCE
 	${Q}$(call sstate_server_curl,/v1/session/filter/$*,-X POST)
