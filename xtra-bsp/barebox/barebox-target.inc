@@ -8,6 +8,8 @@ PROVIDES = "virtual/bootloader"
 BAREBOX_DEFCONFIG ??= "${WORKDIR}/defconfig"
 KCONFIG_DEFCONFIG = "${BAREBOX_DEFCONFIG}"
 
+BAREBOX_DEPLOY_NAME ??= "barebox"
+
 inherit kernel-arch elito-kconfig
 
 unset CFLAGS
@@ -29,18 +31,18 @@ EXTRA_OEMAKE += "\
 
 ## usage: _run_install <dst-dir>
 _run_install() {
-	install -D -p -m 0644 ${B}/barebox        "$1"/barebox-${IMGBASE}-${PV}-${PR}.elf
-	ln -sf barebox-${IMGBASE}-${PV}-${PR}.elf "$1"/barebox-${IMGBASE}.elf
+	install -D -p -m 0644 ${B}/barebox               "$1"/${BAREBOX_DEPLOY_NAME}-${IMGBASE}-${PV}-${PR}.elf
+	ln -sf ${BAREBOX_DEPLOY_NAME}-${IMGBASE}-${PV}-${PR}.elf "$1"/${BAREBOX_DEPLOY_NAME}-${IMGBASE}.elf
 
 	first=
 	for b in ${IMGBASE}; do
-		test -n "$first" || first=barebox-$b-${PV}-${PR}
-		install -p -m 0644 ${B}/images/barebox-$b.img "$1"/barebox-$b-${PV}-${PR}.img
-		ln -sf barebox-$b-${PV}-${PR}.img "$1"/barebox-$b.img
+		test -n "$first" || first=${BAREBOX_DEPLOY_NAME}-$b-${PV}-${PR}
+		install -p -m 0644 ${B}/images/barebox-$b.img    "$1"/${BAREBOX_DEPLOY_NAME}-$b-${PV}-${PR}.img
+		ln -sf ${BAREBOX_DEPLOY_NAME}-$b-${PV}-${PR}.img "$1"/${BAREBOX_DEPLOY_NAME}-$b.img
 	done
 
-	ln -sf barebox-${IMGBASE}.elf "$1"/barebox.elf
-	ln -sf "$first".img           "$1"/barebox.img
+	ln -sf ${BAREBOX_DEPLOY_NAME}-${IMGBASE}.elf "$1"/${BAREBOX_DEPLOY_NAME}.elf
+	ln -sf "$first".img                          "$1"/${BAREBOX_DEPLOY_NAME}.img
 }
 
 inherit deploy
