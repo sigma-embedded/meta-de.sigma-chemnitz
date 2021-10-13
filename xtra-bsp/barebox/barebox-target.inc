@@ -31,14 +31,22 @@ EXTRA_OEMAKE += "\
 
 ## usage: _run_install <dst-dir>
 _run_install() {
-	install -D -p -m 0644 ${B}/barebox               "$1"/${BAREBOX_DEPLOY_NAME}-${IMGBASE}-${PV}-${PR}.elf
-	ln -sf ${BAREBOX_DEPLOY_NAME}-${IMGBASE}-${PV}-${PR}.elf "$1"/${BAREBOX_DEPLOY_NAME}-${IMGBASE}.elf
+        local s=${B}/barebox
+        local t=${BAREBOX_DEPLOY_NAME}-${IMGBASE}-${PV}-${PR}.elf
+        local l=${BAREBOX_DEPLOY_NAME}-${IMGBASE}.elf
+
+	install -D -p -m 0644 "$s" "$1/$t"
+	ln -sf "$t" "$1/$l"
 
 	first=
 	for b in ${IMGBASE}; do
 		test -n "$first" || first=${BAREBOX_DEPLOY_NAME}-$b-${PV}-${PR}
-		install -p -m 0644 ${B}/images/barebox-$b.img    "$1"/${BAREBOX_DEPLOY_NAME}-$b-${PV}-${PR}.img
-		ln -sf ${BAREBOX_DEPLOY_NAME}-$b-${PV}-${PR}.img "$1"/${BAREBOX_DEPLOY_NAME}-$b.img
+		s=${B}/images/barebox-$b.img
+                t=${BAREBOX_DEPLOY_NAME}-$b-${PV}-${PR}.img
+		l=${BAREBOX_DEPLOY_NAME}-$b.img
+
+		install -p -m 0644 "$s" "$1/$t"
+		ln -sf "$t" "$1/$l"
 	done
 
 	ln -sf ${BAREBOX_DEPLOY_NAME}-${IMGBASE}.elf "$1"/${BAREBOX_DEPLOY_NAME}.elf
