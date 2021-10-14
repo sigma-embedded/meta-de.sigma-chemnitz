@@ -85,6 +85,14 @@ elito_set_rootbash() {
 	fi
 }
 
+elito_reenable_sysrq() {
+	echo 'kernel.sysrq = 1' > '${IMAGE_ROOTFS}'/etc/sysctl.d/99-sysctl.conf
+}
+
+ROOTFS_POSTPROCESS_COMMAND += "${@\
+  bb.utils.contains('IMAGE_FEATURES', 'debug-tweaks', \
+		    'elito_reenable_sysrq ;', '', d)}"
+
 ROOTFS_POSTPROCESS_COMMAND += "${@\
   bb.utils.contains('IMAGE_FEATURES', 'devel-history', \
 		    'elito_add_devel_history ;', '', d)}"
