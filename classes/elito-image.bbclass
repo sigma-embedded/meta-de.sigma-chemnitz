@@ -9,6 +9,11 @@ USER_CONFIG_DIRS_EXPANDED[type] = "list"
 
 USER_CONFIG_DIR ?= "${@find_first_directory(oe.data.typed_value('USER_CONFIG_DIRS_EXPANDED', d))}"
 
+ELITO_IMAGE_CFG_PATH ??= "${PROJECT_TOPDIR}/files"
+ELITO_IMAGE_CFG_PATH[type] = "list"
+
+_ELITO_IMAGE_CFG_PATH = "${@oe.data.typed_value('ELITO_IMAGE_CFG_PATH', d)}"
+
 def host_expanduser(dir):
     ## we have to expand it in an extra subprocess with clean environment
     ## because function might be run within PSEUDO context
@@ -30,10 +35,12 @@ elito_add_devel_history() {
 	h=`hostname -f 2>/dev/null || hostname` && h=-$h
 
 	for p in "$h" "$d" ""; do
-		f='${PROJECT_TOPDIR}'/files/bash_history$p
+	    for dir in ${_ELITO_IMAGE_CFG_PATH}; do
+		f=$dir/bash_history$p
 		test -e "$f" || continue
 		install -D -p -m 0600 "$f" '${IMAGE_ROOTFS}${ROOT_HOME}'/.bash_history
-		break
+		break 2
+	    done
 	done
 }
 
@@ -51,8 +58,10 @@ _elito_search_devel_sshkey() {
 	set -- "$@" ${h:+"-$h"} ${d:+"-$d"} ""
 
 	for p in "$@"; do
-		f="${PROJECT_TOPDIR}"/files/authorized_keys$p
-		! test -e "$f" || break
+	    for dir in ${_ELITO_IMAGE_CFG_PATH}; do
+		f=$dir/authorized_keys$p
+		! test -e "$f" || break 2
+	    done
 	done
 }
 
