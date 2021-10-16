@@ -33,7 +33,8 @@ EXTRA_OEMAKE = "\
 
 EXTRA_OEMAKE_append_mx28 = " SOC_FAMILY=mx28"
 
-COMPATIBLE_MACHINE = "(mx28|mx6|mx7|mx8|ti33x)"
+## must be overridden in bbappend
+COMPATIBLE_MACHINE = "(-)"
 
 MACH_DEPENDS = ""
 MACH_DEPENDS_mx28 = "mx28-pins"
