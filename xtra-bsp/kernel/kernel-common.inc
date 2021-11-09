@@ -5,10 +5,10 @@ KERNEL_BASE_URI ??= "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-
 KERNEL_REFSPEC  ??= ";branch=linux-${BASE_PV}.y"
 KERNEL_URI ??= "${KERNEL_BASE_URI}${KERNEL_REFSPEC}"
 
-SRCREV_kernel_vanilla_4.14 ?= "cd529693461026636f76d0395a42cb2439bbd368"
-SRCREV_kernel_vanilla_4.19 ?= "38ec06730e44b2166e87fecca9e36380080801ac"
-SRCREV_kernel_vanilla_5.4  ?= "89b6869b942b8730467f2a0760ea466044aa52d2"
-SRCREV_kernel_vanilla_5.10 ?= "378e85d1aeb5c93db43f2089630ec40c7385bd54"
+SRCREV_kernel_vanilla_4.14 ?= "0447aa205abe1c0c016b4f7fa9d7c08d920b5c8e"
+SRCREV_kernel_vanilla_4.19 ?= "3033e5726834e4c9c8c48cdb2273f33bd105f938"
+SRCREV_kernel_vanilla_5.4  ?= "c65356f0f7268b1260dd64415c2145e73640872e"
+SRCREV_kernel_vanilla_5.10 ?= "5040520482a594e92d4f69141229a6dd26173511"
 SRCREV_kernel_vanilla_5.15 ?= "b6abb62daa5511c4a3eaa30cbdb02544d1f10fa2"
 # use separate entry for include/uapi to avoid unnecessary rebuilds of
 # linux-libc-headers on kernel updates
