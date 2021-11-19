@@ -48,7 +48,7 @@ _SSTATE_SERVER_API ?=		http://ensc-virt.intern.sigma-chemnitz.de:21001/api
 _SSTATE_SERVER_GIT_BRANCH =	$(shell ${_SSTATE_GIT} rev-parse --abbrev-ref HEAD)
 _SSTATE_SERVER_GIT_REF =	$(shell ${_SSTATE_GIT} rev-parse HEAD)
 __SSTATE_SERVER_DISTRO_RH =	sed 's!^\([^ ]\+\) release \([0-9]\+\).*!\1 \2!' /etc/redhat-release
-__SSTATE_SERVER_DISTRO_DEB =	sed 's!^\([0-9.]\+\)!Debian \1!' /etc/debian_version
+__SSTATE_SERVER_DISTRO_DEB =	sed -e 's!^\([0-9.]\+\)!Debian \1!' -e 's!.*/sid!Debian sid!' /etc/debian_version
 __SSTATE_SERVER_DISTRO_LSB =	source /etc/lsb-release && echo "$${DISTRIB_ID} $${DISTRIB_RELEASE}"
 
 _SSTATE_SERVER_DISTRO =		$(shell if   test -e /etc/lsb-release;    then ${__SSTATE_SERVER_DISTRO_LSB}; \
