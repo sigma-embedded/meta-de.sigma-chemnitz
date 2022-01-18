@@ -39,6 +39,8 @@ do_install() {
 do_deploy[cleandirs] = "${DEPLOYDIR}"
 do_deploy() {
 	_run_install "${DEPLOYDIR}"
+	install -p -m 0644 ${B}/.config  "${DEPLOYDIR}"/u-boot-${PV}-${PR}.config
+	ln -sf u-boot-${PV}-${PR}.config "${DEPLOYDIR}"/u-boot.config
 }
 addtask deploy before do_build after do_install
 
