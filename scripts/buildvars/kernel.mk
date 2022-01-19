@@ -8,7 +8,7 @@ endif
 
 ifneq (${HAVE_NFSROOT},)
 KERNEL_NFSSERVER ?= $(shell getent ahostsv4 '${BUILDVAR_KERNEL_NFSSERVER}' | sed '1s/[[:space:]].*//p;d')
-KERNEL_NFSOPTS ?= v3,tcp,nolock
+KERNEL_NFSOPTS ?= v3,tcp,nolock,rsize=32768,wsize=32768
 KERNEL_NFSROOT ?= ${KERNEL_NFSSERVER}:${IMAGE_ROOTFS},${KERNEL_NFSOPTS}${CFG_NFSOPTS_EXTRA}
 endif
 
