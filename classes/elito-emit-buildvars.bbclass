@@ -89,8 +89,8 @@ BUILDVARS_EXPORT = "\
 	PKG_CONFIG_PATH \
 	PKG_CONFIG_SYSROOT_DIR \
 \
-	ACLOCALDIR \
-        ACLOCALEXTRAPATH \
+	~ACLOCALDIR \
+        ~ACLOCALEXTRAPATH \
 \
 	HOST_PREFIX \
 	TARGET_PREFIX \
@@ -102,6 +102,7 @@ BUILDVARS_EXPORT = "\
 	STAGING_DIR_HOST \
 	STAGING_DIR_NATIVE \
 	STAGING_DIR_TARGET \
+        STAGING_DATADIR_NATIVE \
 	TMPDIR \
 	TOOLCHAIN_OPTIONS \
 	WORKDIR \
@@ -112,7 +113,7 @@ BUILDVARS_EXPORT = "\
 	bindir \
 	sbindir \
 	libdir \
-	baselibdir \
+	base_libdir \
 	libexecdir \
 	datadir \
 "
