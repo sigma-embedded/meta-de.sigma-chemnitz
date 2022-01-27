@@ -1,7 +1,7 @@
-Index: strace-5.13/src/v4l2.c
+Index: strace-5.16/src/v4l2.c
 ===================================================================
---- strace-5.13.orig/src/v4l2.c
-+++ strace-5.13/src/v4l2.c
+--- strace-5.16.orig/src/v4l2.c
++++ strace-5.16/src/v4l2.c
 @@ -11,8 +11,11 @@
  #include "defs.h"
  
@@ -14,7 +14,7 @@ Index: strace-5.13/src/v4l2.c
  #include DEF_MPERS_TYPE(struct_v4l2_clip)
  #include DEF_MPERS_TYPE(struct_v4l2_create_buffers)
  #include DEF_MPERS_TYPE(struct_v4l2_ext_control)
-@@ -565,6 +568,29 @@ print_v4l2_timeval(const MPERS_PTR_ARG(k
+@@ -542,6 +545,29 @@ print_v4l2_timeval(const MPERS_PTR_ARG(k
  		print_v4l2_timeval(&((where_).field_));	\
  	} while (0)
  
@@ -44,7 +44,7 @@ Index: strace-5.13/src/v4l2.c
  static int
  print_v4l2_buffer(struct tcb *const tcp, const unsigned int code,
  		  const kernel_ulong_t arg)
-@@ -610,7 +636,8 @@ print_v4l2_buffer(struct tcb *const tcp,
+@@ -587,7 +613,8 @@ print_v4l2_buffer(struct tcb *const tcp,
  		PRINT_FIELD_U(b, bytesused);
  		tprint_struct_next();
  		PRINT_FIELD_V4L2_BUFFER_FLAGS(b, flags);
@@ -54,7 +54,7 @@ Index: strace-5.13/src/v4l2.c
  			tprint_struct_next();
  			PRINT_FIELD_V4L2_TIMEVAL(b, timestamp);
  		}
-@@ -624,6 +651,111 @@ print_v4l2_buffer(struct tcb *const tcp,
+@@ -601,6 +628,111 @@ print_v4l2_buffer(struct tcb *const tcp,
  }
  
  static int
@@ -147,7 +147,7 @@ Index: strace-5.13/src/v4l2.c
 +		if (!IS_ARRAY_ZERO(b.reserved)) {
 +			tprint_struct_next();
 +			PRINT_FIELD_ARRAY(b, reserved, tcp,
-+					  print_xint32_array_member);
++					  print_xint_array_member);
 +		}
 +
 +		tprint_struct_end();
@@ -166,7 +166,7 @@ Index: strace-5.13/src/v4l2.c
  print_v4l2_framebuffer(struct tcb *const tcp, const kernel_ulong_t arg)
  {
  	struct_v4l2_framebuffer b;
-@@ -1423,6 +1555,9 @@ MPERS_PRINTER_DECL(int, v4l2_ioctl, stru
+@@ -1416,6 +1548,9 @@ MPERS_PRINTER_DECL(int, v4l2_ioctl, stru
  	case VIDIOC_DQBUF: /* RW */
  		return print_v4l2_buffer(tcp, code, arg);
  
@@ -176,7 +176,7 @@ Index: strace-5.13/src/v4l2.c
  	case VIDIOC_G_FBUF: /* R */
  		if (entering(tcp))
  			return 0;
-@@ -1499,6 +1634,20 @@ MPERS_PRINTER_DECL(int, v4l2_ioctl, stru
+@@ -1492,6 +1627,20 @@ MPERS_PRINTER_DECL(int, v4l2_ioctl, stru
  		return print_v4l2_create_buffers(tcp, arg);
  
  	default:
@@ -197,10 +197,10 @@ Index: strace-5.13/src/v4l2.c
  		return RVAL_DECODED;
  	}
  
-Index: strace-5.13/src/kernel_v4l2_types.h
+Index: strace-5.16/src/kernel_v4l2_types.h
 ===================================================================
---- strace-5.13.orig/src/kernel_v4l2_types.h
-+++ strace-5.13/src/kernel_v4l2_types.h
+--- strace-5.16.orig/src/kernel_v4l2_types.h
++++ strace-5.16/src/kernel_v4l2_types.h
 @@ -22,6 +22,8 @@ typedef struct {
  typedef kernel_timeval64_t kernel_v4l2_timeval_t;
  # endif
