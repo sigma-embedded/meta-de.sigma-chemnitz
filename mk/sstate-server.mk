@@ -79,8 +79,8 @@ sstate-session:	FORCE
 	@echo 'export SSTATE_SERVER_API = ${SSTATE_SERVER_API}'		                                              > ${_SSTATE_SERVER_SESSION_FILE}.mk
 	@sed 's!^session=\([0-9a-zA-Z]\+\)!export SSTATE_SERVER_SESSION = \1!p;d' ${_SSTATE_SERVER_SESSION_FILE}.tmp >> ${_SSTATE_SERVER_SESSION_FILE}.mk
 	@sed 's!^dlpath=\([0-9a-zA-Z]\+\)!export SSTATE_SERVER_PATH = \1!p;d'     ${_SSTATE_SERVER_SESSION_FILE}.tmp >> ${_SSTATE_SERVER_SESSION_FILE}.mk
+	@url=`sed 's!^app_uri=\(.\+\)!\1!p;d' ${_SSTATE_SERVER_SESSION_FILE}.tmp`; printf "session created at %s\n" "$${url:-${SSTATE_SERVER_API}}"
 	@rm -f ${_SSTATE_SERVER_SESSION_FILE}.tmp
-	@echo "session created at ${SSTATE_SERVER_API}"
 
 endif
 
