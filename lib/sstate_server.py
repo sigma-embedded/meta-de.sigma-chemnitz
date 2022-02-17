@@ -282,7 +282,7 @@ class Upload(SStateAPI):
                         info[1])
 
         res = map(lambda u: Upload(ftype  = info[0],
-                                   fname  = u,
+                                   fname  = os.path.basename(u),
                                    path   = os.path.join(dl_dir, u),
                                    scmrev = getattr(ud, 'revision', None)),
                   files)
