@@ -260,17 +260,22 @@ class Upload(SStateAPI):
         ## TODO: what are the semantics of 'mirrortarballs'?  Can
         ## there be multiple ones?
 
-        if isinstance(ud.method, bb.fetch2.local.Local):
-            ## do not upload local file:// resources
+        if (isinstance(ud.method, bb.fetch2.local.Local) or
+            isinstance(ud.method, bb.fetch2.npmsw.NpmShrinkWrap)):
+            ## do not upload local file:// resources or npmsw://
             pass
         elif (isinstance(ud.method, bb.fetch2.git.Git) or
-              isinstance(ud.method, bb.fetch2.hg.Hg) or
-              isinstance(ud.method, bb.fetch2.npm.Npm)):
+              isinstance(ud.method, bb.fetch2.hg.Hg)):
             if ud.parm.get("protocol", None) in ["file"]:
                 ## do not upload scm from git+file://
                 pass
             elif ud.write_tarballs:
                 info = ('scm', ud.mirrortarballs)
+        elif isinstance(ud.method, bb.fetch2.npm.Npm):
+            # TODO: use 'npm' instead of 'source' when server support
+            # is available; filenames might conflict with regular
+            # sources else
+            info = ('source', [os.path.join("npm2", os.path.basename(ud.localpath))])
         else:
             info = ('source', [os.path.basename(ud.localpath)] )
 
