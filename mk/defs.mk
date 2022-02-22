@@ -99,5 +99,19 @@ endif
 
 BITBAKE_FLAGS += ${BO}
 
+###### Late imports; user might want to do them manually
+
+ifeq (${NO_LATE_IMPORTS},)
+
 ###### optional SIGMA setup
 -include ${META_SIGMA_DIR}/mk/sstate-server.mk
+
+###### internal overrides
+
+ifneq (${BUILDVARS},)
+  include ${BUILDVARS}
+endif
+
+-include ${META_SIGMA_DIR}/mk/ci.mk
+
+endif				# NO_LATE_IMPORTS
