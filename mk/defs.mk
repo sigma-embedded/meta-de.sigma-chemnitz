@@ -3,8 +3,8 @@
 unexport LC_ALL
 export LC_CTYPE ?=	en_US.utf-8
 
-top_srcdir :=		$(dir $(abspath $(firstword $(MAKEFILE_LIST))))
-top_builddir :=		$(abspath .)
+top_srcdir :=		$(if ${topdir_srcdir},${top_srcdir},$(dir $(abspath $(firstword $(MAKEFILE_LIST)))))
+top_builddir :=		$(if ${top_builddir},${top_builddir},$(abspath .))
 
 SHELL :=		bash
 BITBAKE ?=		bitbake
