@@ -11,6 +11,8 @@ BITBAKE ?=		bitbake
 BITBAKE_DIR ?=		$(top_srcdir)/sources/bitbake
 BITBAKE_FLAGS ?=
 
+IMAGE_BASE ?=		$(patsubst %-bundle,%-image,${IMAGE})
+
 BUILDDIR ?=		$(top_builddir)/build
 DEPLOY_DIR ?=		${BUILDDIR}/tmp/deploy
 OE_TMPDIR ?=		$(shell readlink -f "${BUILDDIR}/tmp")
@@ -49,7 +51,7 @@ image:	FORCE
 	$(call bitbake,$(BUILDDIR),$(IMAGE) $(EXTRA_IMAGE))
 
 sdk:	FORCE
-	$(call bitbake,$(BUILDDIR),$(IMAGE) -c populate_sdk)
+	$(call bitbake,$(BUILDDIR),$(IMAGE_BASE) -c populate_sdk)
 
 bitbake: FORCE
 	$(call bitbake,$(BUILDDIR),$R$(if $T, -c $T))
@@ -66,8 +68,9 @@ shell:	export _PS1=${SHELL_PS1}
 shell:	FORCE
 	$(call init_build_env,$(BUILDDIR)) && cd $(abspath .) && env ${EXTRA_ENV} MACHINE='${MACHINE}' PS1="$$_PS1" bash
 
+start-nfsd stop-nfsd status-nfsd:
 start-nfsd stop-nfsd status-nfsd:%-nfsd:	FORCE
-	${MAKE} -f ${META_SIGMA_DIR}/mk/nfsd.mk BUILDVARS_DATA='${DEPLOY_DIR}/buildvars/${MACHINE}/${IMAGE}.mk' $*-daemon
+	${MAKE} -f ${META_SIGMA_DIR}/mk/nfsd.mk BUILDVARS_DATA='${DEPLOY_DIR}/buildvars/${MACHINE}/${IMAGE_BASE}.mk' $*-daemon
 
 ######
 
