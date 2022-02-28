@@ -98,6 +98,8 @@ endif
 
 BITBAKE_FLAGS += ${BO}
 
+.NOTPARALLEL:
+
 ###### Late imports; user might want to do them manually
 
 ifeq (${NO_LATE_IMPORTS},)
