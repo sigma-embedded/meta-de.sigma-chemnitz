@@ -4,7 +4,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0-only;md5=c79ff39f19dfec
 
 PV = "0.4.1+git${SRCPV}"
 
-SRC_URI		=  "git://github.com/sigma-embedded/fbtest.git;protocol=https"
+SRC_URI		=  "${ELITO_PUBLIC_GIT_REPO}/fbtest.git"
 SRCREV		=  "14963f67997f5b01d258acdfa2b6c9d6e3fcba13"
 S		=  "${WORKDIR}/git"
 
