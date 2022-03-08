@@ -1,5 +1,5 @@
 ## --*- bitbake -*--
-LICENSE = "GPLv2"
+LICENSE = "GPL-2.0-only"
 
 KERNEL_BASE_URI ??= "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
 KERNEL_REFSPEC  ??= ";branch=linux-${BASE_PV}.y"
