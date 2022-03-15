@@ -269,7 +269,13 @@ python do_emit_buildvars() {
 }
 addtask do_emit_buildvars after do_prepare_recipe_sysroot
 
+do_emit_buildvars_rec[noexec] = "1"
+do_emit_buildvars_rec() {
+}
+addtask do_emit_buildvars_rec
+
 python() {
     if oe.data.typed_value('BUILDVARS_EMIT', d):
         bb.build.addtask("emit_buildvars", "do_build", None, d)
+        bb.build.addtask("emit_buildvars", "do_emit_buildvars_rec", None, d)
 }
