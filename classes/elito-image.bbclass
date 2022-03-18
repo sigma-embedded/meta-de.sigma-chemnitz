@@ -73,8 +73,14 @@ elito_add_devel_sshkey() {
 		_elito_search_devel_sshkey
 	fi
 
-	! test -e "$f" || \
-		install -D -p -m 0644 "$f" ${IMAGE_ROOTFS}${ROOT_HOME}/.ssh/authorized_keys
+	test -e "$f" || return
+
+	d='${IMAGE_ROOTFS}${ROOT_HOME}/.ssh/authorized_keys'
+	if test -e "$d"; then
+	    cat "$f" >> "$d"
+	else
+	    install -D -p -m 0644 "$f" "$d"
+	fi
 }
 
 elito_set_rootbash() {
