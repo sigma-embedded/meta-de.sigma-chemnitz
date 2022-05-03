@@ -31,13 +31,13 @@ EXTRA_OEMAKE = "\
   _dtbs='${DTBS}' \
 "
 
-EXTRA_OEMAKE:append:mx28 = " SOC_FAMILY=mx28"
+EXTRA_OEMAKE:append:mx28-generic-bsp = " SOC_FAMILY=mx28"
 
 ## must be overridden in bbappend
 COMPATIBLE_MACHINE = "(-)"
 
 MACH_DEPENDS = ""
-MACH_DEPENDS:mx28 = "mx28-pins"
+MACH_DEPENDS:mx28-generic-bsp = "mx28-pins"
 
 DEPENDS += "dtc-native ${MACH_DEPENDS} virtual/${TARGET_PREFIX}gcc"
 DEPENDS += "elito-devicetree-tools-cross-${TARGET_ARCH}"
