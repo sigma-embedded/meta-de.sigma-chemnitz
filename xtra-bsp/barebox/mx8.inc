@@ -9,8 +9,8 @@ DEPENDS += "\
     firmware-imx-8m \
 "
 
-BL31_NAME:mx8mn	= "imx8mn-bl31.bin"
-BL31_NAME:mx8mm	= "imx8mm-bl31.bin"
+BL31_NAME:mx8mn-generic-bsp	= "imx8mn-bl31.bin"
+BL31_NAME:mx8mm-generic-bsp	= "imx8mm-bl31.bin"
 
 do_firmware_prepare[dirs] = "${EXT_FIRMWARE_DIR}"
 do_firmware_prepare[cleandirs] = "${EXT_FIRMWARE_DIR}"
