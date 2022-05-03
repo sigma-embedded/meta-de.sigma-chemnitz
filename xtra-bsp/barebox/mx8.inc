@@ -16,11 +16,11 @@ do_firmware_prepare[dirs] = "${EXT_FIRMWARE_DIR}"
 do_firmware_prepare[cleandirs] = "${EXT_FIRMWARE_DIR}"
 do_firmware_prepare() {
 	src='${STAGING_DATADIR}'
-	lnr "$src"/imx-atf/bl31.bin '${BL31_NAME}'
+	ln -sr "$src"/imx-atf/bl31.bin '${BL31_NAME}'
 	for f in "$src"/firmware-imx-8m/*.bin; do
 		test -e "$f" || continue
 		base=`basename "$f"`
-		lnr "$f" "$base"
+		ln -sr "$f" "$base"
 	done
 }
 addtask do_firmware_prepare before do_compile after do_prepare_recipe_sysroot
