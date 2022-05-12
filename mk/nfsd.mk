@@ -28,6 +28,9 @@ UNFSD_FLAGS = \
 
 all:	status-daemon
 
+repair-daemon:	stop-daemon
+	${PSEUDO_CMD} -B
+
 start-daemon:
 	${UNFSD_CMD} ${UNFSD_FLAGS}
 
