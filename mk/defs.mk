@@ -69,8 +69,8 @@ shell:	export _PS1=${SHELL_PS1}
 shell:	FORCE
 	$(call init_build_env,$(BUILDDIR)) && cd $(abspath .) && env ${EXTRA_ENV} MACHINE='${MACHINE}' PS1="$$_PS1" bash
 
-start-nfsd stop-nfsd status-nfsd:
-start-nfsd stop-nfsd status-nfsd:%-nfsd:	FORCE
+start-nfsd stop-nfsd status-nfsd repair-nfsd:
+start-nfsd stop-nfsd status-nfsd repair-nfsd:%-nfsd:	FORCE
 	${MAKE} -f ${META_SIGMA_DIR}/mk/nfsd.mk BUILDVARS_DATA='${DEPLOY_DIR}/buildvars/${MACHINE}/${IMAGE_BASE}.mk' $*-daemon
 
 ######
