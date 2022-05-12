@@ -1,10 +1,7 @@
 include ${BUILDVAR_BUILDVARS_SCRIPT_DIR}/_generic_.mk
+include ${BUILDVAR_BUILDVARS_SCRIPT_DIR}/__image_rootfs.mk
 
-ifneq (${IMAGE_RECIPE},)
-IMAGE_ROOTFS ?= $(shell ${MAKE} -f '${BUILDVAR_BUILDVARS_DEPLOY_DIR}/${IMAGE_RECIPE}.mk' --eval 'emit-rootfs:;@echo $${BUILDVAR_IMAGE_ROOTFS}' emit-rootfs)
-else
-IMAGE_ROOTFS ?= ${BUILDVAR_WORKDIR}/rootfs
-endif
+IMAGE_ROOTFS ?= ${BUILDVAR_IMAGE_ROOTFS}
 
 ifneq (${HAVE_NFSROOT},)
 KERNEL_NFSSERVER ?= $(shell getent ahostsv4 '${BUILDVAR_KERNEL_NFSSERVER}' | sed '1s/[[:space:]].*//p;d')
