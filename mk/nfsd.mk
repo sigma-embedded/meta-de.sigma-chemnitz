@@ -35,7 +35,7 @@ start-daemon:
 	${UNFSD_CMD} ${UNFSD_FLAGS}
 
 stop-daemon:
-	test ! -e "${UNFSD_PIDFILE}" || kill "`cat ${UNFSD_PIDFILE}`"
+	-test ! -e "${UNFSD_PIDFILE}" || kill "`cat ${UNFSD_PIDFILE}`"
 	-@${PSEUDO_CMD} -S
 
 status-daemon:
