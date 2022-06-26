@@ -47,4 +47,4 @@ do_kconfig_emit_buildhistory() {
 		install -D -p -m 0644 ${B}/defconfig ${BUILDHISTORY_DIR_IMAGE}/${PN}-defconfig
 	fi
 }
-addtask do_kconfig_emit_buildhistory after do_kconfig_savedefconfig before do_build
+addtask do_kconfig_emit_buildhistory after do_kconfig_savedefconfig before do_build do_deploy
