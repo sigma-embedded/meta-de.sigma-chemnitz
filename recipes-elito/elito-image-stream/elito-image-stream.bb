@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0-only;md5=c79ff39f19dfec
 PV   = "0.2.10+git${SRCPV}"
 
 SRCREV  = "9ae194778952db44c13c10c0b3948160a205f8f3"
-SRC_URI = "${ELITO_PUBLIC_GIT_REPO}/elito-image-stream.git"
+SRC_URI = "${ELITO_PUBLIC_GIT_REPO}/elito-image-stream.git;branch=master"
 
 inherit autotools-brokensep pkgconfig
 

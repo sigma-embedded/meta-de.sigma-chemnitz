@@ -5,7 +5,7 @@ HOMEPAGE = "http://jwilk.net/software/fbcat"
 PV = "0.5.2"
 
 SRC_URI = "\
-    git+https://github.com/jwilk/fbcat.git \
+    git+https://github.com/jwilk/fbcat.git;branch=master \
 "
 
 SRCREV = "fe1b2995fa45e863f7ce7b24b91df0a2c511e6e3"
