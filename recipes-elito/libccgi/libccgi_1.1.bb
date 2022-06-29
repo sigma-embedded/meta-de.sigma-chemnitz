@@ -5,7 +5,7 @@ Stores data in lookup table(s) for easy retrieval. Uploads files by \
 copying directly to files created with mkstemp(). Has several handy string \
 conversion functions."
 
-LICENSE		= "GPLv3"
+LICENSE		= "GPL-3.0-only"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 SRC_URI = "\
