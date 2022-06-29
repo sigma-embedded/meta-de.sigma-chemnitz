@@ -5,18 +5,18 @@ KERNEL_BASE_URI ??= "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-
 KERNEL_REFSPEC  ??= ";branch=linux-${BASE_PV}.y"
 KERNEL_URI ??= "${KERNEL_BASE_URI}${KERNEL_REFSPEC}"
 
-SRCREV_kernel_vanilla_4.14 ?= "eb045674aab31aa55a4f9aec27cce36e3d946a21"
-SRCREV_kernel_vanilla_4.19 ?= "6b481672f19259632a852d013cacd5655e8d7da8"
-SRCREV_kernel_vanilla_5.4  ?= "70f77a2cb5281ad0b08a0bbdeeba885984c399dd"
-SRCREV_kernel_vanilla_5.10 ?= "327f1e7d813c77eceadafbdc498f5eb680fd9fb2"
-SRCREV_kernel_vanilla_5.15 ?= "b9a0208cb3e3e37def2abe4d602f084e0f746419"
+SRCREV_kernel_vanilla_4.14 ?= "f051383ef03bde49ca992f297ec80757a702e774"
+SRCREV_kernel_vanilla_4.19 ?= "6a10ec7750739d143e6df5a8085fa389b3258866"
+SRCREV_kernel_vanilla_5.4  ?= "9ef3ad40a81ff6b8b65ed870588b230f38812f2a"
+SRCREV_kernel_vanilla_5.10 ?= "deb587b1a48d3ac4a29378fc238a4677944dff83"
+SRCREV_kernel_vanilla_5.15 ?= "37238449af786e1be06f193ab54a60a39a776826"
 # use separate entry for include/uapi to avoid unnecessary rebuilds of
 # linux-libc-headers on kernel updates
-SRCREV_kernel_uapihdr_4.14 ?= "24fb6fbe7ec004459b3c3cabe82ff8c13146e7d0"
-SRCREV_kernel_uapihdr_4.19 ?= "a472c95af5f64296fc9bdbabcd2b11703bb3a205"
-SRCREV_kernel_uapihdr_5.4  ?= "35fa6f2a31d332e856a7a313f745ae5ae68bf720"
-SRCREV_kernel_uapihdr_5.10 ?= "0e188fde82d7c80a6301954fbfb398ddaa8647c3"
-SRCREV_kernel_uapihdr_5.15 ?= "aa6d3eef28f348f1fed15e9ebac9752f93b8a9b9"
+SRCREV_kernel_uapihdr_4.14 ?= "aa38e379f95e5c4fc5a6eff48f5d73aac1422986"
+SRCREV_kernel_uapihdr_4.19 ?= "a0d109cfe641a59d004552ff96bf8b7aaa4dbd6e"
+SRCREV_kernel_uapihdr_5.4  ?= "c4edc1055c1171f0d84183eb70f855bd3346e0e7"
+SRCREV_kernel_uapihdr_5.10 ?= "633be494c3ca66a6c36e61100ffa0bd3d2923954"
+SRCREV_kernel_uapihdr_5.15 ?= "e42fd07755364329c99e51d069d2daa96df77ed7"
 
 SRCREV_kernel_4.14 ?= "${SRCREV_kernel_vanilla_4.14}"
 SRCREV_kernel_4.19 ?= "${SRCREV_kernel_vanilla_4.19}"
