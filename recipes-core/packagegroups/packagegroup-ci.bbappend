@@ -20,6 +20,7 @@ RRECOMMENDS:${PN} = "\
     gstreamer1.0-plugin-bayer2rgb-neon \
     gstreamer1.0-plugins-good \
     strace \
+    drm-info \
 "
 
 DEPENDS += "\
