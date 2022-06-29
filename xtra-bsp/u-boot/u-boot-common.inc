@@ -2,7 +2,7 @@
 HOMEPAGE = "http://www.denx.de/wiki/U-Boot/WebHome"
 SECTION = "bootloaders"
 
-LICENSE = "GPLv2+"
+LICENSE = "GPL-2.0-or-later"
 
 UBOOT_BASE_URI ??= "git+https://github.com/u-boot/u-boot.git"
 UBOOT_REFSPEC  ??= ";branch=v${BASE_PV};nobranch=1"
