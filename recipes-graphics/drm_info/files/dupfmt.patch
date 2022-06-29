@@ -1,0 +1,30 @@
+Index: git/fourcc.py
+===================================================================
+--- git.orig/fourcc.py
++++ git/fourcc.py
+@@ -32,8 +32,12 @@ const char *format_str(uint32_t format)
+ 		return "INVALID";
+ ''')
+ 
++	seen = {}
+ 	for ident in info['fmt']:
++		if ident in seen:
++			continue
+ 		case_print(f, ident, ident[len('DRM_FORMAT_'):])
++		seen[ident] = True
+ 
+ 	f.write('''\
+ 	default:
+@@ -46,8 +50,12 @@ const char *basic_modifier_str(uint64_t
+ 	switch (modifier) {
+ ''')
+ 
++	seen = {}
+ 	for ident in info['basic_pre'] + info['basic_post']:
++		if ident in seen:
++			continue
+ 		case_print(f, ident, ident)
++		seen[ident] = True
+ 
+ 	f.write('''\
+ 	default:

@@ -1,0 +1,26 @@
+Index: git/meson.build
+===================================================================
+--- git.orig/meson.build
++++ git/meson.build
+@@ -62,7 +62,7 @@ if libdrm.version().version_compare('<2.
+ elif libdrm.type_name() == 'internal'
+   fourcc_h = files('subprojects/libdrm/include/drm/drm_fourcc.h')
+ else
+-  fourcc_h = files(libdrm.get_pkgconfig_variable('includedir') / 'libdrm/drm_fourcc.h')
++  fourcc_h = files(get_option('sysroot') + libdrm.get_pkgconfig_variable('includedir') / 'libdrm/drm_fourcc.h')
+ endif
+ 
+ if libpci.found()
+Index: git/meson_options.txt
+===================================================================
+--- git.orig/meson_options.txt
++++ git/meson_options.txt
+@@ -3,3 +3,8 @@ option('libpci',
+   value: 'auto',
+   description: 'Print PCI device names via libpci'
+ )
++
++option('sysroot',
++       type: 'string',
++       value: '/',
++       description: 'sysroot')
