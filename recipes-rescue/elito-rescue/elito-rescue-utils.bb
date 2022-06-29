@@ -7,7 +7,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-3.0;md5=c79ff39f19dfec6d293
 PV   = "0.2.12+git${SRCPV}"
 
 SRCREV  = "cce565a26d7c568332d26a0ae7cf584b542309f3"
-SRC_URI = "${ELITO_PUBLIC_GIT_REPO}/elito-rescue-utils.git"
+SRC_URI = "${ELITO_PUBLIC_GIT_REPO}/elito-rescue-utils.git;branch=master"
 
 inherit autotools-brokensep
 
