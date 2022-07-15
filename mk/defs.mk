@@ -69,8 +69,8 @@ shell:	export _PS1=${SHELL_PS1}
 shell:	FORCE
 	$(call init_build_env,$(BUILDDIR)) && cd $(abspath .) && env ${EXTRA_ENV} MACHINE='${MACHINE}' PS1="$$_PS1" bash
 
-start-nfsd stop-nfsd status-nfsd repair-nfsd:
-start-nfsd stop-nfsd status-nfsd repair-nfsd:%-nfsd:	FORCE
+start-nfsd stop-nfsd status-nfsd repair-nfsd info-nfsd sync-nfsd:
+start-nfsd stop-nfsd status-nfsd repair-nfsd info-nfsd sync-nfsd:%-nfsd:	FORCE
 	${MAKE} -f ${META_SIGMA_DIR}/mk/nfsd.mk BUILDVARS_DATA='${DEPLOY_DIR}/buildvars/${MACHINE}/${IMAGE_BASE}.mk' $*-daemon
 
 ######
@@ -81,7 +81,7 @@ FORCE:
 ###### protect against execution in wrong environment
 _NOT_HOST_TARETS ?=
 _NOT_HOST_TARETS += \
-	all bitbake image sdk shell start-nfsd stop-nfsd status-nfsd
+	all bitbake image sdk shell start-nfsd stop-nfsd status-nfsd sync-nfsd
 
 prohibit-host-environment:	FORCE
 ${_NOT_HOST_TARETS}:		prohibit-host-environment
