@@ -9,7 +9,7 @@ inherit elito-emit-buildvars
 
 BUILDVARS_EMIT = "true"
 BUILDVARS_EXPORT += "\
-  IMAGE_ROOTFS \
-  FAKEROOTENV \
-  FAKEROOTCMD \
+    IMAGE_ROOTFS \
+    FAKEROOTENV \
+    FAKEROOTCMD \
 "
