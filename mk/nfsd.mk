@@ -19,6 +19,7 @@ PSEUDO_IGNORE_PATHS = \
 	/bin /dev /etc /home /lib /lib64 /mnt \
 	/proc /run /sbin /sys /tmp /usr /var \
 	${BUILDVAR_DEPLOY_DIR}/images \
+	${BUILDVAR_TMPDIR}/pcache \
 	${ROOTFS_METADIR} \
 	${BUILDVAR_COMPONENTS_DIR} \
 
