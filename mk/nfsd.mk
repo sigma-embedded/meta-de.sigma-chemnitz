@@ -46,6 +46,13 @@ UNFSD_FLAGS = \
 	-n "${UNFSD_NFS_PORT}" \
 	-m "${UNFSD_MOUNT_PORT}"
 
+RSYNCD =		$(dir ${BUILDVAR_PSEUDO_SYSROOT})/rsync-native/usr/bin/rsync
+RSYNCD_CONFIG =		${ROOTFS_METADIR}/rsyncd.conf
+RSYNCD_PIDFILE =	${ROOTFS_METADIR}/rsyncd.pid
+RSYNCD_FLAGS = \
+	--daemon \
+	--config ${RSYNCD_CONFIG}
+
 IMAGE_BASE =		${BUILDVAR_DEPLOY_DIR_IMAGE}/${BUILDVAR_IMAGE_LINK_NAME}
 IMAGE_TARBALL ?=	$(firstword $(abspath ${IMAGE_BASE}.tar ${IMAGE_BASE}.tar.xz ${IMAGE_BASE}))
 
@@ -74,23 +81,61 @@ image-install sync-daemon:	${IMAGE_TARBALL}
 repair-daemon:	stop-daemon
 	${PSEUDO_CMD} -B
 
-start-daemon:	${UNFSD_EXPORTS}
+info-daemon:
+	@echo "tarball: " ${IMAGE_TARBALL}
+
+start-daemon:
+stop-daemon:
+status-daemon:
+
+
+
+## unfs3
+start-daemon:	.start-unfsd
+.start-unfsd:	${UNFSD_EXPORTS}
 	$(call pseudo,${UNFSD} ${UNFSD_FLAGS})
 
-stop-daemon:
+stop-daemon:	.stop-unfsd
+.stop-unfsd:
 	-test ! -e "${UNFSD_PIDFILE}" || kill "`cat ${UNFSD_PIDFILE}`"
-	-@${PSEUDO_CMD} -S
+	-$Q${PSEUDO_CMD} -S
 
-status-daemon:
-	@if test -s "${UNFSD_PIDFILE}" && kill -0 "`cat ${UNFSD_PIDFILE}`"; then \
-		echo "daemon is running with pid `cat ${UNFSD_PIDFILE}`"; \
+status-daemon:	.status-unfsd
+.status-unfsd:
+	$Q if test -s "${UNFSD_PIDFILE}" && kill -0 "`cat ${UNFSD_PIDFILE}`"; then \
+		echo "unfs3 daemon is running with pid `cat ${UNFSD_PIDFILE}`"; \
 	else \
-		echo "daemon is not running"; \
+		echo "unfs3 daemon is not running"; \
 	fi
 
-${UNFSD_EXPORTS}:
-	rm -f '$@'
-	echo '${ROOTFS_BASEDIR} (ro,no_root_squash,no_all_squash,insecure)' > $@
+## rsyncd
+start-daemon:	.start-rsyncd
+.start-rsyncd:	${RSYNCD_CONFIG}
+	$(call pseudo,${RSYNCD} ${RSYNCD_FLAGS})
 
-info-daemon:
-	ls -l ${IMAGE_TARBALL}
+stop-daemon:	.stop-rsyncd
+.stop-rsyncd:
+	-test ! -e "${RSYNCD_PIDFILE}" || kill "`cat ${RSYNCD_PIDFILE}`"
+	-$Q${PSEUDO_CMD} -S
+
+status-daemon:	.status-rsyncd
+.status-rsyncd:
+	$Q if test -s "${RSYNCD_PIDFILE}" && kill -0 "`cat ${RSYNCD_PIDFILE}`"; then \
+		echo "rsyncd daemon is running with pid `cat ${RSYNCD_PIDFILE}`"; \
+	else \
+		echo "rsyncd daemon is not running"; \
+	fi
+
+## helper targets
+${UNFSD_EXPORTS}:
+	@rm -f '$@'
+	@echo '${ROOTFS_BASEDIR} (ro,no_root_squash,no_all_squash,insecure)' > $@
+
+${RSYNCD_CONFIG}:	${MAKEFILE_LIST}
+	@rm -f '$@'
+	@echo 'pid file = ${RSYNCD_PIDFILE}' >$@
+	@echo 'port     = ${RSYNCD_PORT}'   >>$@
+	@echo '[rootfs]'                    >>$@
+	@echo 'path = ${ROOTFS_BASEDIR}'    >>$@
+	@echo 'read only = true'            >>$@
+	@echo 'open noatime = true'	    >>$@
