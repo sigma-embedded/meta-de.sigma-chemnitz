@@ -3,7 +3,7 @@ do_nfs_export() {
 }
 addtask do_nfs_export before do_build
 
-DEPENDS += "unfs3-native"
+DEPENDS += "unfs3-native rsync-native"
 
 NFS_ROOTFS_BASEDIR ?= "${DEPLOY_DIR}/rootfs/roots"
 NFS_ROOTFS_METADIR ?= "${DEPLOY_DIR}/rootfs/meta"
