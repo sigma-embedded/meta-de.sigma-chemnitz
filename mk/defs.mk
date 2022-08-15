@@ -80,6 +80,17 @@ start-nfsd stop-nfsd status-nfsd repair-nfsd info-nfsd sync-nfsd:
 start-nfsd stop-nfsd status-nfsd repair-nfsd info-nfsd sync-nfsd:%-nfsd:	FORCE
 	+$Q${_NFSD_MAKE} $*-daemon
 
+info:	FORCE
+	@printf "Environment:\n"
+	@printf "  %20s: %s\n" "PROJECT"   '${PROJECT}'
+	@printf "  %20s: %s\n" "MACHINE"   '${MACHINE}'
+	@printf "  %20s: %s\n" "IMAGE"     '${IMAGE}'
+	@printf "Paths:\n"
+	@printf "  %20s: %s\n" "TOPDIR"    '${top_srcdir}'
+	@printf "  %20s: %s\n" "BUILDDIR"  '${BUILDDIR}'
+	@printf "  %20s: %s\n" "TMPDIR"    '${OE_TMPDIR}'
+	@printf "  %20s: %s\n" "DEPLOYDIR" '${DEPLOY_DIR}'
+
 ######
 
 .PHONY:		FORCE
