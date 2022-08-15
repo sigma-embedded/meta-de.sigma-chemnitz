@@ -7,6 +7,8 @@ _nfsd_mk_dir := $(dir $(lastword ${MAKEFILE_LIST}))
 include ${_nfsd_mk_dir}/nfs-opt.mk
 include ${BUILDVARS_DATA}
 
+BUILDVAR_WS_DIR ?=
+
 _space = $(eval) $(eval)
 _comma = ,
 
@@ -22,6 +24,7 @@ PSEUDO_IGNORE_PATHS = \
 	${BUILDVAR_TMPDIR}/pcache \
 	${ROOTFS_METADIR} \
 	${BUILDVAR_COMPONENTS_DIR} \
+	${BUILDVAR_WS_DIR} \
 
 PSEUDO = ${BUILDVAR_PSEUDO_SYSROOT}/usr/bin/pseudo
 
