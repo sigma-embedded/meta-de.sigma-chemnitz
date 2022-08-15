@@ -142,3 +142,13 @@ ${RSYNCD_CONFIG}:	${MAKEFILE_LIST}
 	@echo 'path = ${ROOTFS_BASEDIR}'    >>$@
 	@echo 'read only = true'            >>$@
 	@echo 'open noatime = true'	    >>$@
+	@echo '[images]'                    >>$@
+	@echo 'path = $(dir ${BUILDVAR_DEPLOY_DIR_IMAGE})' >>$@
+	@echo 'read only = true'            >>$@
+	@echo 'open noatime = true'	    >>$@
+ifneq ($(wildcard ${BUILDVAR_WS_DIR}/www),)
+	@echo '[www]'                    >>$@
+	@echo 'path = $(abspath ${BUILDVAR_WS_DIR}/www)' >>$@
+	@echo 'read only = true'            >>$@
+	@echo 'open noatime = true'	    >>$@
+endif
