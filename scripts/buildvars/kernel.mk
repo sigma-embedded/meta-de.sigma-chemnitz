@@ -36,4 +36,7 @@ KERNEL_ARGS= \
 check-syntax:
 	@${MAKE} -s ${KERNEL_ARGS} -f flymake.mk
 
+## required for building 'menuconfig' with correct libncurses
+menuconfig nconfig gconfig:	export PKG_CONFIG_LIBDIR=${BUILDVAR_STAGING_DIR_NATIVE}/usr/lib/pkgconfig
+
 .NOTPARALLEL:
