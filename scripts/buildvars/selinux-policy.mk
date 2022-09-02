@@ -1,7 +1,7 @@
 include ${BUILDVAR_BUILDVARS_SCRIPT_DIR}/_generic_.mk
 
 MODULE_PRIO ?= 800
-POLICY_FILE ?= policy.31
+POLICY_FILE ?= policy.33
 POLICY_FILE_SRC = ${BUILDVAR_SE_POLICY_ROOT}/etc/selinux/${BUILDVAR_SE_POLICY_NAME}/policy/${POLICY_FILE}
 
 FCTX_FILE ?= file_contexts
