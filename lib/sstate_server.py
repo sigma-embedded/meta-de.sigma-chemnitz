@@ -18,6 +18,17 @@ last_ping = time.monotonic() - PING_DELAY
 sstate_server_disabled = False
 start_tm = None
 
+class Connection:
+    def __init__(self, conn, uri):
+        self.__conn = conn
+        self.__uri = uri
+
+    def __enter__(self):
+        return (self.__conn, self.__uri)
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        self.__conn.close()
+
 ## Generic object with some helper functions
 class SStateAPI(ABC):
     def connect(self, d, api):
@@ -37,7 +48,7 @@ class SStateAPI(ABC):
             bb.warn("Unsupported scheme '%s' for sstate-server" % (uri.scheme))
             raise Exception("unsupported upload scheme '%s'" % (uri.scheme))
 
-        return (conn, uri)
+        return Connection(conn, uri)
 
     @staticmethod
     def is_enabled(d):
@@ -146,18 +157,17 @@ class Ping(SStateAPI):
         pass
 
     def _run(self, d, session):
-        (conn, uri) = self.connect(d, "/v1/session/ping")
+        with self.connect(d, "/v1/session/ping") as (conn, uri):
+            hdrs = {
+                "x-session"        : session,
+            }
 
-        hdrs = {
-            "x-session"        : session,
-        }
+            conn.request('GET', url = uri.path, headers = hdrs)
 
-        conn.request('GET', url = uri.path, headers = hdrs)
+            res = conn.getresponse()
+            self._generic_403(res)
 
-        res = conn.getresponse()
-        self._generic_403(res)
-
-        return res
+            return res
 
 ## Transmits some metadata
 class SetInfo(SStateAPI):
@@ -173,19 +183,18 @@ class SetInfo(SStateAPI):
         pass
 
     def _run(self, d, session):
-        (conn, uri) = self.connect(d, "/v1/session/set-info")
+        with self.connect(d, "/v1/session/set-info") as (conn, uri):
+            distro = (d.getVar("DISTRO_CODENAME", True) or
+                      (d.getVar('LAYERSERIES_CORENAMES', True).split() or [None])[-1])
 
-        distro = (d.getVar("DISTRO_CODENAME", True) or
-                  (d.getVar('LAYERSERIES_CORENAMES', True).split() or [None])[-1])
+            hdrs = {
+                "x-session"   : session,
+                "x-lsb"       : d.getVar("NATIVELSBSTRING", True),
+                "x-corename"  : distro,
+            }
 
-        hdrs = {
-            "x-session"   : session,
-            "x-lsb"       : d.getVar("NATIVELSBSTRING", True),
-            "x-corename"  : distro,
-        }
-
-        conn.request('PATCH', url = uri.path, headers = hdrs)
-        return conn.getresponse()
+            conn.request('PATCH', url = uri.path, headers = hdrs)
+            return conn.getresponse()
 
 ## Fetches stats and displays them
 class Stats(SStateAPI):
@@ -206,14 +215,13 @@ class Stats(SStateAPI):
         pass
 
     def _run(self, d, session):
-       (conn, uri) = self.connect(d, "/v1/session/stats")
+       with self.connect(d, "/v1/session/stats") as (conn, uri):
+           hdrs = {
+               "x-session"        : session,
+           }
 
-       hdrs = {
-           "x-session"        : session,
-       }
-
-       conn.request('GET', url = uri.path, headers = hdrs)
-       return conn.getresponse()
+           conn.request('GET', url = uri.path, headers = hdrs)
+           return conn.getresponse()
 
 ## Uploads a file
 class Upload(SStateAPI):
@@ -305,34 +313,33 @@ class Upload(SStateAPI):
         bb.warn("failed to upload %s file %s: %s" % (self.ftype, self.fname, e))
 
     def _run(self, d, session):
-        (conn, uri) = self.connect(d, "/v1/upload/" + self.ftype)
+        with self.connect(d, "/v1/upload/" + self.ftype) as (conn, uri):
+            with open(self.path, "rb") as f:
+                st = os.fstat(f.fileno())
 
-        with open(self.path, "rb") as f:
-            st = os.fstat(f.fileno())
+                hdrs = {
+                    "content-length"   : "%s" % st.st_size,
+                    "cache-control"    : "no-store",
+                    "x-session"        : session,
+                    "x-pkg-pn"         : d.getVar("PN", True),
+                    "x-pkg-pv"         : d.getVar("PV", True),
+                    "x-pkg-pr"         : d.getVar("PR", True),
+                    "x-pkg-pe"         : d.getVar("PE", True),
+                    "x-pkg-scmrev"     : self.scmrev,
+                    "x-ftime"          : "%s" % st.st_mtime,
+                    "x-filename"       : self.fname,
+                    "x-task"           : self.task,
+                    "x-is-signed"      : ["nil", "t"][self.is_signed],
+                }
 
-            hdrs = {
-                "content-length"   : "%s" % st.st_size,
-                "cache-control"    : "no-store",
-                "x-session"        : session,
-                "x-pkg-pn"         : d.getVar("PN", True),
-                "x-pkg-pv"         : d.getVar("PV", True),
-                "x-pkg-pr"         : d.getVar("PR", True),
-                "x-pkg-pe"         : d.getVar("PE", True),
-                "x-pkg-scmrev"     : self.scmrev,
-                "x-ftime"          : "%s" % st.st_mtime,
-                "x-filename"       : self.fname,
-                "x-task"           : self.task,
-                "x-is-signed"      : ["nil", "t"][self.is_signed],
-            }
+                # filter out empty values
+                hdrs = { k: v   for k, v in hdrs.items() if v is not None and v != "" }
 
-            # filter out empty values
-            hdrs = { k: v   for k, v in hdrs.items() if v is not None and v != "" }
+                conn.request('PUT', url = uri.path, body = f, headers = hdrs)
 
-            conn.request('PUT', url = uri.path, body = f, headers = hdrs)
+            res = conn.getresponse()
 
-        res = conn.getresponse()
-
-        return res
+            return res
 
 ## TODO: use 'eventmask' to filter for bb.event.TaskSucceeded instead
 ## of comparing it manually
