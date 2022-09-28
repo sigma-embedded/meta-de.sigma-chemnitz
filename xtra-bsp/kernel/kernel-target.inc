@@ -16,6 +16,9 @@ COMPATIBLE_MACHINE  = "(-)"
 
 RDEPENDS_${KERNEL_PACKAGE_NAME}-base = ""
 
+# required for working 'menuconfig'
+DEPENDS += "pkgconfig-native"
+
 inherit kernel
 inherit elito-kconfig
 
