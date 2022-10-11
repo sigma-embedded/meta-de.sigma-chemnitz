@@ -5,7 +5,7 @@ SRC_URI = "file://persistent-v4l.rules"
 
 do_install() {
 	install -D -p -m 0644 ${WORKDIR}/persistent-v4l.rules \
-		${D}/lib/udev/rules.d/61-persistent-v4l.rules
+		${D}${nonarch_base_libdir}/udev/rules.d/61-persistent-v4l.rules
 }
 
-FILES:${PN} = "/lib/udev/rules.d/*.rules"
+FILES:${PN} = "${nonarch_base_libdir}/udev/rules.d/*.rules"
