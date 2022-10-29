@@ -36,6 +36,6 @@ DEPENDS += "bc-native lzop-native"
 
 PV = "${BASE_PV}+git${SRCPV}"
 
-KERNEL_CONFIG_COMMAND ?= "oe_runmake_call -C ${S} O=${B} oldnoconfig"
+KERNEL_CONFIG_COMMAND ?= "oe_runmake_call -C ${S} O=${B} olddefconfig"
 
 inherit kernel-arch
