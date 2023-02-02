@@ -262,7 +262,7 @@ class Upload(SStateAPI):
         return False
 
     @staticmethod
-    def from_srcuri(uri, ud):
+    def from_srcuri(d, uri, ud):
         info = None
 
         ## TODO: what are the semantics of 'mirrortarballs'?  Can
@@ -378,7 +378,7 @@ def post_fetch(d):
     fetcher = bb.fetch2.Fetch(src_uris, d)
 
     for (uri, ud) in fetcher.ud.items():
-        uploads = Upload.from_srcuri(uri, ud)
+        uploads = Upload.from_srcuri(d, uri, ud)
 
         for u in uploads:
             u.run(d)
