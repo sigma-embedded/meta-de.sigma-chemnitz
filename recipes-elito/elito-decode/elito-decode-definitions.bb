@@ -27,6 +27,7 @@ _DECODERS_CPU = ""
 _DECODERS_CPU:mx8mq-generic-bsp = "mx8mq"
 _DECODERS_CPU:mx8mm-generic-bsp = "mx8mm"
 _DECODERS_CPU:mx6q-generic-bsp  = "mx6q"
+_DECODERS_CPU:mx6qp-generic-bsp = "mx6qp"
 _DECODERS_CPU:mx6dl-generic-bsp = "mx6dl"
 _DECODERS_CPU:mx6s-generic-bsp  = "mx6dl"
 
