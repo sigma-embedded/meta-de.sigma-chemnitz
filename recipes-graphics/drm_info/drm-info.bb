@@ -3,7 +3,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=32fd56d355bd6a61017655d8da26b67c"
 
 SRC_URI = "\
     git+https://gitlab.freedesktop.org/emersion/drm_info.git;branch=master \
-    file://cross.patch \
     file://dupfmt.patch \
 "
 
