@@ -2,7 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 ## already in OE since 2021-10-05 but see below...
 SRC_URI += "\
-    file://parallel-make.patch \
+    file://parallel-make.patch;maxver=9.4 \
 "
 
 ## remove the corresponding OE patch to keep compatibility with projects
