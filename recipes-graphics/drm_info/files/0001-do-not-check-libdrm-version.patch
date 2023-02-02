@@ -1,0 +1,26 @@
+From 58987a43ff6335a40de00b083c69826ddcf13358 Mon Sep 17 00:00:00 2001
+From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+Date: Thu, 2 Feb 2023 16:36:39 +0100
+Subject: [PATCH] do not check libdrm version
+
+Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index c7b919e..5155476 100644
+--- a/meson.build
++++ b/meson.build
+@@ -41,7 +41,7 @@ inc = []
+ #
+ # We need to make sure we don't use any new libdrm functions, but those
+ # are added very infrequently, so this is unlikely to be an issue.
+-if libdrm.version().version_compare('<2.4.114')
++if libdrm.version().version_compare('<2.4.114') and false
+   if libdrm.type_name() == 'internal'
+     error('libdrm subproject out of date. Run `meson subprojects update`.')
+   endif
+-- 
+2.39.1
+

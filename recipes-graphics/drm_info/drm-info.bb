@@ -4,6 +4,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=32fd56d355bd6a61017655d8da26b67c"
 SRC_URI = "\
     git+https://gitlab.freedesktop.org/emersion/drm_info.git;branch=master \
     file://dupfmt.patch \
+    file://0001-do-not-check-libdrm-version.patch \
 "
 
 SRCREV = "e318e93f9096d373d362395dacd7af2c03f7148e"
