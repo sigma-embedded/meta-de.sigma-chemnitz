@@ -73,6 +73,8 @@ endef
 
 all:	status-daemon
 
+mrproper:	stop-daemon
+
 image-install sync-daemon:	${IMAGE_TARBALL}
 	$(call pseudo,rm -rf '${ROOTFS_DIR}')
 	$(call pseudo,install -d -m 0755 -o root -g root '${ROOTFS_DIR}')
