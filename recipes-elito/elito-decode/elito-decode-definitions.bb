@@ -4,7 +4,7 @@ SUMMARY = "Register defintions for use with elito-decode-registers"
 HOMEPAGE = "https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-definitions"
 
 SRC_URI = "git+https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-definitions;branch=master"
-SRCREV  = "069c8698ea939e87c708932d0912056e5f1a7259"
+SRCREV  = "875dc9c4c1248033e4847e2882dd0453c83c4e70"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
