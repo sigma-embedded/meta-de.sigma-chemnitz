@@ -1,5 +1,5 @@
 import fnmatch
-import pipes
+import shlex
 import oe
 import oe.data
 import bb.parse
@@ -39,7 +39,7 @@ def prepare(d):
 
             #bb.warn("RES: %s" % (res,))
             if is_shell:
-                return ' '.join(map(lambda x: pipes.quote(x), res))
+                return ' '.join(map(lambda x: shlex.quote(x), res))
             else:
                 return res
 
