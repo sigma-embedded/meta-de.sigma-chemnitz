@@ -23,4 +23,4 @@ FILES:${PN}-dbg += "${PTEST_PATH}/.debug"
 
 PTEST_PATH = "${libdir}/bayer2rgb/testsuite"
 FILES:${PN}-tests += "${libdir}/bayer2rgb/testsuite"
-RDEPENDS:${PN}-tests += "bash"
+RDEPENDS:${PN}-tests += "bash ${PN}-bin (=${EXTENDPKGV})"
