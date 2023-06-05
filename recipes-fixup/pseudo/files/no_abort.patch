@@ -1,0 +1,32 @@
+Index: git/pseudo_client.c
+===================================================================
+--- git.orig/pseudo_client.c
++++ git/pseudo_client.c
+@@ -46,6 +46,7 @@ static char *base_path(int dirfd, const
+ 
+ static int connect_fd = -1;
+ static int server_pid = 0;
++int pseudo_no_abort = 0;
+ int pseudo_prefix_dir_fd = -1;
+ int pseudo_localstate_dir_fd = -1;
+ int pseudo_pwd_fd = -1;
+@@ -528,6 +529,10 @@ pseudo_init_client(void) {
+ 		pseudo_disabled = 1;
+ 	}
+ 
++	env = getenv("PSEUDO_NO_ABORT");
++	if (env)
++		pseudo_no_abort = 1;
++
+ 	/* Setup global items needed for pseudo to function... */
+ 	if (!pseudo_inited) {
+ 		/* Ensure that all of the values are reset */
+@@ -2052,7 +2057,7 @@ pseudo_client_op(pseudo_op_t op, int acc
+ #endif
+ 		if (result) {
+ 			pseudo_debug(PDBGF_OP, "(%d) %s", getpid(), pseudo_res_name(result->result));
+-			if (result->result == RESULT_ABORT) {
++			if (result->result == RESULT_ABORT && !pseudo_no_abort) {
+ 				char *local_state_dir = pseudo_get_value("PSEUDO_LOCALSTATEDIR");
+ 				pseudo_diag("abort()ing pseudo client by server request. See https://wiki.yoctoproject.org/wiki/Pseudo_Abort for more details on this.\n"
+ 					"Check logfile: %s/%s\n", local_state_dir, PSEUDO_LOGFILE);
