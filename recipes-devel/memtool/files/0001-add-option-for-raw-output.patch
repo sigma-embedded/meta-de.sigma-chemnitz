@@ -8,6 +8,8 @@ output the read data directly as binary.
 
 Patch adds '-r' option to enable this behavior.
 
+Upstream-Status: Submitted [https://github.com/pengutronix/memtool/pull/6]
+
 Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
 ---
  memtool.c | 16 +++++++++++++---
