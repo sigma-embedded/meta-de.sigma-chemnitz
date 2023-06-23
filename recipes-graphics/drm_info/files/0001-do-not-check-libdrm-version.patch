@@ -3,6 +3,8 @@ From: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
 Date: Thu, 2 Feb 2023 16:36:39 +0100
 Subject: [PATCH] do not check libdrm version
 
+Upstream-Status: Inappropriate [embedded specific]
+
 Signed-off-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
 ---
  meson.build | 2 +-

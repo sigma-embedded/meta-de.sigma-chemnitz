@@ -1,3 +1,5 @@
+Upstream-Status: Pending
+
 Index: strace-5.16/src/v4l2.c
 ===================================================================
 --- strace-5.16.orig/src/v4l2.c

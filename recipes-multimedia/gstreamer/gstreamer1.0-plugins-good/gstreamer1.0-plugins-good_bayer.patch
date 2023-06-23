@@ -1,3 +1,5 @@
+Upstream-Status: Pending
+
 Index: gst-plugins-good-1.18.4/sys/v4l2/gstv4l2object.c
 ===================================================================
 --- gst-plugins-good-1.18.4.orig/sys/v4l2/gstv4l2object.c
