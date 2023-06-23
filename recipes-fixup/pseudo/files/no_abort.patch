@@ -1,3 +1,5 @@
+Upstream-Status: Pending
+
 Index: git/pseudo_client.c
 ===================================================================
 --- git.orig/pseudo_client.c
