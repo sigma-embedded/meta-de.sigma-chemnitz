@@ -30,6 +30,7 @@ PSEUDO = ${BUILDVAR_PSEUDO_SYSROOT}/usr/bin/pseudo
 
 PSEUDO_CMD = \
 	env \
+	LD_LIBRARY_PATH=$(dir ${BUILDVAR_PSEUDO_SYSROOT})/flex-native/usr/lib \
 	PSEUDO_PREFIX=${BUILDVAR_PSEUDO_SYSROOT}/usr \
 	PSEUDO_LOCALSTATEDIR=${ROOTFS_METADIR}/.pseudo \
 	PSEUDO_PASSWD='$(subst ${_space},:,$(strip ${ROOTFS_ALL_DIRS})):/' \
