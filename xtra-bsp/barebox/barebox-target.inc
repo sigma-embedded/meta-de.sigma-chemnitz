@@ -27,9 +27,20 @@ EXTRA_OEMAKE += "\
     CROSS_COMPILE='${TARGET_PREFIX}' \
     CC='${KERNEL_CC}' \
     LD='${KERNEL_LD}' \
+    HOSTLDFLAGS='${BUILD_LDFLAGS}' \
     HOSTCC='${BUILD_CC}' \
-    HOSTCPP='${BUILD_CPP}' \
+    HOSTCFLAGS='${BUILD_CFLAGS}' \
+    HOSTCXX='${BUILD_CXX}' \
+    HOSTCXXFLAGS='${BUILD_CXXFLAGS}' \
+    HOSTCPP='${BUILD_CPP} ${BUILD_CPPFLAGS}' \
 "
+
+inherit pkgconfig
+
+export PKG_CONFIG_DIR    = "${STAGING_DIR_NATIVE}${libdir_native}/pkgconfig"
+export PKG_CONFIG_PATH   = "${PKG_CONFIG_DIR}:${STAGING_DATADIR_NATIVE}/pkgconfig"
+export PKG_CONFIG_LIBDIR = "${PKG_CONFIG_DIR}"
+export PKG_CONFIG_SYSROOT_DIR = ""
 
 ## usage: _run_install <dst-dir>
 _run_install() {
