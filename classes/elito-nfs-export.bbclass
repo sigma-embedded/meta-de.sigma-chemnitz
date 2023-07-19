@@ -15,6 +15,8 @@ NFS_ROOTFS_IMGDIR  ?= "${NFS_ROOTFS_BASEDIR}/${MACHINE}/${PN}"
 
 inherit elito-emit-buildvars
 
+IMAGE_FSTYPES += "tar"
+
 BUILDVARS_EMIT = "true"
 BUILDVARS_EXPORT += "\
     IMAGE_ROOTFS \
