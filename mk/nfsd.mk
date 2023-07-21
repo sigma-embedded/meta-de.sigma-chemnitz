@@ -87,6 +87,9 @@ image-install sync-daemon:	${IMAGE_TARBALL}
 repair-daemon:	stop-daemon
 	${PSEUDO_CMD} -B
 
+chown-daemon:
+	$(call pseudo,chown -R root:root ${ROOTFS_DIR}/lib/modules)
+
 info-daemon:
 	@echo "tarball: " ${IMAGE_TARBALL}
 
