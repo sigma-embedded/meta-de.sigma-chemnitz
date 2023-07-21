@@ -76,8 +76,8 @@ _NFSD_MAKE = \
 	Q='$Q' \
 	BUILDVARS_DATA='${DEPLOY_DIR}/buildvars/${MACHINE}/${IMAGE_BASE}.mk'
 
-start-nfsd stop-nfsd status-nfsd repair-nfsd info-nfsd sync-nfsd:
-start-nfsd stop-nfsd status-nfsd repair-nfsd info-nfsd sync-nfsd:%-nfsd:	FORCE
+start-nfsd stop-nfsd status-nfsd repair-nfsd info-nfsd sync-nfsd chown-nfsd:
+start-nfsd stop-nfsd status-nfsd repair-nfsd info-nfsd sync-nfsd chown-nfsd:%-nfsd:	FORCE
 	+$Q${_NFSD_MAKE} $*-daemon
 
 info:	FORCE
