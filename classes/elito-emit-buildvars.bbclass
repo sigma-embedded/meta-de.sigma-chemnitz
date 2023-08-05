@@ -311,9 +311,26 @@ def _get_buildvars_style(d):
 
     return None
 
-do_emit_buildvars[vardeps] += "BUILDVARS_EXPORT ${BUILDVARS_EXPORT} \
-  BUILDVARS_OMIT_FOOTER BUILDVARS_FOOTER"
-do_emit_buildvars[vardepvalue] += "${@_gen_emitbuildvars_value(d)}"
+_get_vardeps[vardeps] += 'BUILDVARS_EXPORT'
+def _get_vardeps(d):
+    res = set()
+    for name in oe.data.typed_value('BUILDVARS_EXPORT', d):
+        while name:
+            if name[0] in ['-', '?', '!']:
+                name = name[1:]
+            else:
+                break
+
+        res.add(name)
+
+    return ' '.join(sorted(res))
+
+do_emit_buildvars[vardeps] += "\
+    ${@_get_vardeps(d)} \
+    BUILDVARS_OMIT_FOOTER BUILDVARS_FOOTER \
+    BUILDVARS_PREFIX BUILDVARS_STYLE BUILDVARS_MINIFY \
+    _get_vardeps \
+    _emitbuildvars_split_vars _get_buildvars_style"
 do_emit_buildvars[dirs] = "${BUILDVARSDIR}"
 do_emit_buildvars[sstate-inputdirs] = "${BUILDVARSDIR}"
 do_emit_buildvars[sstate-outputdirs] = "${BUILDVARS_DEPLOY_DIR}"
