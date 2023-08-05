@@ -12,10 +12,6 @@ _vars = \
 	HOST_CXX \
 	RUST_TARGET_PATH \
 	RUSTFLAGS \
-	PKG_CONFIG_DIR \
-	PKG_CONFIG_LIBDIR \
-	PKG_CONFIG_PATH \
-	PKG_CONFIG_SYSROOT_DIR \
 
 $(call export_vars,${_vars},build build-release install install-release)
 
