@@ -189,6 +189,11 @@ BUILDVARS_EMIT[type] = "boolean"
 BUILDVARS_EMIT[doc] = "When set, the do_emit_buildvars task will be\
 executed implicitly."
 
+BUILDVARS_MINIFY ?= "true"
+BUILDVARS_MINIFY[type] = "boolean"
+BUILDVARS_MINIFY[doc] = "When set, minify output by substituting common paths \
+in the output"
+
 BUILDVARS_OMIT_FOOTER ?= "false"
 BUILDVARS_OMIT_FOOTER[type] = "boolean"
 BUILDVARS_OMIT_FOOTER[doc] = "When set, omit the 'ifdef' block at the\
@@ -232,6 +237,14 @@ def _emitbuildvars_split_vars(d):
 
             self.name = v
 
+        def __replace_val(self, val, prefix):
+            for (pat, repl) in replacements:
+                if self.name == repl or not pat:
+                    continue
+                val = val.replace(pat, '${' + prefix + repl + '}')
+
+            return val
+
         def emit(self, d, prefix):
             val = d.getVar(self.name, True)
             if self.is_dflt:
@@ -242,7 +255,12 @@ def _emitbuildvars_split_vars(d):
             start = prefix + self.name + eq
 
             if val is not None:
-                return start + ' ' + val.strip()
+                val = val.strip()
+
+            if val is not None:
+                if do_minify:
+                    val = self.__replace_val(val, prefix)
+                return start + ' ' + val
             elif not self.is_optional:
                 raise Exception("emit-buildvars: variable '%s' not set" % self.name)
             elif self.emit_null:
@@ -250,7 +268,20 @@ def _emitbuildvars_split_vars(d):
             else:
                 return None
 
+    def genpair(d, varname):
+        return (d.getVar(varname), varname)
+
     res = {}
+    do_minify = oe.data.typed_value('BUILDVARS_MINIFY', d)
+    replacements = [
+        genpair(d, 'S'),
+        genpair(d, 'B'),
+        genpair(d, 'STAGING_DIR_NATIVE'),
+        genpair(d, 'STAGING_DIR_TARGET'),
+        genpair(d, 'WORKDIR'),
+        genpair(d, 'TMPDIR'),
+    ]
+
     for name in oe.data.typed_value('BUILDVARS_EXPORT', d):
         var = Var(name)
         res[var.name] = var
