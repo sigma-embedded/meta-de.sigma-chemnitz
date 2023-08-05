@@ -305,7 +305,7 @@ def _get_buildvars_style(d):
     if style and len(style) > 0:
         return style
 
-    for k in ('autotools', 'meson'):
+    for k in ('autotools', 'meson', 'cargo'):
         if bb.data.inherits_class(k, d):
             return '_%s_' % k
 
