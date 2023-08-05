@@ -45,6 +45,60 @@ BUILDVARS_PREFIX ?= "BUILDVAR_"
 BUILDVARS_PREFIX[type] = "string"
 BUILDVARS_PREFIX[doc] = "A string prepended to the variable name."
 
+_BUILDVARS_cargo = "\
+    ~CARGO \
+    ~CARGO_BUILD_FLAGS \
+    ~CARGO_BUILD_TARGET \
+    ~CARGO_HOME \
+    ~CARGO_TARGET_SUBDIR \
+\
+    ~MANIFEST_PATH \
+\
+    ~RUSTFLAGS \
+    ~RUSTLIB \
+    ~RUST_TARGET_PATH \
+    ~RUST_BUILD_SYS \
+    ~RUST_HOST_SYS \
+    ~RUST_TARGET_SYS \
+\
+    ~RUST_BUILD_AR \
+    ~RUST_BUILD_CC \
+    ~RUST_BUILD_CCLD \
+    ~RUST_BUILD_CXX \
+\
+    ~RUST_TARGET_AR \
+    ~RUST_TARGET_CC \
+    ~RUST_TARGET_CCLD \
+    ~RUST_TARGET_CXX \
+"
+
+_BUILDVARS_cmake = "\
+    ~EXTRA_OECMAKE \
+    ~OECMAKE_C_FLAGS \
+    ~OECMAKE_GENERATOR_ARGS \
+"
+
+_BUILDVARS_kernel-arch = "\
+    ~KERNEL_AR \
+    ~KERNEL_CC \
+    ~KERNEL_LD \
+"
+
+_BUILDVARS_meson = "\
+    ~MESONOPTS \
+    ~MESON_CROSS_FILE \
+"
+
+_BUILDVARS_pkgconfig = "\
+    PKG_CONFIG_DIR \
+    PKG_CONFIG_LIBDIR \
+    PKG_CONFIG_PATH \
+    PKG_CONFIG_SYSROOT_DIR \
+    PKG_CONFIG_DISABLE_UNINSTALLED \
+    PKG_CONFIG_SYSTEM_LIBRARY_PATH \
+    PKG_CONFIG_SYSTEM_INCLUDE_PATH \
+"
+
 BUILDVARS_EXPORT = "\
     BUILD_AR \
     BUILD_CC \
@@ -76,6 +130,10 @@ BUILDVARS_EXPORT = "\
     RANLIB \
     STRIP \
 \
+    PYTHON \
+    PYTHON_LIBRARY \
+    PYTHON_INCLUDE_DIR \
+\
     ?CCACHE \
     ?CCACHE_DIR \
 \
@@ -83,11 +141,6 @@ BUILDVARS_EXPORT = "\
     EXTRA_OECONF \
 \
     CONFIGUREOPTS \
-\
-    PKG_CONFIG_DIR \
-    PKG_CONFIG_LIBDIR \
-    PKG_CONFIG_PATH \
-    PKG_CONFIG_SYSROOT_DIR \
 \
     ~ACLOCALDIR \
     ~ACLOCALEXTRAPATH \
@@ -116,6 +169,12 @@ BUILDVARS_EXPORT = "\
     base_libdir \
     libexecdir \
     datadir \
+\
+    ${_BUILDVARS_cargo} \
+    ${_BUILDVARS_cmake} \
+    ${_BUILDVARS_kernel-arch} \
+    ${_BUILDVARS_meson} \
+    ${_BUILDVARS_pkgconfig} \
 "
 
 BUILDVARS_EXPORT[type] = "list"
