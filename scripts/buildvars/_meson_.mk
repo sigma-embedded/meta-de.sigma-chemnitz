@@ -14,7 +14,6 @@ SED ?=   sed
 MESON_CDB_CLEANUP = \
 	-e "s!-MF \+'[^'']*'!!g"
 
-meson-setup:	export PKG_CONFIG_LIBDIR=${BUILDVAR_PKG_CONFIG_LIBDIR}
 meson-setup:
 	w=; test ! -e "meson-private/cmd_line.txt" || w=--wipe; \
 	${MESON} setup $$w ${MESON_ARGS} '.' '$S'
