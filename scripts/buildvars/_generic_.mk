@@ -12,6 +12,17 @@ SHELL_PS1 ?= [\[\033[1;34m\]${BUILDVAR_PN}\[\033[0;39m\]|\u@\h \W]\044\040
 
 _common_vars =
 
+ifeq (${BUILDVAR_NO_PKG_CONFIG_ENVIRONMENT},)
+_common_vars +=					\
+	PKG_CONFIG_DIR				\
+	PKG_CONFIG_PATH				\
+	PKG_CONFIG_LIBDIR			\
+	PKG_CONFIG_SYSROOT_DIR			\
+	PKG_CONFIG_SYSTEM_LIBRARY_PATH		\
+	PKG_CONFIG_SYSTEM_INCLUDE_PATH		\
+
+endif
+
 define _export_var
 export $1 = $${BUILDVAR_$1}
 endef
