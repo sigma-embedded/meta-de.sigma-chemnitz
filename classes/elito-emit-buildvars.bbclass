@@ -46,77 +46,78 @@ BUILDVARS_PREFIX[type] = "string"
 BUILDVARS_PREFIX[doc] = "A string prepended to the variable name."
 
 BUILDVARS_EXPORT = "\
-	BUILD_AR \
-	BUILD_CC \
-	BUILD_CFLAGS \
-	BUILD_CCLD \
-	BUILD_CPP \
-	BUILD_CPPFLAGS \
-	BUILD_CXX \
-	BUILD_CXXFLAGS \
-	BUILD_LD \
-	BUILD_LDFLAGS \
-	BUILD_NM \
-	BUILD_RANLIB \
-	BUILD_STRIP \
+    BUILD_AR \
+    BUILD_CC \
+    BUILD_CFLAGS \
+    BUILD_CCLD \
+    BUILD_CPP \
+    BUILD_CPPFLAGS \
+    BUILD_CXX \
+    BUILD_CXXFLAGS \
+    BUILD_LD \
+    BUILD_LDFLAGS \
+    BUILD_NM \
+    BUILD_RANLIB \
+    BUILD_STRIP \
 \
-	AR \
-	CC \
-	CFLAGS \
-	CCLD \
-	CPP \
-	CPPFLAGS \
-	CXX \
-	CXXFLAGS \
-	LD \
-	LDFLAGS \
-	NM \
-	OBJCOPY \
-	OBJDUMP \
-	RANLIB \
-	STRIP \
+    AR \
+    CC \
+    CFLAGS \
+    CCLD \
+    CPP \
+    CPPFLAGS \
+    CXX \
+    CXXFLAGS \
+    LD \
+    LDFLAGS \
+    NM \
+    OBJCOPY \
+    OBJDUMP \
+    RANLIB \
+    STRIP \
 \
-	?CCACHE \
-	?CCACHE_DIR \
+    ?CCACHE \
+    ?CCACHE_DIR \
 \
-	EXTRA_OEMAKE \
-	EXTRA_OECONF \
+    EXTRA_OEMAKE \
+    EXTRA_OECONF \
 \
-	CONFIGUREOPTS \
+    CONFIGUREOPTS \
 \
-	PKG_CONFIG_DIR \
-	PKG_CONFIG_LIBDIR \
-	PKG_CONFIG_PATH \
-	PKG_CONFIG_SYSROOT_DIR \
+    PKG_CONFIG_DIR \
+    PKG_CONFIG_LIBDIR \
+    PKG_CONFIG_PATH \
+    PKG_CONFIG_SYSROOT_DIR \
 \
-	~ACLOCALDIR \
-        ~ACLOCALEXTRAPATH \
+    ~ACLOCALDIR \
+    ~ACLOCALEXTRAPATH \
 \
-	HOST_PREFIX \
-	TARGET_PREFIX \
-	MACHINE \
-	PATH \
-	S \
-	B \
-	PN \
-	STAGING_DIR_HOST \
-	STAGING_DIR_NATIVE \
-	STAGING_DIR_TARGET \
-        STAGING_DATADIR_NATIVE \
-	TMPDIR \
-	TOOLCHAIN_OPTIONS \
-	WORKDIR \
-	?BUILDVARS_SCRIPT_DIR \
-	?BUILDVARS_DEPLOY_DIR \
+    HOST_PREFIX \
+    TARGET_PREFIX \
+    MACHINE \
+    PATH \
+    S \
+    B \
+    PN \
+    STAGING_DIR_HOST \
+    STAGING_DIR_NATIVE \
+    STAGING_DIR_TARGET \
+    STAGING_DATADIR_NATIVE \
+    TMPDIR \
+    TOOLCHAIN_OPTIONS \
+    WORKDIR \
+    ?BUILDVARS_SCRIPT_DIR \
+    ?BUILDVARS_DEPLOY_DIR \
 \
-	prefix \
-	bindir \
-	sbindir \
-	libdir \
-	base_libdir \
-	libexecdir \
-	datadir \
+    prefix \
+    bindir \
+    sbindir \
+    libdir \
+    base_libdir \
+    libexecdir \
+    datadir \
 "
+
 BUILDVARS_EXPORT[type] = "list"
 BUILDVARS_EXPORT[doc] = "A list of variables which shall be exported. \
 A prefix '!' makes the variable mandatory; e.g. when not defined, an \
