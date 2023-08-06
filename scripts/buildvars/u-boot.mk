@@ -11,3 +11,6 @@ BUILD_FLAGS = \
 
 check-syntax:
 	@${MAKE} -s ${BUILD_FLAGS} -f flymake.mk
+
+## required for building 'menuconfig' with correct libncurses
+menuconfig nconfig gconfig:	export LD_LIBRARY_PATH=${BUILDVAR_STAGING_DIR_NATIVE}/usr/lib
