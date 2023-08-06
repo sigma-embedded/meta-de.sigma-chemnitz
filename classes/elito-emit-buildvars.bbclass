@@ -254,10 +254,10 @@ def _emitbuildvars_split_vars(d):
 
             start = prefix + self.name + eq
 
-            if val is not None:
+            if val:
                 val = val.strip()
 
-            if val is not None:
+            if val:
                 if do_minify:
                     val = self.__replace_val(val, prefix)
                 return start + ' ' + val
