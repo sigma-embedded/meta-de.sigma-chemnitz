@@ -219,6 +219,8 @@ SSTATETASKS += "do_emit_buildvars"
 
 ## Splite BUILDVARS_EXPORT and honor special prefixes
 def _emitbuildvars_split_vars(d):
+    import re
+
     class Var:
         def __init__(self, v):
             self.is_optional = True
@@ -240,9 +242,9 @@ def _emitbuildvars_split_vars(d):
 
         def __replace_val(self, val, prefix):
             for (pat, repl) in replacements:
-                if self.name == repl or not pat:
+                if self.name == repl:
                     continue
-                val = val.replace(pat, '${' + prefix + repl + '}')
+                val = pat.sub('${' + prefix + repl + '}', val)
 
             return val
 
@@ -272,16 +274,41 @@ def _emitbuildvars_split_vars(d):
     def genpair(d, varname):
         return (d.getVar(varname), varname)
 
+    def fixup_replacement(replacements):
+        seen = set()
+        tmp = []
+        for (pat, repl) in replacements:
+            ## filter out already seen and empty patterns
+            if pat in seen or not pat:
+                continue
+
+            seen.add(pat)
+            tmp.append((pat, repl))
+
+        ## move longest pattern first
+        tmp = sorted(tmp, key = lambda k: len(k[0]), reverse = True)
+
+        res = []
+        for (pat, repl) in tmp:
+            pat = re.compile(re.escape(pat) + r'\b')
+            res.append((pat, repl))
+
+        return res
+
     res = {}
     do_minify = oe.data.typed_value('BUILDVARS_MINIFY', d)
-    replacements = [
-        genpair(d, 'S'),
-        genpair(d, 'B'),
+
+    ## put common dirs first; they will take precedence over those
+    ## declared later
+    replacements = fixup_replacement([
+        genpair(d, 'TMPDIR'),
+        genpair(d, 'DEPLOY_DIR'),
+        genpair(d, 'WORKDIR'),
         genpair(d, 'STAGING_DIR_NATIVE'),
         genpair(d, 'STAGING_DIR_TARGET'),
-        genpair(d, 'WORKDIR'),
-        genpair(d, 'TMPDIR'),
-    ]
+        genpair(d, 'S'),
+        genpair(d, 'B'),
+    ])
 
     for name in oe.data.typed_value('BUILDVARS_EXPORT', d):
         var = Var(name)
