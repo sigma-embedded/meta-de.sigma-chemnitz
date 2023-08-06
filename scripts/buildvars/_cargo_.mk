@@ -21,7 +21,7 @@ $(call export_vars,${_vars},build build-release install install-release)
 export CARGO_TARGET_DIR = ${BUILDVAR_B}/local-build
 export PKG_CONFIG_ALLOW_CROSS = 1
 
-CARGO_BUILD_FLAGS = --target ${BUILDVAR_HOST_SYS}
+CARGO_BUILD_FLAGS = --offline --target ${BUILDVAR_HOST_SYS}
 
 all:	build
 
