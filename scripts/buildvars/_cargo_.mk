@@ -16,7 +16,11 @@ _vars = \
 	RUST_TARGET_PATH \
 	RUSTFLAGS \
 
-$(call export_vars,${_vars},build build-release install install-release)
+$(call export_vars,${_vars},\
+	${SHELL_TARGET} \
+	cargo.build cargo.build-release cargo.install cargo.install-release \
+	.cargo.build .cargo.build-release .cargo.install .cargo.install-release \
+)
 
 export CARGO_TARGET_DIR = ${BUILDVAR_B}/local-build
 export PKG_CONFIG_ALLOW_CROSS = 1
@@ -25,14 +29,21 @@ CARGO_BUILD_FLAGS = --offline --target ${BUILDVAR_RUST_HOST_SYS}
 
 all:	build
 
-build:
+build build-release install install-release:%:	cargo.%
+	@:
+
+cargo.%:		FORCE
+	@$(if ${ORIG_MAKE},true,echo "***** ORIG_MAKE not defined *****"; exit 1)
+	+${ORIG_MAKE} -e .$@
+
+.cargo.build:		FORCE
 	${CARGO} build ${CARGO_BUILD_FLAGS}
 
-build-release:
+.cargo.build-release:	FORCE
 	${CARGO} build --release ${CARGO_BUILD_FLAGS}
 
-install:
+.cargo.install:		FORCE
 	${CARGO} install ${CARGO_BUILD_FLAGS} --path '.' --root '${DESTDIR}/usr' --debug --force
 
-install-release:
+.cargo.install-release:	FORCE
 	${CARGO} install ${CARGO_BUILD_FLAGS} --path '.' --root '${DESTDIR}/usr' --force
