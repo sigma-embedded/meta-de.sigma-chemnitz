@@ -14,10 +14,11 @@ SRC_URI[vardepsexclude] += "UBOOT_REFSPEC UBOOT_BASE_URI UBOOT_URI"
 ### NOTE: 'swig' requires a manual 'inherit python2native'
 
 PACKAGECONFIG ??= ""
-PACKAGECONFIG[swig] = ",,swig-native"
+PACKAGECONFIG[swig] = ",,swig-native python3-setuptools-native"
 
 _EXTRA_OEMAGE_swig = "\
     PYTHON2='${PYTHON}' \
+    PYTHON3='${PYTHON}' \
     STAGING_INCDIR='${STAGING_INCDIR_NATIVE}' \
     STAGING_LIBDIR='${STAGING_LIBDIR_NATIVE}' \
 "
