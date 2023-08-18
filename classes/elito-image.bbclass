@@ -14,7 +14,7 @@ ELITO_IMAGE_CFG_PATH[type] = "list"
 
 _ELITO_IMAGE_CFG_PATH = "${@oe.data.typed_value('ELITO_IMAGE_CFG_PATH', d)}"
 
-do_build[recrdeptask] = "do_emit_buildvars_rec"
+do_image_complete[recrdeptask] += "do_emit_buildvars_rec"
 
 def host_expanduser(dir):
     ## we have to expand it in an extra subprocess with clean environment
