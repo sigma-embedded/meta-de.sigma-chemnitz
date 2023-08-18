@@ -415,3 +415,5 @@ python() {
         bb.build.addtask("emit_buildvars", "do_build", None, d)
         bb.build.addtask("emit_buildvars", "do_emit_buildvars_rec", None, d)
 }
+
+do_build[recrdeptask] += "do_emit_buildvars_rec"
