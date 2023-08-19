@@ -21,10 +21,6 @@ RRECOMMENDS:${PN} = "\
     gstreamer1.0-plugins-good \
     strace \
     drm-info \
-"
-
-DEPENDS += "\
-    unfs3-native \
-    ccache-native \
-    rust-llvm-native \
+\
+    native-ci \
 "
