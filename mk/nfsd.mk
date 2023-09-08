@@ -15,7 +15,10 @@ _comma = ,
 ROOTFS_BASEDIR =	${BUILDVAR_NFS_ROOTFS_BASEDIR}
 ROOTFS_METADIR =	${BUILDVAR_NFS_ROOTFS_METADIR}
 ROOTFS_DIR =		${BUILDVAR_NFS_ROOTFS_IMGDIR}
-ROOTFS_ALL_DIRS =	$(sort $(abspath $(filter-out %/latest,$(wildcard ${ROOTFS_BASEDIR}/${BUILDVAR_MACHINE}/*) ${ROOTFS_DIR})))
+ROOTFS_ALL_DIRS = \
+	$(abspath $(wildcard ${ROOTFS_DIR})) \
+	$(filter-out $(abspath $(wildcard ${ROOTFS_DIR})), \
+		$(sort $(abspath $(filter-out %/latest,$(wildcard ${ROOTFS_BASEDIR}/${BUILDVAR_MACHINE}/*)))))
 
 PSEUDO_IGNORE_PATHS = \
 	/bin /dev /etc /home /lib /lib64 /mnt \
