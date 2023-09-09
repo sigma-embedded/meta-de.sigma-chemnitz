@@ -16,7 +16,7 @@ ROOTFS_BASEDIR =	${BUILDVAR_NFS_ROOTFS_BASEDIR}
 ROOTFS_METADIR =	${BUILDVAR_NFS_ROOTFS_METADIR}
 ROOTFS_DIR =		${BUILDVAR_NFS_ROOTFS_IMGDIR}
 ROOTFS_IGNOREPAT ?=
-ROOTFS_ALL_DIRS = \
+ROOTFS_PASSWD_DIRS ?= \
 	$(abspath $(wildcard ${ROOTFS_DIR})) \
 	$(filter-out $(abspath $(wildcard ${ROOTFS_DIR})), \
 		$(sort $(abspath $(filter-out $(addprefix %/,${ROOTFS_IGNOREPAT} latest),\
@@ -37,7 +37,7 @@ PSEUDO_CMD = \
 	env \
 	PSEUDO_PREFIX=${BUILDVAR_PSEUDO_SYSROOT}/usr \
 	PSEUDO_LOCALSTATEDIR=${ROOTFS_METADIR}/.pseudo \
-	PSEUDO_PASSWD='$(subst ${_space},:,$(strip ${ROOTFS_ALL_DIRS})):/' \
+	PSEUDO_PASSWD='$(subst ${_space},:,$(strip ${ROOTFS_PASSWD_DIRS})):/' \
 	PSEUDO_NO_ABORT=1 \
 	PSEUDO_NOSYMLINKEXP=1 \
 	PSEUDO_IGNORE_PATHS='$(subst ${_space},${_comma},$(strip ${PSEUDO_IGNORE_PATHS}))' \
