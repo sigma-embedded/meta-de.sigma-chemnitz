@@ -218,6 +218,7 @@ class FitImage(OfNode):
         idx = 0
         for r in ramdisks:
             images.add_node(FitPart("ramdisk", idx)
+                            .set_os("linux")
                             .set_compression("none")
                             .set_inputfile(r))
 
@@ -239,9 +240,14 @@ class FitPart(FitNode):
         self.hash = "sha1"
         self.entry = None
         self.load = None
+        self.os = None
 
     def set_compression(self, comp):
         self.compression = comp
+        return self
+
+    def set_os(self, os):
+        self.os = os
         return self
 
     def set_load(self, load):
@@ -281,6 +287,7 @@ class FitPart(FitNode):
             (self.type,  "type",              OfPropertyString),
             (self.desc, "description",        OfPropertyString),
             (self.arch, "arch",               OfPropertyString),
+            (self.os,   "os",                 OfPropertyString),
             (self.compression, "compression", OfPropertyString),
             (self.load,  "load",              OfPropertyH32),
             (self.entry, "entry",             OfPropertyH32),
