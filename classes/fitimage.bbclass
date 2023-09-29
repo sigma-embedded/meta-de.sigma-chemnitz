@@ -167,6 +167,7 @@ fitimage_do_deploy() {
 	  fit|fit.*)
 		install -D -p -m 0644 '${IMAGE_BASENAME}'.$t '${DEPLOYDIR}/${IMAGE_NAME}'.$t
 		ln -s '${IMAGE_NAME}'.$t '${DEPLOYDIR}/${IMAGE_BASENAME}'.$t
+		ln -s '${IMAGE_NAME}'.$t '${DEPLOYDIR}/${IMAGE_BASENAME}-${MACHINE}'.$t
 		;;
 	esac
     done
