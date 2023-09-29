@@ -165,8 +165,8 @@ fitimage_do_deploy() {
     for t in ${IMAGE_TYPES}; do
 	case $t in
 	  fit|fit.*)
-		install -D -p -m 0644 ${IMAGE_BASENAME}.$t ${DEPLOYDIR}/${IMAGE_NAME}.$t
-		ln -s ${IMAGE_NAME}.$t ${DEPLOYDIR}/${IMAGE_BASENAME}.$t
+		install -D -p -m 0644 '${IMAGE_BASENAME}'.$t '${DEPLOYDIR}/${IMAGE_NAME}'.$t
+		ln -s '${IMAGE_NAME}'.$t '${DEPLOYDIR}/${IMAGE_BASENAME}'.$t
 		;;
 	esac
     done
