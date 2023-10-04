@@ -106,7 +106,7 @@ ${_NOT_HOST_TARETS}:		prohibit-host-environment
 
 ###### makeflags
 
-ifneq ($(findstring k,$(MAKEFLAGS)),)
+ifneq ($(findstring k,$(firstword -$(MAKEFLAGS))),)
 BITBAKE_FLAGS += -k
 endif
 
