@@ -1,4 +1,4 @@
-ci-deploy ci-deploy-rescue ci-deploy-sdk ci-deploy-doc:
+ci-deploy ci-deploy-sdk ci-deploy-doc:
 	: D=$(abspath $D)
 	: PWD=$(abspath .)
 	rm -rf $D

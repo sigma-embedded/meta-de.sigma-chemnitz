@@ -9,7 +9,6 @@ RRECOMMENDS:${PN} = "\
     e2fsprogs \
     elito-decode-definitions \
     elito-fbtest \
-    elito-image-stream \
     gengetopt \
     libccgi \
     systemd \
