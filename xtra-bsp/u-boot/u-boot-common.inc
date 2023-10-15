@@ -33,7 +33,8 @@ do_prepare_localversion() {
     rm -f 'local-version.cfg'
 
     if test -n '${UBOOT_LOCALVERSION}'; then
-	printf 'CONFIG_LOCALVERSION=" (%s)"\n' "${UBOOT_LOCALVERSION}"
+	## NOTE: u-boot uses this option on the shell without quoting
+	printf 'CONFIG_LOCALVERSION=" \(%s\)"\n' "${UBOOT_LOCALVERSION}"
 	printf '# CONFIG_LOCALVERSION_AUTO is not set\n'
     fi > local-version.cfg
 }
