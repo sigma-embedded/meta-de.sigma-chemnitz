@@ -2,13 +2,13 @@ LICENSE = "GPL-2.0-only"
 LIC_FILES_CHKSUM = "file://COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 HOMEPAGE = "http://jwilk.net/software/fbcat"
 
-PV = "0.5.2"
+PV = "0.5.3"
 
 SRC_URI = "\
     git+https://github.com/jwilk/fbcat.git;branch=master \
 "
 
-SRCREV = "fe1b2995fa45e863f7ce7b24b91df0a2c511e6e3"
+SRCREV = "9afeec9231277fcdb7119765bda931cfb84e8524"
 
 S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
