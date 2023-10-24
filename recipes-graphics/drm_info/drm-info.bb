@@ -7,7 +7,9 @@ SRC_URI = "\
     file://0001-do-not-check-libdrm-version.patch \
 "
 
-SRCREV = "e318e93f9096d373d362395dacd7af2c03f7148e"
+SRCREV = "b89557d57edd9bb43894e5917c11ac92fdafcc50"
+
+PV = "2.6.0"
 
 S = "${WORKDIR}/git"
 
