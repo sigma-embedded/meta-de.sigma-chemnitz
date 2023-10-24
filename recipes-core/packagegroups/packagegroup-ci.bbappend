@@ -10,7 +10,6 @@ RRECOMMENDS:${PN} = "\
     elito-decode-definitions \
     elito-fbtest \
     gengetopt \
-    libccgi \
     systemd \
     unfs3 \
     fbcat \
