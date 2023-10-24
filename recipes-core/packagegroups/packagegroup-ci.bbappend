@@ -11,7 +11,6 @@ RRECOMMENDS:${PN} = "\
     elito-fbtest \
     elito-image-stream \
     gengetopt \
-    libccgi \
     systemd \
     unfs3 \
     fbcat \
