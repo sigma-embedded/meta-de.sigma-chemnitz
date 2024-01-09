@@ -7,10 +7,17 @@ def find_cfgs(d):
 
     return ' '.join(sources_list)
 
-CFG_SRC = "${@find_cfgs(d)}"
+CFG_DYNAMIC = "${WORKDIR}/_dynamic.cfg"
+CFG_SRC = "${@find_cfgs(d)} ${CFG_DYNAMIC}"
 
 KCONFIG_DEFCONFIG ?= "${WORKDIR}/defconfig"
 KCONFIG_LOCK = "${WORKDIR}/kconfig.lock"
+
+kernel_generate_dynamic_cfg() {
+	rm -f ${CFG_DYNAMIC}
+	touch ${CFG_DYNAMIC}
+}
+do_unpack[postfuncs] += "kernel_generate_dynamic_cfg"
 
 kernel_do_configure() {
 	touch ${B}/.scmversion ${S}/.scmversion
