@@ -89,6 +89,7 @@ def fitimage_generate_its(d, template, output):
             out_file.write(d.expand(in_file.read()))
 
         out_file.write('\n'.join(frag.emit(d)))
+        out_file.write('\n')
 
 do_fitimage_prepare_its[depends] += "${FITIMAGE_COMPONENTS}"
 python do_fitimage_prepare_its() {
