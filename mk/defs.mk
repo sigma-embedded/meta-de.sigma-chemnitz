@@ -134,6 +134,10 @@ ifneq (${BUILDVARS},)
   include ${BUILDVARS}
 endif
 
+ifeq (${X_CI_CATALOG_OE_BUILD},)
+-include ${META_SIGMA_DIR}/mk/ci-legacy.mk
+else
 -include ${META_SIGMA_DIR}/mk/ci.mk
+endif
 
 endif				# NO_LATE_IMPORTS
