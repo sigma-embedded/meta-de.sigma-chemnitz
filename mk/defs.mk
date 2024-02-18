@@ -24,6 +24,8 @@ SHELL_PS1 ?=		[\[\033[1;31m\]${PROJECT}\[\033[0;39m\]|\u@\h \W]\044\040
 BB_ENV_EXTRAWHITE ?=
 BB_ENV_EXTRAWHITE +=	BB_GENERATE_MIRROR_TARBALLS BBMULTICONFIG
 
+TEMPLATECONF ?=		${META_SIGMA_DIR}/conf/templates/generic
+
 export BB_ENV_PASSTHROUGH_ADDITIONS = ${BB_ENV_EXTRAWHITE}
 unexport BB_ENV_EXTRAWHITE
 
@@ -57,6 +59,10 @@ sdk:	FORCE
 
 bitbake: FORCE
 	$(call bitbake,$(BUILDDIR),$R$(if $T, -c $T))
+
+oe-init-build-env:	export TEMPLATECONF:=${TEMPLATECONF}
+oe-init-build-env:	FORCE
+	$(call init_build_env,${BUILDDIR})
 
 clean:	FORCE
 
