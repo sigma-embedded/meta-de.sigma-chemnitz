@@ -6,7 +6,7 @@ EXTRA_OEMAKE += "\
 
 DEPENDS += "\
     imx-atf \
-    firmware-imx-8m \
+    imx-boot-firmware-files \
 "
 
 BL31_NAME:mx8mn-generic-bsp	= "imx8mn-bl31.bin"
