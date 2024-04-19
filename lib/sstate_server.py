@@ -245,10 +245,18 @@ class Upload(SStateAPI):
         path      = os.path.join(dl_dir, fname)
         done_file = path + ".done"
 
-        if not os.path.exists(path):
+        ## master file
+        try:
+            st = os.stat(done_file)
+        except:
             bb.warn("source %s does not exist; skipping" % (fname,))
             return True
 
+        if st.st_size == 0:
+            bb.debug(1, "%s file is empty; skipping" % (fname,))
+            return True
+
+        ## "done" marker file
         try:
             st = os.lstat(done_file)
         except:
