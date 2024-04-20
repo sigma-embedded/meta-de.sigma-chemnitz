@@ -4,17 +4,31 @@ require u-boot-target.inc
 BOOT_TOOLS = "imx-boot-tools"
 UBOOT_SUFFIX = ".bin"
 
-_run_install:append() {
-	install -p -m 0644 ${B}/spl/u-boot-spl.bin "$1"/SPL-${PV}-${PR}.bin
-	ln -sf SPL-${PV}-${PR}.bin  "$1"/SPL.bin
+PACKAGECONFIG:append = " swig"
+inherit python3native
 
-	install -p -m 0644 ${B}/dts/dt.dtb "$1"/u-boot-${PV}-${PR}.dtb
-	ln -sf u-boot-${PV}-${PR}.dtb "$1"/u-boot.dtb
+EXTRA_OEMAKE += "\
+    BINMAN_INDIRS='${FWDIR}' \
+"
+
+FWDIR = "${WORKDIR}/fw"
+
+do_prepare_fw[dirs] = "${FWDIR}"
+do_prepare_fw[cleandirs] = "${FWDIR}"
+do_prepare_fw[depends] += "\
+    imx-boot-firmware-files:do_deploy \
+    imx-atf:do_deploy \
+"
+do_prepare_fw() {
+    for fw in ${DDR_FIRMWARE_NAME} bl31.bin; do
+        rm -f "$fw"
+        ln -s ${DEPLOY_DIR_IMAGE}/"$fw" ./
+    done
 }
+addtask do_prepare_fw before do_configure
 
-do_deploy:append() {
-	install -d -m 0755 "${DEPLOYDIR}"/${BOOT_TOOLS}/
-	install -p -m 0644 ${B}/u-boot-nodtb.bin                "${DEPLOYDIR}"/${BOOT_TOOLS}/u-boot-nodtb.bin
-	install -p -m 0644 ${B}/arch/arm/dts/${UBOOT_DTB_NAME}  "${DEPLOYDIR}"/${BOOT_TOOLS}/
-	install -p -m 0755 ${B}/tools/mkimage                   "${DEPLOYDIR}"/${BOOT_TOOLS}/mkimage_uboot
+_run_install:append:mx8mp-generic-bsp() {
+	install -p -m 0644 ${B}/flash.bin "$1"/flash-${MACHINE}-${PV}-${PR}.bin
+	ln -sf flash-${MACHINE}-${PV}-${PR}.bin  "$1"/flash-${MACHINE}.bin
+	ln -sf flash-${MACHINE}-${PV}-${PR}.bin  "$1"/flash.bin
 }
