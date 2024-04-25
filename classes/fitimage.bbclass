@@ -13,6 +13,15 @@ FITIMAGE_RAMDISKS[type] = "list"
 FITIMAGE_TEMPLATE ?= "fitimage.its"
 FITIMAGE_ITSFILE  ?= "fitimage-gen.its"
 
+FITIMAGE_CFGNODE ??= ""
+#FITIMAGE_CFGNODE[type] = "string"
+
+FITIMAGE_CFG_OVERLAYS ??= "${FITIMAGE_OVERLAYS}"
+FITIMAGE_CFG_OVERLAYS[type] = "list"
+
+FITIMAGE_CFG_RAMDISKS ??= "${FITIMAGE_RAMDISKS}"
+FITIMAGE_CFG_RAMDISKS[type] = "list"
+
 FITIMAGE_SEARCH_PATH ?= "\
     ${DEPLOY_DIR_IMAGE} \
 "
@@ -74,11 +83,14 @@ def fitimage_generate_fragment(d):
                               dtbs     = fitimage_expand_filenames(d, 'FITIMAGE_DTBS'),
                               overlays = fitimage_expand_filenames(d, 'FITIMAGE_OVERLAYS'),
                               ramdisks = fitimage_expand_filenames(d, 'FITIMAGE_RAMDISKS'),
+                              cfgnode  = d.getVar('FITIMAGE_CFGNODE', d),
+                              cfg_overlays = oe.data.typed_value('FITIMAGE_CFG_OVERLAYS', d),
+                              cfg_ramdisks = oe.data.typed_value('FITIMAGE_CFG_RAMDISKS', d),
                               id_attr  = d.getVar('FITIMAGE_ATTR_ID'),
                               desc_attr = d.getVar('FITIMAGE_ATTR_DESC'))
 
 def fitimage_generate_its(d, template, output):
-    frag = fitimage_generate_fragment(d).finish()
+    (frag,cfg) = fitimage_generate_fragment(d)
     ## normalize paths; when relative us WORKDIR resp. B as parent directory
     template = os.path.join(d.getVar("WORKDIR"), d.expand(template))
     output   = os.path.join(d.getVar("B"), d.expand(output))
@@ -86,8 +98,12 @@ def fitimage_generate_its(d, template, output):
         with open(template, "r") as in_file:
             out_file.write(d.expand(in_file.read()))
 
-        out_file.write('\n'.join(frag.emit(d)))
+        out_file.write('\n'.join(frag.finish().emit(d)))
         out_file.write('\n')
+
+        if cfg:
+            out_file.write('\n'.join(cfg.finish().emit(d)))
+            out_file.write('\n')
 
 do_fitimage_prepare_its[vardeps] += "FITIMAGE_KERNELS FITIMAGE_DTBS FITIMAGE_OVERLAYS FITIMAGE_RAMDISKS"
 do_fitimage_prepare_its[vardeps] += "FITIMAGE_ATTR_ID FITIMAGE_ATTR_DESC"
