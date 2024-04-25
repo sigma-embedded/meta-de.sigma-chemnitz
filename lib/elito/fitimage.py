@@ -269,8 +269,15 @@ class FitImage(OfNode):
 
     @staticmethod
     def from_desc(kernels = [], dtbs = [], overlays = [], ramdisks = [],
-                  id_attr = "device-id", desc_attr = "device-description"):
+                  id_attr = "device-id", desc_attr = "device-description",
+                  cfgnode = None, cfg_ramdisks = [], cfg_overlays = []):
         images = OfNode("&images")
+
+        if len(dtbs) != 1 and cfgnode and cfg_overlays:
+            raise Exception("overlays can be add to cfg only with a single dtb")
+
+        dtb_map = {}
+        rd_map = {}
 
         idx    = 0
         for k in kernels:
@@ -279,20 +286,41 @@ class FitImage(OfNode):
 
         for d in dtbs + overlays:
             (hw_id, hw_desc) = FitImage.get_hwid(d, id_attr, desc_attr) or (0, d)
-            images.add_node(FitPart("fdt", hw_id)
-                            .set_type("flat_dt")
-                            .set_compression("none")
-                            .set_description(hw_desc)
-                            .set_inputfile(d))
+            part = (FitPart("fdt", hw_id)
+                    .set_type("flat_dt")
+                    .set_compression("none")
+                    .set_description(hw_desc)
+                    .set_inputfile(d))
+            images.add_node(part)
+            dtb_map[d] = part
 
         idx = 0
         for r in ramdisks:
-            images.add_node(FitPart("ramdisk", idx)
-                            .set_os("linux")
-                            .set_compression("none")
-                            .set_inputfile(r))
+            part = (FitPart("ramdisk", idx)
+                    .set_os("linux")
+                    .set_compression("none")
+                    .set_inputfile(r))
+            images.add_node(part)
+            rd_map[r] = part
 
-        return images
+        cfg = None
+
+        if cfgnode:
+            cfg = OfNode(cfgnode)
+
+            if cfg_ramdisks:
+                p = OfValueList()
+                for rd in cfg_ramdisks:
+                    p.push(OfValueNodeName(rd_map[rd]))
+                cfg.add_prop(OfProperty('ramdisk', p))
+
+            if cfg_overlays or dtbs:
+                p = OfValueList()
+                for ov in dtbs + cfg_overlays:
+                    p.push(OfValueNodeName(dtb_map[ov]))
+                cfg.add_prop(OfProperty('fdt', p))
+
+        return (images, cfg)
 
 class FitNode(OfNode):
     def __init__(self, name, instance):
