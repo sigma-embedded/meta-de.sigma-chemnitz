@@ -153,6 +153,15 @@ class OfNode:
         self._nodes.append(node)
         return self
 
+    def get_name(self, d):
+        if self._instance_prop is None:
+            return d.expand(self.name)
+        else:
+            return d.expand("%s%s%s" % (
+                self.name,
+                ['@', '-'][self._pseudo_reg],
+                self._instance_prop.emit_val(d, as_raw = True)))
+
     def attr_map(self, attrs):
         res = []
         for (val, attr, klass) in attrs:
@@ -182,13 +191,7 @@ class OfNode:
     def emit(self, d):
         res = []
 
-        if self._instance_prop is None:
-            res.append(d.expand("%s {" % self.name))
-        else:
-            res.append(d.expand("%s%s%s {" % (
-                self.name,
-                ['@', '-'][self._pseudo_reg],
-                self._instance_prop.emit_val(d, as_raw = True))))
+        res.append(self.get_name(d) + ' {')
 
         props = []
         for p in filter(lambda x: x.key.startswith('#'), self._props):
