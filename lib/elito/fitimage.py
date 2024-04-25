@@ -119,6 +119,14 @@ class OfPropertyIncBin(OfProperty):
     def __init__(self, key, val):
         super().__init__(key, OfValueIncBin(val))
 
+class OfPropertyDelete:
+    def __init__(self, op, key):
+        self.op  = op
+        self.key = key
+
+    def emit(self, d):
+        return "/%s/ %s;" % (self.op, self.key)
+
 class OfNode:
     def __init__(self, name, instance = None, pseudo_reg = False):
         self.name = name
