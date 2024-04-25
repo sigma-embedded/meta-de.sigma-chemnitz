@@ -70,14 +70,12 @@ def fitimage_expand_filenames(d, varname):
 def fitimage_generate_fragment(d):
     from elito.fitimage import FitImage
 
-    images = FitImage.from_desc(kernels  = fitimage_expand_filenames(d, 'FITIMAGE_KERNELS'),
-                                dtbs     = fitimage_expand_filenames(d, 'FITIMAGE_DTBS'),
-                                overlays = fitimage_expand_filenames(d, 'FITIMAGE_OVERLAYS'),
-                                ramdisks = fitimage_expand_filenames(d, 'FITIMAGE_RAMDISKS'),
-                                id_attr  = d.getVar('FITIMAGE_ATTR_ID'),
-                                desc_attr = d.getVar('FITIMAGE_ATTR_DESC'))
-
-    return images
+    return FitImage.from_desc(kernels  = fitimage_expand_filenames(d, 'FITIMAGE_KERNELS'),
+                              dtbs     = fitimage_expand_filenames(d, 'FITIMAGE_DTBS'),
+                              overlays = fitimage_expand_filenames(d, 'FITIMAGE_OVERLAYS'),
+                              ramdisks = fitimage_expand_filenames(d, 'FITIMAGE_RAMDISKS'),
+                              id_attr  = d.getVar('FITIMAGE_ATTR_ID'),
+                              desc_attr = d.getVar('FITIMAGE_ATTR_DESC'))
 
 def fitimage_generate_its(d, template, output):
     frag = fitimage_generate_fragment(d).finish()
