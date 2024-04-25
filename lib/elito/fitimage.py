@@ -17,6 +17,34 @@ class OfValue:
     def _emit(self, v, as_raw = False):
         assert(False)
 
+class OfValueList(OfValue):
+    def __init__(self, v = []):
+        super().__init__(v[:])
+
+    def push(self, prop):
+        assert(isinstance(prop, OfValue))
+        self.val.append(prop)
+
+    def emit(self, d, as_raw = False):
+        assert(d is not None)
+        return ', '.join([p.emit(d, as_raw) for p in self.val])
+
+class OfValueNodeName(OfValue):
+    def __init__(self, val):
+        assert(isinstance(val, OfNode))
+        super().__init__(val)
+
+    def emit(self, d, as_raw = False):
+        assert(d is not None)
+        v = d.expand(self.val.get_name(d))
+        return self._emit(v, as_raw = as_raw)
+
+    def _emit(self, v, as_raw = False):
+        if as_raw:
+            return "%s" % v
+        else:
+            return '"%s"' % v
+
 class OfValueBool(OfValue):
     def __init__(self, val = None):
         assert(val is None);
