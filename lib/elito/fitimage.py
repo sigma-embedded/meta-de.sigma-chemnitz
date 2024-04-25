@@ -4,68 +4,92 @@ import os.path
 
 _hash_algo = 'sha1'
 
-class OfProperty:
-    def __init__(self, key, val):
-        self.key = key
+class OfValue:
+    def __init__(self, val):
         self.val = val
 
-    def emit(self, d):
-        if self.val is not None:
-            return "%s = %s;" % (self.key, self.emit_val(d))
-        else:
-            return "%s;" % (self.key,)
-
-    def emit_val(self, d, as_raw = False):
+    def emit(self, d, as_raw = False):
         assert(d is not None)
         v = d.expand(self.val)
-        return self._emit_val(v, as_raw = as_raw)
+        return self._emit(v, as_raw = as_raw)
 
     @abstractmethod
-    def _emit_val(self, as_raw = False):
+    def _emit(self, v, as_raw = False):
         assert(False)
 
-class OfPropertyBool(OfProperty):
-    def __init__(self, key, val = None):
+class OfValueBool(OfValue):
+    def __init__(self, val = None):
         assert(val is None);
-        super().__init__(key, val)
+        super().__init__(val)
 
-class OfPropertyString(OfProperty):
-    def __init__(self, key, val):
-        super().__init__(key, val)
+class OfValueString(OfValue):
+    def __init__(self, val):
+        super().__init__(val)
 
-    def _emit_val(self, v, as_raw = False):
+    def _emit(self, v, as_raw = False):
         if as_raw:
             return "%s" % v
         else:
             return '"%s"' % v
 
-class OfPropertyH32(OfProperty):
-    def __init__(self, key, val):
-        super().__init__(key, val)
+class OfValueH32(OfValue):
+    def __init__(self, val):
+        super().__init__(val)
 
-    def _emit_val(self, v, as_raw = False):
+    def _emit(self, v, as_raw = False):
         if as_raw:
             return '0x%08x' % v
         else:
             return '<0x%08x>' % v
 
-class OfPropertyI32(OfProperty):
-    def __init__(self, key, val):
-        super().__init__(key, val)
+class OfValueI32(OfValue):
+    def __init__(self, val):
+        super().__init__(val)
 
-    def _emit_val(self, v, as_raw = False):
+    def _emit(self, v, as_raw = False):
         if as_raw:
             return "%d" % v
         else:
             return '<%d>' % v
 
-class OfPropertyIncBin(OfProperty):
-    def __init__(self, key, val):
-        super().__init__(key, val)
+class OfValueIncBin(OfValue):
+    def __init__(self, val):
+        super().__init__(val)
 
-    def _emit_val(self, v, as_raw = False):
+    def _emit(self, v, as_raw = False):
         assert(not as_raw)
         return '/incbin/("%s")' % v
+
+class OfProperty:
+    def __init__(self, key, val):
+        assert(val is None or isinstance(val, OfValue))
+        self.key = key
+        self.val = val
+
+    def emit(self, d):
+        if self.val is not None:
+            return "%s = %s;" % (self.key, self.val.emit(d))
+        else:
+            return "%s;" % (self.key,)
+
+    def emit_val(self, d, as_raw = False):
+        return self.val.emit(d, as_raw)
+
+class OfPropertyString(OfProperty):
+    def __init__(self, key, val):
+        super().__init__(key, OfValueString(val))
+
+class OfPropertyH32(OfProperty):
+    def __init__(self, key, val):
+        super().__init__(key, OfValueH32(val))
+
+class OfPropertyI32(OfProperty):
+    def __init__(self, key, val):
+        super().__init__(key, OfValueI32(val))
+
+class OfPropertyIncBin(OfProperty):
+    def __init__(self, key, val):
+        super().__init__(key, OfValueIncBin(val))
 
 class OfNode:
     def __init__(self, name, instance = None, pseudo_reg = False):
