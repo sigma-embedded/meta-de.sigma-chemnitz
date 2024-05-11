@@ -18,12 +18,14 @@ kernel_generate_dynamic_cfg_set_fwpath() {
     printf 'CONFIG_EXTRA_FIRMWARE_DIR="%s"' '${STAGING_DIR_TARGET}${nonarch_base_libdir}/firmware' > ${CFG_DYNAMIC}
 }
 
+do_install[vardeps] += "FW_IN_KERNEL do_install_rm_fw_path"
 do_install:append() {
     if ${@'true' if oe.data.typed_value('FW_IN_KERNEL', d) else 'false'}; then
         do_install_rm_fw_path
     fi
 }
 
+kernel_generate_dynamic_cfg[vardeps] += "FW_IN_KERNEL kernel_generate_dynamic_cfg_set_fwpath"
 kernel_generate_dynamic_cfg:append() {
     if ${@'true' if oe.data.typed_value('FW_IN_KERNEL', d) else 'false'}; then
         kernel_generate_dynamic_cfg_set_fwpath
