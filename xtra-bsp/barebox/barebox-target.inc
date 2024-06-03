@@ -1,6 +1,7 @@
 # --*- bitbake -*--
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
+PROVIDES = "virtual/bootloader"
 
 BAREBOX_REVISION ??= "${SRCREV_barebox_${BASE_PV}}"
 PROVIDES = "virtual/bootloader"
