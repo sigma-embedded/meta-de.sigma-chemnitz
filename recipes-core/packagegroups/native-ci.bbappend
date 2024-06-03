@@ -3,4 +3,5 @@ DEPENDS += "\
     ccache-native \
     rust-llvm-native \
     mariadb-native \
+    barebox-tools-native \
 "
