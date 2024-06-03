@@ -25,3 +25,64 @@ SRCREV_barebox_2023.06 = "7033a67d0c7e0f39edbf51a1e0b182b00c6b80ec"
 SRCREV_barebox_2023.07 = "0186c17838e655dbf6a3bcd01fa74821d5e67ae6"
 
 PV = "${BASE_PV}+git${SRCPV}"
+
+##############
+
+inherit kernel-arch
+inherit pkgconfig
+
+## we want only to "unexport" them; but this is not supported by
+## bitbake.  Unset variables and redefine them later.
+unset CFLAGS
+unset LDFLAGS
+
+CFLAGS = "${TARGET_CFLAGS}"
+LDFLAGS = "${TARGET_LDFLAGS}"
+
+## do not use single quotes!
+X_CROSS_PKG_CONFIG = "\
+    env \
+    PKG_CONFIG_SYSROOT_DIR=${STAGING_DIR_TARGET} \
+    PKG_CONFIG_DIR=${STAGING_DIR_TARGET}${libdir_native}/pkgconfig \
+    PKG_CONFIG_PATH=${PKG_CONFIG_DIR}:${STAGING_DATADIR_TARGET}/pkgconfig \
+    PKG_CONFIG_LIBDIR=${PKG_CONFIG_DIR} \
+    pkg-config \
+"
+
+## do not use single quotes!
+X_PKG_CONFIG = "\
+    env \
+    PKG_CONFIG_SYSROOT_DIR=${STAGING_DIR_NATIVE} \
+    PKG_CONFIG_DIR=${STAGING_DIR_NATIVE}${libdir_native}/pkgconfig \
+    PKG_CONFIG_PATH=${PKG_CONFIG_DIR}:${STAGING_DATADIR_NATIVE}/pkgconfig \
+    PKG_CONFIG_LIBDIR=${PKG_CONFIG_DIR} \
+    pkg-config \
+"
+
+EXTRA_OEMAKE += "\
+    -C ${S} \
+    KBUILD_OUTPUT=${B} V=1 \
+    CROSS_COMPILE='${TARGET_PREFIX}' \
+    CC='${KERNEL_CC}' \
+    LD='${KERNEL_LD}' \
+    USERCFLAGS='${TARGET_CC_ARCH}${TOOLCHAIN_OPTIONS} ${TARGET_CFLAGS}' \
+    USERLDFLAGS='${TARGET_CC_ARCH}${TOOLCHAIN_OPTIONS} ${TARGET_LDFLAGS}' \
+    HOSTLDFLAGS='${BUILD_LDFLAGS}' \
+    HOSTCC='${BUILD_CC}' \
+    HOSTCFLAGS='${BUILD_CFLAGS}' \
+    HOSTCXX='${BUILD_CXX}' \
+    HOSTCXXFLAGS='${BUILD_CXXFLAGS}' \
+    HOSTCPP='${BUILD_CPP} ${BUILD_CPPFLAGS}' \
+    CROSS_PKG_CONFIG='${X_CROSS_PKG_CONFIG}' \
+    PKG_CONFIG='${X_PKG_CONFIG}' \
+"
+
+BUILDVARS_EXPORT += "\
+    ARCH \
+    TARGET \
+    KERNEL_AR \
+    KERNEL_CC \
+    KERNEL_LD \
+    X_PKG_CONFIG \
+    X_CROSS_PKG_CONFIG \
+"
