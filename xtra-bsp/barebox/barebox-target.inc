@@ -12,7 +12,7 @@ BAREBOX_DEPLOY_NAME ??= "barebox"
 BAREBOX_IMG_TYPES ??= ".img"
 BAREBOX_IMG_TYPES[type] = "list"
 
-inherit kernel-arch elito-kconfig
+inherit elito-kconfig
 
 unset CFLAGS
 unset LDFLAGS
@@ -21,26 +21,7 @@ unset LDFLAGS
 COMPATIBLE_MACHINE  = "(-)"
 IMGBASE ??= "${MACHINE}"
 
-EXTRA_OEMAKE += "\
-    -C ${S} \
-    KBUILD_OUTPUT=${B} V=1 \
-    CROSS_COMPILE='${TARGET_PREFIX}' \
-    CC='${KERNEL_CC}' \
-    LD='${KERNEL_LD}' \
-    HOSTLDFLAGS='${BUILD_LDFLAGS}' \
-    HOSTCC='${BUILD_CC}' \
-    HOSTCFLAGS='${BUILD_CFLAGS}' \
-    HOSTCXX='${BUILD_CXX}' \
-    HOSTCXXFLAGS='${BUILD_CXXFLAGS}' \
-    HOSTCPP='${BUILD_CPP} ${BUILD_CPPFLAGS}' \
-"
-
 inherit pkgconfig
-
-export PKG_CONFIG_DIR    = "${STAGING_DIR_NATIVE}${libdir_native}/pkgconfig"
-export PKG_CONFIG_PATH   = "${PKG_CONFIG_DIR}:${STAGING_DATADIR_NATIVE}/pkgconfig"
-export PKG_CONFIG_LIBDIR = "${PKG_CONFIG_DIR}"
-export PKG_CONFIG_SYSROOT_DIR = ""
 
 ## usage: _run_install <dst-dir>
 _run_install() {
