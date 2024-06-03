@@ -6,6 +6,7 @@ _ARCHPKGS = "\
 
 RRECOMMENDS:${PN} = "\
     ${_ARCHPKGS} \
+    barebox-tools \
     e2fsprogs \
     elito-decode-definitions \
     elito-fbtest \
