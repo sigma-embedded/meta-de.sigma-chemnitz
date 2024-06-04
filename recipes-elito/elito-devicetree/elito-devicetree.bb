@@ -25,7 +25,7 @@ DEPENDS += "dtc-native ${MACH_DEPENDS} virtual/${TARGET_PREFIX}gcc"
 DEPENDS += "elito-devicetree-tools-cross-${TARGET_ARCH}"
 
 B := "${S}"
-S  = "${WORKDIR}"
+S  = "${UNPACKDIR}"
 
 require elito-devicetree-common.inc
 inherit deploy elito-machdata elito-dtree-base

@@ -24,7 +24,7 @@ python () {
 }
 
 B := "${S}"
-S  = "${WORKDIR}"
+S  = "${UNPACKDIR}"
 
 pkgdatadir = "${datadir}/${BPN}"
 
