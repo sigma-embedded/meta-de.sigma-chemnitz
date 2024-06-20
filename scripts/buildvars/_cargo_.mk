@@ -18,8 +18,8 @@ _vars = \
 
 $(call export_vars,${_vars},\
 	${SHELL_TARGET} \
-	cargo.build cargo.build-release cargo.install cargo.install-release \
-	.cargo.build .cargo.build-release .cargo.install .cargo.install-release \
+	cargo.build cargo.build-release cargo.install cargo.install-release cargo.test \
+	.cargo.build .cargo.build-release .cargo.install .cargo.install-release .cargo.test \
 )
 
 export CARGO_TARGET_DIR = ${BUILDVAR_B}/local-build
@@ -29,7 +29,7 @@ CARGO_BUILD_FLAGS = --offline --target ${BUILDVAR_RUST_HOST_SYS}
 
 all:	build
 
-build build-release install install-release:%:	cargo.%
+build build-release install install-release test:%:	cargo.%
 	@:
 
 cargo.%:		FORCE
@@ -47,3 +47,7 @@ cargo.%:		FORCE
 
 .cargo.install-release:	FORCE
 	${CARGO} install ${CARGO_BUILD_FLAGS} --path '.' --root '${DESTDIR}/usr' --force
+
+.cargo.test:		FORCE
+	${CARGO} test ${CARGO_BUILD_FLAGS}
+
