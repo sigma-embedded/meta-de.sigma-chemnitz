@@ -31,7 +31,8 @@ class Connection:
 
 ## Generic object with some helper functions
 class SStateAPI(ABC):
-    def connect(self, d, api):
+    @staticmethod
+    def connect(d, api):
         """Generate URI to the given API endpoint and connect to the server.
         Do *not* send the HTTP request itself yet."""
         import http.client
