@@ -9,6 +9,7 @@ from abc import ABC, abstractmethod
 import bb
 import os
 import time
+import json
 import oe.data
 
 ## delay in seconds between two pings
@@ -16,6 +17,7 @@ PING_DELAY = 120
 last_ping = time.monotonic() - PING_DELAY
 
 sstate_server_disabled = False
+upload_disabled = -1
 start_tm = None
 
 class Connection:
@@ -236,6 +238,44 @@ class Upload(SStateAPI):
         self.tags      = None
         self.task      = task
         self.is_signed = is_signed
+
+    @staticmethod
+    def is_enabled(d):
+        if not SStateAPI.is_enabled(d):
+            return False
+
+        global upload_disabled
+
+        if upload_disabled != -1:
+            return not upload_disabled
+
+        session = Upload.get_session(d)
+        if not session:
+            return
+
+        with Upload.connect(d, "/v1/session/disable/push") as (conn, uri):
+            hdrs = {
+                "x-session"        : session
+            }
+
+            conn.request('GET', url = uri.path, headers = hdrs)
+
+            res = conn.getresponse()
+            if res.status != 200:
+                # no api support
+                bb.debug(0, "sstate does not support filter query yet; assuming that upload is enabled")
+                upload_disabled = False
+            else:
+                try:
+                    res = res.read().decode('utf-8')
+                    res = json.loads(res)
+                    upload_disabled = res == True
+                    bb.note("upload_disabled detected as %s" % upload_disabled)
+                except Exception as e:
+                    bb.warn("failed to parse filter query response (%s); assuming that upload is enabled: %s" % (res, e))
+                    upload_disabled = False
+
+        return not upload_disabled
 
     @staticmethod
     def _skip_file(dl_dir, fname):
