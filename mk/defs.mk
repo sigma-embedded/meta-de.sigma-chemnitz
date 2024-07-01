@@ -16,8 +16,9 @@ BITBAKE_FLAGS ?=
 IMAGE_BASE ?=		$(patsubst %-bundle,%-image,${IMAGE})
 
 BUILDDIR ?=		$(top_builddir)/build
-DEPLOY_DIR ?=		${BUILDDIR}/tmp/deploy
-OE_TMPDIR ?=		$(shell readlink -f "${BUILDDIR}/tmp")
+TMPDIR ?=		$(if ${TMPDIR_ROOT},${TMPDIR_ROOT}/bsp,${BUILDDIR}/tmp)
+OE_TMPDIR ?=		$(shell readlink -f "$(if $(filter-out /tmp /var/tmp,${TMPDIR}),${TMPDIR},${BUILDDIR}/tmp)")
+DEPLOY_DIR ?=		${OE_TMPDIR}/deploy
 
 SHELL_PS1 ?=		[\[\033[1;31m\]${PROJECT}\[\033[0;39m\]|\u@\h \W]\044\040
 
@@ -68,8 +69,8 @@ clean:	FORCE
 
 mrproper:	clean
 	rm -rf .emacs.d
-	readlink -f "${BUILDDIR}/tmp"
 	test -d "${OE_TMPDIR}"
+	test -O "${OE_TMPDIR}"
 	rm -rf "${OE_TMPDIR}" "${BUILDDIR}/cache"
 
 shell:	export _PS1=${SHELL_PS1}
