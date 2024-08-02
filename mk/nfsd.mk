@@ -94,6 +94,7 @@ repair-daemon:	stop-daemon
 
 chown-daemon:
 	$(call pseudo,chown -R root:root ${ROOTFS_DIR}/lib/modules)
+	$(call pseudo,chown root:root ${ROOTFS_DIR})
 
 info-daemon:
 	@echo "tarball: " ${IMAGE_TARBALL}
