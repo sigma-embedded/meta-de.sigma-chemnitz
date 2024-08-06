@@ -82,7 +82,7 @@ all:	status-daemon
 mrproper:	stop-daemon
 
 image-install sync-daemon:	${IMAGE_TARBALL}
-	$(call pseudo,test ! -d '${ROOTFS_DIR}' || { cd ${ROOTFS_DIR} && find -xdev -delete; })
+	-$(call pseudo,find ${ROOTFS_DIR} -xdev -mindepth 1 -delete)
 	$(call pseudo,install -d -m 0755 -o root -g root '${ROOTFS_DIR}')
 	$(call pseudo,tar $(call TAR_XF,$<) -C '${ROOTFS_DIR}')
 	@rm -f '${ROOTFS_BASEDIR}/latest' '${ROOTFS_BASEDIR}/${BUILDVAR_MACHINE}/latest'
