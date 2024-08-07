@@ -9,6 +9,13 @@ PACKAGE_ARCH = "${MACHINE_ARCH}"
 # to be overridden in .bbappend
 COMPATIBLE_MACHINE ??= "none"
 
+UBOOT_PROVIDE_FW_ENV_CONFIG ??= "false"
+UBOOT_PROVIDE_FW_ENV_CONFIG[type] = "boolean"
+
+SRC_URI += "\
+    ${@'file://fw_env.config' if oe.data.typed_value('UBOOT_PROVIDE_FW_ENV_CONFIG', d) else ''} \
+"
+
 CFGSET = "\
 "
 
@@ -33,6 +40,10 @@ _run_install() {
 }
 
 do_install() {
+	if ${@['false', 'true'][oe.data.typed_value('UBOOT_PROVIDE_FW_ENV_CONFIG', d)]}; then
+		install -D -p -m 0644 ${WORKDIR}/fw_env.config ${D}${sysconfdir}/fw_env.config
+	fi
+
 	_run_install "${D}/boot"
 }
 
@@ -43,6 +54,13 @@ do_deploy() {
 	ln -sf u-boot-${PV}-${PR}.config "${DEPLOYDIR}"/u-boot.config
 }
 addtask deploy before do_build after do_install
+
+PACKAGE_BEFORE_PN += "\
+    ${@'${PN}-env' if oe.data.typed_value('UBOOT_PROVIDE_FW_ENV_CONFIG', d) else ''} \
+"
+
+RPROVIDES:${PN}-env += "u-boot-default-env"
+FILES:${PN}-env = "${sysconfdir}/fw_env.config"
 
 FILES:${PN} = "/boot"
 
