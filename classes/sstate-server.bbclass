@@ -16,7 +16,7 @@ SSTATE_SERVER_SSTATE_MIRRORS = "\
 "
 
 ## PREMIRRORS
-PREMIRRORS:prepend = "${@sstate_server_get_mirrors(d, 'SSTATE_SERVER_PREMIRRORS')}"
+PREMIRRORS =. "${@sstate_server_get_mirrors(d, 'SSTATE_SERVER_PREMIRRORS')}"
 
 SSTATE_SERVER_PREMIRRORS[vardepsexclude] += "PN SSTATE_SERVER_API SSTATE_SERVER_PATH"
 SSTATE_SERVER_PREMIRRORS[doc] = "PREMIRRORS used when sstate-server is activated"
