@@ -24,6 +24,8 @@ inherit elito-kconfig
 
 S = "${WORKDIR}/git"
 
+kernel_do_compile[vardepsexclude] += "REPRODUCIBLE_TIMESTAMP_ROOTFS"
+
 kernel_deploy_dot_config() {
 	for imageType in ${KERNEL_IMAGETYPES} ; do
 		base_name=${imageType}-${KERNEL_IMAGE_NAME}
