@@ -92,7 +92,7 @@ def fitimage_generate_fragment(d):
 def fitimage_generate_its(d, template, output):
     (frag,cfg) = fitimage_generate_fragment(d)
     ## normalize paths; when relative us WORKDIR resp. B as parent directory
-    template = os.path.join(d.getVar("WORKDIR"), d.expand(template))
+    template = os.path.join(d.getVar("UNPACKDIR"), d.expand(template))
     output   = os.path.join(d.getVar("B"), d.expand(output))
     with open(output, "w") as out_file:
         with open(template, "r") as in_file:
