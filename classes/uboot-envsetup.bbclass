@@ -63,7 +63,7 @@ python do_uboot_envsetup_generate_env() {
 do_uboot_envsetup[postfuncs] = "do_uboot_envsetup_generate_env"
 
 def envsetup_file(d, fname):
-    fname = os.path.join(d.getVar('WORKDIR', False), fname)
+    fname = os.path.join(d.getVar('UNPACKDIR', False), fname)
     d.appendVar("_UBOOT_ENVSETUP_FILES", ' ' + fname)
 
 def envsetup_var(d, name, value):
