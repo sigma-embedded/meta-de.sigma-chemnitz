@@ -50,7 +50,7 @@ do_configure() {
 # to win else
 do_install:forcevariable() {
     install -D -p -m 0755 build-dtree ${D}${bindir}/elito-build-dtree
-    install -D -p -m 0644 ${WORKDIR}/devicetree.mk ${D}${pkgdatadir}/devicetree.mk
+    install -D -p -m 0644 ${UNPACKDIR}/devicetree.mk ${D}${pkgdatadir}/devicetree.mk
 }
 
 do_build[depends] += "virtual/kernel:do_patch"
