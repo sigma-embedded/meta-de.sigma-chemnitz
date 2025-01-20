@@ -41,7 +41,7 @@ _run_install() {
 
 do_install() {
 	if ${@['false', 'true'][oe.data.typed_value('UBOOT_PROVIDE_FW_ENV_CONFIG', d)]}; then
-		install -D -p -m 0644 ${WORKDIR}/fw_env.config ${D}${sysconfdir}/fw_env.config
+		install -D -p -m 0644 ${UNPACKDIR}/fw_env.config ${D}${sysconfdir}/fw_env.config
 	fi
 
 	_run_install "${D}/boot"
