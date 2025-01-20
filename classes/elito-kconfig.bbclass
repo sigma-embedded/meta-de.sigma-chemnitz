@@ -10,7 +10,7 @@ def find_cfgs(d):
 CFG_DYNAMIC = "${WORKDIR}/_dynamic.cfg"
 CFG_SRC = "${@find_cfgs(d)} ${CFG_DYNAMIC}"
 
-KCONFIG_DEFCONFIG ?= "${WORKDIR}/defconfig"
+KCONFIG_DEFCONFIG ?= "${UNPACKDIR}/defconfig"
 KCONFIG_LOCK = "${WORKDIR}/kconfig.lock"
 
 kernel_generate_dynamic_cfg() {
