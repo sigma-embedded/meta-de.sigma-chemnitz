@@ -28,7 +28,7 @@ do_configure:append() {
 # The data file for environment is placed into the folder _ENV_DIR, so bitbake
 # feature 'cleandirs' cleans the folder every time before starting the task
 # 'do_env'. This garantuees a clean state and no stall information.
-_ENV_DIR = "${WORKDIR}/env"
+_ENV_DIR = "${UNPACKDIR}/env"
 _ENV_FILE = "${_ENV_DIR}/json"
 do_env[cleandirs] += "${_ENV_DIR}"
 

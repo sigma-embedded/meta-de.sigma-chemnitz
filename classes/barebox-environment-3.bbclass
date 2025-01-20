@@ -23,7 +23,7 @@ def env_file(d, opt, fname = None):
     if not fname:
         fname = opt
 
-    fname = os.path.join(d.getVar("WORKDIR", True), fname)
+    fname = os.path.join(d.getVar("UNPACKDIR", True), fname)
 
     with open(fname) as f:
         data = f.read()
