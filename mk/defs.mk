@@ -58,6 +58,9 @@ image:	FORCE
 sdk:	FORCE
 	$(call bitbake,$(BUILDDIR),$(IMAGE_BASE) -c populate_sdk)
 
+sdk-ext: FORCE
+	$(call bitbake,$(BUILDDIR),$(IMAGE_BASE) -c populate_sdk_ext)
+
 bitbake: FORCE
 	$(call bitbake,$(BUILDDIR),$R$(if $T, -c $T))
 
