@@ -25,6 +25,7 @@ $(call export_vars,${_vars},\
 export CARGO_TARGET_DIR = ${BUILDVAR_B}/local-build
 export PKG_CONFIG_ALLOW_CROSS = 1
 
+CARGO_LOCAL_CONF ?=
 CARGO_BUILD_FLAGS = --offline --target ${BUILDVAR_RUST_HOST_SYS}
 
 all:	build
@@ -51,3 +52,31 @@ cargo.%:		FORCE
 .cargo.test:		FORCE
 	${CARGO} test ${CARGO_BUILD_FLAGS}
 
+
+## $(call cargo_local_conf,<cargo-local.conf>)
+cargo_local_conf = $(eval $(call _cargo_local_conf,$1))
+
+define _cargo_local_conf
+ORIG_CARGO_HOME    := $${BUILDVAR_CARGO_HOME}
+ORIG_CARGO_CONFIG  ?= $$(firstword $$(wildcard $${ORIG_CARGO_HOME}/config.toml  $${ORIG_CARGO_HOME}/config))
+BUILDVAR_CARGO_HOME = $${CARGO_TARGET_DIR}/.home
+
+_SED_CARGO_LOCAL_CONF = sed \
+	-e '/^\[patch\./,$$$$d' \
+
+$${BUILDVAR_CARGO_HOME}/config.toml: | $${BUILDVAR_CARGO_HOME}/.dirstamp
+$${BUILDVAR_CARGO_HOME}/config.toml: $${ORIG_CARGO_CONFIG} $1
+	rm -f $$@
+	{ \
+		$${_SED_CARGO_LOCAL_CONF} < '$$(filter %/config,$$^)' && \
+		cat '$$(filter %$1,$$^)'; \
+	} > '$$@'
+
+.SECONDARY: $${BUILDVAR_CARGO_HOME}/config.toml
+
+.cargo.build \
+.cargo.build-release \
+.cargo.install \
+.cargo.install-release \
+.cargo.test:	$${BUILDVAR_CARGO_HOME}/config.toml
+endef				# cargo_local_conf
