@@ -114,7 +114,7 @@ sstate-check:	FORCE
 	${Q}$(call _sstate_server_curl,,/v1/session/ping,${SSTATE_SERVER_SESSION_PING_PARAMS} --output /dev/null)
 
 sstate-close:	FORCE
-	${Q}$(call sstate_server_curl,/v1/session/close,-X POST)
+	-${Q}$(call sstate_server_curl,/v1/session/close,-X POST)
 	@rm -f ${_SSTATE_SERVER_SESSION_FILE}.mk
 	@echo 'export SSTATE_SERVER_API = ${SSTATE_SERVER_API}'  > ${_SSTATE_SERVER_SESSION_FILE}.mk
 
