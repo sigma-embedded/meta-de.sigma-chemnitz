@@ -301,6 +301,7 @@ class FitImage(OfNode):
 
         dtb_map = {}
         rd_map = {}
+        fdt_ids = {}
 
         idx    = 0
         for k in kernels:
@@ -326,7 +327,7 @@ class FitImage(OfNode):
             images.add_node(part)
             rd_map[r] = part
 
-        cfg = None
+        cfg = []
 
         if cfgnode:
             cfg = OfNode(cfgnode)
@@ -345,11 +346,35 @@ class FitImage(OfNode):
 
             add_hash_sign(cfg)
 
-        return (images, cfg)
+        cfg_root = OfNode("/")
+        cfg_conf = OfNode("configurations")
+
+        for d in overlays:
+            part = dtb_map[d]
+            cfg_conf.add_node(FitOverlayConfNode('overlay', part))
+
+        cfg_root.add_node(cfg_conf)
+
+        return (images, cfg, cfg_root)
 
 class FitNode(OfNode):
     def __init__(self, name, instance):
         super().__init__(name, instance, True)
+
+class FitOverlayConfNode(FitNode):
+    def __init__(self, prefix, part):
+        super().__init__(prefix, part.instance)
+        self.part = part
+
+    def finish(self):
+        part = self.part
+
+        self.add_prop(OfProperty('fdt', OfValueNodeName(part)))
+        self.add_prop_string('description', part.desc);
+
+        add_hash_sign(self)
+
+        return super().finish()
 
 class FitPart(FitNode):
     def __init__(self, type, instance = None):
