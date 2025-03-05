@@ -90,7 +90,7 @@ def fitimage_generate_fragment(d):
                               desc_attr = d.getVar('FITIMAGE_ATTR_DESC'))
 
 def fitimage_generate_its(d, template, output):
-    (frag,cfg) = fitimage_generate_fragment(d)
+    (frag,cfg,extra_cfgs) = fitimage_generate_fragment(d)
     ## normalize paths; when relative us WORKDIR resp. B as parent directory
     template = os.path.join(d.getVar("WORKDIR"), d.expand(template))
     output   = os.path.join(d.getVar("B"), d.expand(output))
@@ -103,6 +103,10 @@ def fitimage_generate_its(d, template, output):
 
         if cfg:
             out_file.write('\n'.join(cfg.finish().emit(d)))
+            out_file.write('\n')
+
+        if extra_cfgs:
+            out_file.write('\n'.join(extra_cfgs.finish().emit(d)))
             out_file.write('\n')
 
 do_fitimage_prepare_its[vardeps] += "FITIMAGE_KERNELS FITIMAGE_DTBS FITIMAGE_OVERLAYS FITIMAGE_RAMDISKS"
