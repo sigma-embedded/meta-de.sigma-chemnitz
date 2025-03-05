@@ -343,6 +343,8 @@ class FitImage(OfNode):
                     p.push(OfValueNodeName(dtb_map[ov]))
                 cfg.add_prop(OfProperty('fdt', p))
 
+            add_hash_sign(cfg)
+
         return (images, cfg)
 
 class FitNode(OfNode):
