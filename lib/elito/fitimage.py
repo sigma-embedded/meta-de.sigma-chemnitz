@@ -3,6 +3,21 @@ from functools import cmp_to_key
 import os.path
 
 _hash_algo = 'sha256'
+_sign_algo = 'sha256,rsa2048'
+_sign_key  = None
+
+def add_hash_sign(node):
+    global _hash_algo
+    global _sign_algo
+    global _sign_key
+
+    node.add_node(OfNode("hash-1", None)
+                  .add_prop_string("algo", _hash_algo))
+
+    if _sign_key:
+        node.add_node(OfNode("signature-1", None)
+                      .add_prop_string("algo", _sign_algo)
+                      .add_prop_string('key-name-hint', _sign_key))
 
 class OfValue:
     def __init__(self, val):
@@ -253,6 +268,14 @@ class FitImage(OfNode):
     def set_global_hash_algo(algo):
         global _hash_algo
         _hash_algo = algo
+
+    def set_global_sign_algo(algo):
+        global _sign_algo
+        _sign_algo = algo
+
+    def set_global_sign_key(key):
+        global _sign_key
+        _sign_key = key
 
     @staticmethod
     def get_hwid(dtb, id_attr, desc_attr):
