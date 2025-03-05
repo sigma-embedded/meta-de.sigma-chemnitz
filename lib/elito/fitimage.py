@@ -140,7 +140,7 @@ class OfNode:
         self._props.append(prop)
         return self
 
-    def add_prop_strring(self, key, val):
+    def add_prop_string(self, key, val):
         return self.add_prop(OfPropertyString(key, val))
 
     def add_prop_h32(self, key, val):
@@ -246,7 +246,7 @@ class FitImage(OfNode):
         self.description = "U-Boot fitImage for ${DISTRO_NAME}/${PV}/${MACHINE}"
 
     def finish(self):
-        self.add_prop_strring("description", self.description)
+        self.add_prop_string("description", self.description)
         return super().finish()
 
     @staticmethod
@@ -395,7 +395,7 @@ class FitPart(FitNode):
         ])
 
         self.add_node(OfNode("hash-1", None)
-                      .add_prop_strring("algo", self.hash))
+                      .add_prop_string("algo", self.hash))
 
         return super().finish()
 
