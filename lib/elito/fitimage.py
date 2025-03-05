@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from functools import cmp_to_key
 import os.path
 
-_hash_algo = 'sha1'
+_hash_algo = 'sha256'
 
 class OfValue:
     def __init__(self, val):
