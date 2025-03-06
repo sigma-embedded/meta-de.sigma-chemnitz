@@ -38,6 +38,13 @@ FITIMAGE_BOOT_NAME ??= "${IMAGE_BASENAME}"
 FITIMAGE_ATTR_ID ??= "device-id"
 FITIMAGE_ATTR_DESC ??= "device-description"
 
+FITIMAGE_HASH_ALGO ??= "sha256"
+FITIMAGE_SIGNING_NUM ??= "0"
+FITIMAGE_SIGNING_NUM[type] = "integer"
+FITIMAGE_SIGNING_0_ALGO ??= "sha256,rsa4096"
+FITIMAGE_SIGNING_0_HINT ??= ""
+FITIMAGE_SIGNING_0_KEY  ??= ""
+
 DEPENDS += "dtc-native"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -77,7 +84,15 @@ def fitimage_expand_filenames(d, varname):
     return res
 
 def fitimage_generate_fragment(d):
-    from elito.fitimage import FitImage
+    from elito.fitimage import FitImage, FitSignature
+
+    signature = FitSignature(hash_algo = d.getVar('FITIMAGE_HASH_ALGO'))
+    num_keys = oe.data.typed_value('FITIMAGE_SIGNING_NUM', d)
+    for i in range(0, num_keys):
+        sign_algo = d.getVar('FITIMAGE_SIGNING_%d_ALGO' % i) or None
+        sign_hint = d.getVar('FITIMAGE_SIGNING_%d_HINT' % i) or None
+
+        signature.add_key(sign_hint, sign_algo)
 
     return FitImage.from_desc(kernels  = fitimage_expand_filenames(d, 'FITIMAGE_KERNELS'),
                               dtbs     = fitimage_expand_filenames(d, 'FITIMAGE_DTBS'),
@@ -87,7 +102,8 @@ def fitimage_generate_fragment(d):
                               cfg_overlays = oe.data.typed_value('FITIMAGE_CFG_OVERLAYS', d),
                               cfg_ramdisks = oe.data.typed_value('FITIMAGE_CFG_RAMDISKS', d),
                               id_attr  = d.getVar('FITIMAGE_ATTR_ID'),
-                              desc_attr = d.getVar('FITIMAGE_ATTR_DESC'))
+                              desc_attr = d.getVar('FITIMAGE_ATTR_DESC'),
+                              signature = signature)
 
 def fitimage_generate_its(d, template, output):
     (frag,cfg,extra_cfgs) = fitimage_generate_fragment(d)
@@ -112,6 +128,8 @@ def fitimage_generate_its(d, template, output):
 do_fitimage_prepare_its[vardeps] += "FITIMAGE_KERNELS FITIMAGE_DTBS FITIMAGE_OVERLAYS FITIMAGE_RAMDISKS"
 do_fitimage_prepare_its[vardeps] += "FITIMAGE_ATTR_ID FITIMAGE_ATTR_DESC"
 do_fitimage_prepare_its[vardeps] += "FITIMAGE_SEARCH_PATH FITIMAGE_TEMPLATE FITIMAGE_ITSFILE"
+do_fitimage_prepare_its[vardeps] += "FITIMAGE_SIGNING_NUM"
+do_fitimage_prepare_its[vardeps] += "FITIMAGE_SIGNING_0_ALGO FITIMAGE_SIGNING_0_HINT"
 do_fitimage_prepare_its[depends] += "${FITIMAGE_COMPONENTS}"
 python do_fitimage_prepare_its() {
     fitimage_generate_its(d, d.getVar('FITIMAGE_TEMPLATE'), d.getVar('FITIMAGE_ITSFILE'))
