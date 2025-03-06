@@ -137,7 +137,15 @@ python do_fitimage_prepare_its() {
 addtask do_fitimage_prepare_its after do_configure before do_image_fit
 
 IMAGE_CMD:fit[vardepsexclude] = "DATETIME"
-IMAGE_CMD:fit = "mkimage ${EXTRA_IMAGECMD} -f '${FITIMAGE_ITSFILE}' ${IMAGE_NAME}${IMAGE_NAME_SUFFIX}.fit"
+IMAGE_CMD:fit = "${@fitimage_cmd(d)}"
+
+def fitimage_cmd(d):
+    res = "mkimage ${EXTRA_IMAGECMD} -f '${FITIMAGE_ITSFILE}'"
+    if oe.data.typed_value('FITIMAGE_SIGNING_NUM', d) > 0:
+        # TODO: atm we support only singing with one key.  But fitimage can contain multiple 'signature' nodes
+        res += " -G '${FITIMAGE_SIGNING_0_KEY}' -r"
+    res += " '${IMAGE_NAME}${IMAGE_NAME_SUFFIX}.fit'"
+    return res
 
 ## TODO: make gzip/xz-native depending on conversion
 do_image_fit[depends] += "\
