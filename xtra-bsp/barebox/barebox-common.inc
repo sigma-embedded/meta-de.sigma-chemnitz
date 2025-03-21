@@ -38,23 +38,23 @@ unset LDFLAGS
 CFLAGS = "${TARGET_CFLAGS}"
 LDFLAGS = "${TARGET_LDFLAGS}"
 
+## pkgconfig call for target builds
 ## do not use single quotes!
 X_CROSS_PKG_CONFIG = "\
     env \
     PKG_CONFIG_SYSROOT_DIR=${STAGING_DIR_TARGET} \
-    PKG_CONFIG_DIR=${STAGING_DIR_TARGET}${libdir_native}/pkgconfig \
-    PKG_CONFIG_PATH=${PKG_CONFIG_DIR}:${STAGING_DATADIR_TARGET}/pkgconfig \
-    PKG_CONFIG_LIBDIR=${PKG_CONFIG_DIR} \
+    PKG_CONFIG_LIBDIR=${STAGING_LIBDIR}/pkgconfig:${STAGING_DATADIR}/pkgconfig \
+    PKG_CONFIG_PATH= \
     pkg-config \
 "
 
+## pkgconfig call for native builds
 ## do not use single quotes!
 X_PKG_CONFIG = "\
     env \
     PKG_CONFIG_SYSROOT_DIR=${STAGING_DIR_NATIVE} \
-    PKG_CONFIG_DIR=${STAGING_DIR_NATIVE}${libdir_native}/pkgconfig \
-    PKG_CONFIG_PATH=${PKG_CONFIG_DIR}:${STAGING_DATADIR_NATIVE}/pkgconfig \
-    PKG_CONFIG_LIBDIR=${PKG_CONFIG_DIR} \
+    PKG_CONFIG_LIBDIR=${STAGING_LIBDIR_NATIVE}/pkgconfig:${STAGING_DATADIR_NATIVE}/pkgconfig \
+    PKG_CONFIG_PATH= \
     pkg-config \
 "
 
