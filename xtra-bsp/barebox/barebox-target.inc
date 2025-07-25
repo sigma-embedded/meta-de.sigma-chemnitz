@@ -25,21 +25,25 @@ inherit pkgconfig
 
 ## usage: _run_install <dst-dir>
 _run_install() {
-        local s=${B}/barebox
-        local t=${BAREBOX_DEPLOY_NAME}-${IMGBASE}-${PV}-${PR}.elf
-        local l=${BAREBOX_DEPLOY_NAME}-${IMGBASE}.elf
-
-	install -D -p -m 0644 "$s" "$1/$t"
-	ln -sf "$t" "$1/$l"
-	ln -sf "$l" "$1"/${BAREBOX_DEPLOY_NAME}.elf
-
-	for img in ${@oe.data.typed_value("BAREBOX_IMG_TYPES", d)}; do
+	for img in .elf ${@oe.data.typed_value("BAREBOX_IMG_TYPES", d)}; do
 	    first=
 	    for b in ${IMGBASE}; do
-		test -n "$first" || first=${BAREBOX_DEPLOY_NAME}-$b-${PV}-${PR}
-		s=${B}/images/barebox-$b$img
-                t=${BAREBOX_DEPLOY_NAME}-$b-${PV}-${PR}$img
-		l=${BAREBOX_DEPLOY_NAME}-$b$img
+		src_b=${b%%:*}
+		tgt_b=${b##${src_b}:}
+
+		test -n "$first" || first=${BAREBOX_DEPLOY_NAME}-$tgt_b-${PV}-${PR}
+
+		case $img in
+		.elf)
+			s=${B}/barebox
+			;;
+		*)
+			s=${B}/images/barebox-$src_b$img
+			;;
+		esac
+
+                t=${BAREBOX_DEPLOY_NAME}-$tgt_b-${PV}-${PR}$img
+		l=${BAREBOX_DEPLOY_NAME}-$tgt_b$img
 
 		install -p -m 0644 "$s" "$1/$t"
 		ln -sf "$t" "$1/$l"
