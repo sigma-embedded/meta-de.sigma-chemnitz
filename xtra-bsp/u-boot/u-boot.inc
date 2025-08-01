@@ -10,7 +10,6 @@ SRC_URI = "\
 "
 SRCREV = "${UBOOT_REVISION}"
 
-S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
 CROSS_COMPILE = ""

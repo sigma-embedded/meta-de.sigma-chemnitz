@@ -6,7 +6,6 @@ HOMEPAGE = "https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-registe
 SRC_URI = "git+https://gitlab-ext.sigma-chemnitz.de/elito/misc/elito-decode-registers.git;branch=master"
 SRCREV  = "5bd911466a57699efaeb2fdbb2c666f1d0324484"
 
-S = "${WORKDIR}/git"
 #B = "${WORKDIR}/build"
 
 _PYTHON3 = "/usr/bin/env python3"

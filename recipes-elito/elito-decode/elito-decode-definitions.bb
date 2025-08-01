@@ -8,7 +8,6 @@ SRCREV  = "2cf739938d8978cac0087a1ec8f7ba8ee95c8dea"
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
 _OEMAKE_DECODERS = "\

@@ -10,8 +10,6 @@ SRCREV = "97a50b57930743aaa3e2ba3e1a41e9d93ce07f43"
 
 inherit autotools
 
-S = "${WORKDIR}/git"
-
 EXTRA_OECONF = "\
     --enable-mdio \
 "

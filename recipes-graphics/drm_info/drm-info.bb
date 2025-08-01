@@ -10,8 +10,6 @@ SRCREV = "b89557d57edd9bb43894e5917c11ac92fdafcc50"
 
 PV = "2.6.0"
 
-S = "${WORKDIR}/git"
-
 DEPENDS += "json-c libdrm pciutils cmake-native"
 
 inherit meson pkgconfig

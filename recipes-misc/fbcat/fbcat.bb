@@ -10,7 +10,6 @@ SRC_URI = "\
 
 SRCREV = "b781b05d2dd12fd2a35705c0fc6cb3667fddee35"
 
-S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
 EXTRA_OEMAKE = "\

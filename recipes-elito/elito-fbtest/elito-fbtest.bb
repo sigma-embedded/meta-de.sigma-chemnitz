@@ -6,7 +6,6 @@ PV = "0.4.1+git${SRCPV}"
 
 SRC_URI		=  "${ELITO_PUBLIC_GIT_REPO}/fbtest.git;branch=master"
 SRCREV		=  "14963f67997f5b01d258acdfa2b6c9d6e3fcba13"
-S		=  "${WORKDIR}/git"
 
 do_compile() {
 	oe_runmake -e

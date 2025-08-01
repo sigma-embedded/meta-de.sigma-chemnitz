@@ -22,8 +22,6 @@ DEPENDS += "pkgconfig-native"
 inherit kernel
 inherit elito-kconfig
 
-S = "${WORKDIR}/git"
-
 kernel_do_compile[vardepsexclude] += "REPRODUCIBLE_TIMESTAMP_ROOTFS"
 
 kernel_deploy_dot_config() {

@@ -11,7 +11,6 @@ SRC_URI = "\
 "
 SRCREV = "${BAREBOX_REVISION}"
 
-S = "${WORKDIR}/git"
 B = "${WORKDIR}/build"
 
 DEPENDS += "lzop-native coreutils-native bison-native"
