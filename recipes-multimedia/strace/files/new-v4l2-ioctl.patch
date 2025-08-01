@@ -1,124 +1,31 @@
 Upstream-Status: Pending
 
-Index: strace-5.16/src/v4l2.c
+Index: strace-6.15/src/v4l2.c
 ===================================================================
---- strace-5.16.orig/src/v4l2.c
-+++ strace-5.16/src/v4l2.c
-@@ -11,8 +11,11 @@
- #include "defs.h"
- 
- #include DEF_MPERS_TYPE(kernel_v4l2_buffer_t)
-+#include DEF_MPERS_TYPE(kernel_v4l2_buffer_time32_t)
+--- strace-6.15.orig/src/v4l2.c
++++ strace-6.15/src/v4l2.c
+@@ -14,6 +14,7 @@
+ #include DEF_MPERS_TYPE(kernel_v4l2_buffer_time32_t)
  #include DEF_MPERS_TYPE(kernel_v4l2_event_t)
  #include DEF_MPERS_TYPE(kernel_v4l2_timeval_t)
-+#include DEF_MPERS_TYPE(kernel_v4l2_old_timeval32_t)
 +#include DEF_MPERS_TYPE(kernel_v4l2_exportbuffer_t)
  #include DEF_MPERS_TYPE(struct_v4l2_clip)
  #include DEF_MPERS_TYPE(struct_v4l2_create_buffers)
  #include DEF_MPERS_TYPE(struct_v4l2_ext_control)
-@@ -542,6 +545,29 @@ print_v4l2_timeval(const MPERS_PTR_ARG(k
- 		print_v4l2_timeval(&((where_).field_));	\
- 	} while (0)
- 
-+
-+static void
-+print_v4l2_old_timeval32(const MPERS_PTR_ARG(kernel_v4l2_old_timeval32_t *) const arg)
-+{
-+	const kernel_v4l2_old_timeval32_t *const t = arg;
-+	kernel_old_timeval_t tv;
-+
-+	if (sizeof(tv.tv_sec) == sizeof(t->tv_sec) &&
-+	    sizeof(tv.tv_usec) == sizeof(t->tv_usec)) {
-+		print_struct_timeval(t);
-+	} else {
-+		tv.tv_sec = sign_extend_unsigned_to_ll(t->tv_sec);
-+		tv.tv_usec = zero_extend_signed_to_ull(t->tv_usec);
-+		print_struct_timeval(&tv);
-+	}
-+}
-+
-+#define PRINT_FIELD_V4L2_OLD_TIMEVAL32(where_, field_)	\
-+	do {						\
-+		tprints_field_name(#field_);		\
-+		print_v4l2_old_timeval32(&((where_).field_));	\
-+	} while (0)
-+
- static int
- print_v4l2_buffer(struct tcb *const tcp, const unsigned int code,
- 		  const kernel_ulong_t arg)
-@@ -587,7 +613,8 @@ print_v4l2_buffer(struct tcb *const tcp,
- 		PRINT_FIELD_U(b, bytesused);
+@@ -583,7 +584,8 @@ print_v4l2_buffer_contents(struct tcb *c
+ 	PRINT_FIELD_U(*b, bytesused);
+ 	tprint_struct_next();
+ 	PRINT_FIELD_V4L2_BUFFER_FLAGS(*b, flags);
+-	if (code == VIDIOC_DQBUF) {
++	if ((code == VIDIOC_DQBUF && b->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) ||
++	    (code == VIDIOC_QBUF  && b->type == V4L2_BUF_TYPE_VIDEO_OUTPUT)) {
  		tprint_struct_next();
- 		PRINT_FIELD_V4L2_BUFFER_FLAGS(b, flags);
--		if (code == VIDIOC_DQBUF) {
-+		if ((code == VIDIOC_DQBUF && b.type == V4L2_BUF_TYPE_VIDEO_CAPTURE) ||
-+		    (code == VIDIOC_QBUF  && b.type == V4L2_BUF_TYPE_VIDEO_OUTPUT)) {
- 			tprint_struct_next();
- 			PRINT_FIELD_V4L2_TIMEVAL(b, timestamp);
- 		}
-@@ -601,6 +628,111 @@ print_v4l2_buffer(struct tcb *const tcp,
- }
+ 		PRINT_FIELD_V4L2_TIMEVAL(*b, timestamp);
+ 	}
+@@ -681,6 +683,52 @@ print_v4l2_buffer_time32(struct tcb *con
+ #endif
  
  static int
-+print_v4l2_buffer_time32(struct tcb *const tcp, const unsigned int code,
-+			 const kernel_ulong_t arg)
-+{
-+	kernel_v4l2_buffer_time32_t b;
-+
-+	if (entering(tcp)) {
-+		tprint_arg_next();
-+		if (umove_or_printaddr(tcp, arg, &b))
-+			return RVAL_IOCTL_DECODED;
-+
-+		tprint_struct_begin();
-+		PRINT_FIELD_XVAL(b, type, v4l2_buf_types,
-+				 "V4L2_BUF_TYPE_???");
-+		if (code != VIDIOC_DQBUF_TIME32) {
-+			tprint_struct_next();
-+			PRINT_FIELD_U(b, index);
-+		}
-+
-+		return 0;
-+	}
-+
-+	if (!syserror(tcp) && !umove(tcp, arg, &b)) {
-+		if (code == VIDIOC_DQBUF_TIME32) {
-+			tprint_struct_next();
-+			PRINT_FIELD_U(b, index);
-+		}
-+		tprint_struct_next();
-+		PRINT_FIELD_XVAL(b, memory, v4l2_memories,
-+				 "V4L2_MEMORY_???");
-+
-+		if (b.memory == V4L2_MEMORY_MMAP) {
-+			tprint_struct_next();
-+			PRINT_FIELD_X(b, m.offset);
-+		} else if (b.memory == V4L2_MEMORY_USERPTR) {
-+			tprint_struct_next();
-+			PRINT_FIELD_PTR(b, m.userptr);
-+		}
-+
-+		tprint_struct_next();
-+		PRINT_FIELD_U(b, length);
-+		tprint_struct_next();
-+		PRINT_FIELD_U(b, bytesused);
-+		tprint_struct_next();
-+		PRINT_FIELD_V4L2_BUFFER_FLAGS(b, flags);
-+		if ((code == VIDIOC_DQBUF_TIME32 && b.type == V4L2_BUF_TYPE_VIDEO_CAPTURE) ||
-+		    (code == VIDIOC_QBUF_TIME32  && b.type == V4L2_BUF_TYPE_VIDEO_OUTPUT)) {
-+			tprint_struct_next();
-+			PRINT_FIELD_V4L2_OLD_TIMEVAL32(b, timestamp);
-+		}
-+		tprint_struct_next();
-+		tprint_more_data_follows();
-+	}
-+
-+	tprint_struct_end();
-+
-+	return RVAL_IOCTL_DECODED;
-+}
-+
-+static int
 +print_v4l2_expbuf(struct tcb *const tcp, const unsigned int code,
 +		  const kernel_ulong_t arg)
 +{
@@ -168,82 +75,11 @@ Index: strace-5.16/src/v4l2.c
  print_v4l2_framebuffer(struct tcb *const tcp, const kernel_ulong_t arg)
  {
  	struct_v4l2_framebuffer b;
-@@ -1416,6 +1548,9 @@ MPERS_PRINTER_DECL(int, v4l2_ioctl, stru
- 	case VIDIOC_DQBUF: /* RW */
- 		return print_v4l2_buffer(tcp, code, arg);
- 
-+	case VIDIOC_EXPBUF: /* RW */
-+		return print_v4l2_expbuf(tcp, code, arg);
-+
- 	case VIDIOC_G_FBUF: /* R */
- 		if (entering(tcp))
- 			return 0;
-@@ -1492,6 +1627,20 @@ MPERS_PRINTER_DECL(int, v4l2_ioctl, stru
- 		return print_v4l2_create_buffers(tcp, arg);
- 
- 	default:
-+		/* fallthrough */
-+		;
-+	}
-+
-+	/* we can not place this code in the previous switch because these
-+	 * ioctl might be identical to their non-_TIME32 counterpart (e.g. on
-+	 * 64 bit platforms) */
-+	switch (code) {
-+	case VIDIOC_QUERYBUF_TIME32: /* RW */
-+	case VIDIOC_QBUF_TIME32: /* RW */
-+	case VIDIOC_DQBUF_TIME32: /* RW */
-+		return print_v4l2_buffer_time32(tcp, code, arg);
-+
-+	default:
- 		return RVAL_DECODED;
- 	}
- 
-Index: strace-5.16/src/kernel_v4l2_types.h
+Index: strace-6.15/src/kernel_v4l2_types.h
 ===================================================================
---- strace-5.16.orig/src/kernel_v4l2_types.h
-+++ strace-5.16/src/kernel_v4l2_types.h
-@@ -22,6 +22,8 @@ typedef struct {
- typedef kernel_timeval64_t kernel_v4l2_timeval_t;
- # endif
- 
-+typedef kernel_old_timeval_t kernel_v4l2_old_timeval32_t;
-+
- typedef struct {
- 	uint32_t			index;
- 	uint32_t			type;
-@@ -47,6 +49,30 @@ typedef struct {
- } kernel_v4l2_buffer_t;
- 
- typedef struct {
-+	uint32_t			index;
-+	uint32_t			type;
-+	uint32_t			bytesused;
-+	uint32_t			flags;
-+	uint32_t			field;
-+	kernel_old_timeval_t		timestamp;
-+	struct v4l2_timecode		timecode;
-+	uint32_t			sequence;
-+	uint32_t			memory;
-+	union {
-+		uint32_t		offset;
-+		unsigned long		userptr;
-+		struct v4l2_plane	*planes;
-+		int32_t			fd;
-+	} m;
-+	uint32_t			length;
-+	uint32_t			reserved2;
-+	union {
-+		int32_t			request_fd;
-+		uint32_t		reserved;
-+	};
-+} kernel_v4l2_buffer_time32_t;
-+
-+typedef struct {
- 	uint32_t				type;
- 	union {
- 		uint64_t			data[8];
-@@ -58,6 +84,15 @@ typedef struct {
+--- strace-6.15.orig/src/kernel_v4l2_types.h
++++ strace-6.15/src/kernel_v4l2_types.h
+@@ -101,6 +127,15 @@ typedef struct {
  	uint32_t				reserved[8];
  } kernel_v4l2_event_t;
  
@@ -259,22 +95,3 @@ Index: strace-5.16/src/kernel_v4l2_types.h
  /* Removed by Linux kernel commit v3.6-rc1~28^2~240.  */
  # define V4L2_BUF_FLAG_INPUT	0x0200
  
-@@ -85,6 +120,18 @@ typedef struct {
- # undef VIDIOC_PREPARE_BUF
- # define VIDIOC_PREPARE_BUF	_IOWR('V',  93, kernel_v4l2_buffer_t)
- 
-+# undef VIDIOC_QUERYBUF_TIME32
-+# define VIDIOC_QUERYBUF_TIME32	_IOWR('V',  9, kernel_v4l2_buffer_time32_t)
-+
-+# undef VIDIOC_QBUF_TIME32
-+# define VIDIOC_QBUF_TIME32	_IOWR('V', 15, kernel_v4l2_buffer_time32_t)
-+
-+# undef VIDIOC_DQBUF_TIME32
-+# define VIDIOC_DQBUF_TIME32	_IOWR('V', 17, kernel_v4l2_buffer_time32_t)
-+
-+# undef VIDIOC_PREPARE_BUF_TIME32
-+# define VIDIOC_PREPARE_BUF_TIME32 _IOWR('V', 93, kernel_v4l2_buffer_time32_t)
-+
- /*
-  * Constants based on struct v4l2_event are unreliable
-  * as the latter uses struct timespec.
