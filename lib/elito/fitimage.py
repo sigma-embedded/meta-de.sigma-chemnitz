@@ -302,7 +302,7 @@ class FitImage(OfNode):
                             .set_inputfile(k))
 
         for d in dtbs + overlays:
-            (hw_id, hw_desc) = FitImage.get_hwid(d, id_attr, desc_attr) or (0, d)
+            (hw_id, hw_desc) = FitImage.get_hwid(d, id_attr, desc_attr) or (0, os.path.basename(d))
             part = (FitPart("fdt", signature, hw_id)
                     .set_type("flat_dt")
                     .set_compression("none")
