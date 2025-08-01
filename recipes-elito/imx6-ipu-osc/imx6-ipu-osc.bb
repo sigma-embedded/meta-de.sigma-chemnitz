@@ -9,6 +9,6 @@ EXTRA_OEMAKE = "-f ${S}/Makefile VPATH=${S} -e"
 
 COMPATIBLE_MACHINE = "mx6q|mx6dl|mx6d"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 inherit autotools
