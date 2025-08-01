@@ -5,7 +5,7 @@ PROVIDES = "virtual/bootloader"
 
 BAREBOX_REVISION ??= "${SRCREV_barebox_${BASE_PV}}"
 
-BAREBOX_DEFCONFIG ??= "${WORKDIR}/defconfig"
+BAREBOX_DEFCONFIG ??= "${UNPACKDIR}/defconfig"
 KCONFIG_DEFCONFIG = "${BAREBOX_DEFCONFIG}"
 
 BAREBOX_DEPLOY_NAME ??= "barebox"
