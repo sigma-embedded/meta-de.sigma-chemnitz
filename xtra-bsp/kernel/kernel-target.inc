@@ -39,3 +39,18 @@ kernel_deploy_dot_config() {
 do_deploy:append() {
 	kernel_deploy_dot_config
 }
+
+## HACK: kernel.bbclass is broken for non-poky kernels; sources are
+## expected to be in STAGING_KERNEL_DIR and with preventing the manual
+## setup of 'S' in recent OE versions, this can not be triggered anymore
+##
+## Simulate ${S} != ${STAGING_KERNEL_DIR} behavior and the following
+## symlink operations by setting S temporarily to the actual location.
+##
+## NOTE: kernel-yocto has a do_kernel_checkout() task which does the
+## moving / symlink
+do_symlink_kernsrc:prepend () {
+    d = d.createCopy()
+    s = d.expand("${UNPACKDIR}/${BB_GIT_DEFAULT_DESTSUFFIX}")
+    d.setVar('S', s)
+}
