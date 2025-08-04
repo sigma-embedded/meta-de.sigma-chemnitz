@@ -20,14 +20,14 @@ kernel_generate_dynamic_cfg() {
 do_unpack[postfuncs] += "kernel_generate_dynamic_cfg"
 
 kernel_do_configure() {
-	touch ${B}/.scmversion ${S}/.scmversion
+	touch .scmversion ${S}/.scmversion
 
-	rm -f ${B}/.config
+	rm -f .config
 
 	touch .empty.cfg
 
-	${S}/scripts/kconfig/merge_config.sh -m -O ${B} \
 		"${KCONFIG_DEFCONFIG}" .empty.cfg ${CFG_SRC}
+	${S}/scripts/kconfig/merge_config.sh -m -O "$(pwd)" \
 
 	${KERNEL_CONFIG_COMMAND}
 }
@@ -47,11 +47,13 @@ do_kconfig_savedefconfig() {
 }
 addtask do_kconfig_savedefconfig after do_configure
 
+do_kconfig_emit_buildhistory[dirs] = "${B}"
 do_kconfig_emit_buildhistory() {
+	pn=${1:-${PN}}
 	if "${@bb.utils.contains_any('INHERIT', 'buildhistory buildhistory-ext', 'true', 'false', d)}" && \
            "${@bb.utils.contains('BUILDHISTORY_FEATURES', 'image', 'true', 'false', d)}"; then
-		install -D -p -m 0644 ${B}/.config   ${BUILDHISTORY_DIR_IMAGE}/${PN}-config
-		install -D -p -m 0644 ${B}/defconfig ${BUILDHISTORY_DIR_IMAGE}/${PN}-defconfig
+		install -D -p -m 0644 .config   ${BUILDHISTORY_DIR_IMAGE}/$pn-config
+		install -D -p -m 0644 defconfig ${BUILDHISTORY_DIR_IMAGE}/$pn-defconfig
 	fi
 }
 addtask do_kconfig_emit_buildhistory after do_kconfig_savedefconfig before do_build do_deploy
