@@ -20,14 +20,15 @@ kernel_generate_dynamic_cfg() {
 do_unpack[postfuncs] += "kernel_generate_dynamic_cfg"
 
 kernel_do_configure() {
+	set -- ${CFG_SRC} "$@"
 	touch .scmversion ${S}/.scmversion
 
 	rm -f .config
 
 	touch .empty.cfg
 
-		"${KCONFIG_DEFCONFIG}" .empty.cfg ${CFG_SRC}
 	${S}/scripts/kconfig/merge_config.sh -m -O "$(pwd)" \
+		"${KCONFIG_DEFCONFIG}" .empty.cfg "$@"
 
 	${KERNEL_CONFIG_COMMAND}
 }
