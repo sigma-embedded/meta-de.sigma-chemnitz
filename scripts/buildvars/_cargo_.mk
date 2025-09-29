@@ -58,7 +58,7 @@ cargo_local_conf = $(eval $(call _cargo_local_conf,$1))
 
 define _cargo_local_conf
 ORIG_CARGO_HOME    := $${BUILDVAR_CARGO_HOME}
-ORIG_CARGO_CONFIG  ?= $$(firstword $$(wildcard $${ORIG_CARGO_HOME}/config.toml  $${ORIG_CARGO_HOME}/config))
+ORIG_CARGO_CONFIG  ?= $$(wildcard $${ORIG_CARGO_HOME}/config.toml)
 BUILDVAR_CARGO_HOME = $${CARGO_TARGET_DIR}/.home
 
 _SED_CARGO_LOCAL_CONF = sed \
@@ -66,11 +66,12 @@ _SED_CARGO_LOCAL_CONF = sed \
 
 $${BUILDVAR_CARGO_HOME}/config.toml: | $${BUILDVAR_CARGO_HOME}/.dirstamp
 $${BUILDVAR_CARGO_HOME}/config.toml: $${ORIG_CARGO_CONFIG} $1
-	rm -f $$@
+	rm -f $$@ $$@.tmp
 	{ \
-		$${_SED_CARGO_LOCAL_CONF} < '$$(filter %/config,$$^)' && \
+		$${_SED_CARGO_LOCAL_CONF} < '$$(filter %/config.toml,$$^)' && \
 		cat '$$(filter %$1,$$^)'; \
-	} > '$$@'
+	} > '$$@'.tmp
+	mv '$$@'.tmp '$$@'
 
 .SECONDARY: $${BUILDVAR_CARGO_HOME}/config.toml
 
