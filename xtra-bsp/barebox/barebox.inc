@@ -13,7 +13,7 @@ SRCREV = "${BAREBOX_REVISION}"
 
 B = "${WORKDIR}/build"
 
-DEPENDS += "lzop-native coreutils-native bison-native"
+DEPENDS += "lzop-native lz4-native coreutils-native bison-native"
 
 KERNEL_CONFIG_COMMAND ?= "oe_runmake_call -C ${S} CC='${KERNEL_CC}' O=${B} olddefconfig"
 
