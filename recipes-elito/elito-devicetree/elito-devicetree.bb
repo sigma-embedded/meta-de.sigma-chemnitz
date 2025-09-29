@@ -16,10 +16,7 @@ EXTRA_OEMAKE = "\
   KERNEL_DTREE_DIR=${KERNEL_DTREE_DIR} \
 "
 
-EXTRA_OEMAKE:append:mx28-generic-bsp = " SOC_FAMILY=mx28"
-
 MACH_DEPENDS = ""
-MACH_DEPENDS:mx28-generic-bsp = "mx28-pins"
 
 DEPENDS += "dtc-native ${MACH_DEPENDS} virtual/cross-cc"
 DEPENDS += "elito-devicetree-tools-cross-${TARGET_ARCH}"

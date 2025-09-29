@@ -28,19 +28,16 @@ S  = "${UNPACKDIR}"
 
 pkgdatadir = "${datadir}/${BPN}"
 
-do_configure[vardeps] += "SOC_FAMILY"
 do_configure() {
     rm -f build-dtree
     sed \
 	-e 's!@STAGINGDIR@!${STAGING_DIR_TARGET}!g' \
 	-e 's!@MACHINCDIR@!${MACHINCDIR}!g' \
 	-e 's!@MACHDATADIR@!${MACHDATADIR}!g' \
-	-e 's!@TFTPBOOT_DIR@!${TFTPBOOT_DIR}!g' \
 	-e 's!@PROJECT_TOPDIR@!${PROJECT_TOPDIR}!g' \
 	-e 's!@KERNEL_DIR@!${STAGING_KERNEL_DIR}!g' \
 	-e 's!@KERNEL_DTREE_DIR@!${KERNEL_DTREE_DIR}!g' \
 	-e 's!@PKGDATA_DIR@!${pkgdatadir}!g' \
-	-e 's!@SOC@!${@(d.getVar("SOC_FAMILY", True) or "").split(":")[0]}!g' \
 	${S}/build-dtree > build-dtree
 
     touch -r ${S}/build-dtree build-dtree || :

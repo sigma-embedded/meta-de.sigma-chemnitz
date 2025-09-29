@@ -8,6 +8,9 @@ VPATH = ${abs_top_srcdir}
 
 KERNEL_DIR ?= =/usr/src/kernel
 
+DESTDIR ?=
+pkgdatadir ?=
+
 AM_CPP_DEPGENFLAGS = \
   -MD -MF ${@D}/.${@F}.d -MT '$@'
 

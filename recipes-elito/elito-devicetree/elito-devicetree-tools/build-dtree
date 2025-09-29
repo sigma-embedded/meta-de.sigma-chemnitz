@@ -3,22 +3,17 @@
 : ${STAGINGDIR:="@STAGINGDIR@"}
 : ${MACHINCDIR:="@MACHINCDIR@"}
 : ${MACHDATADIR:="@MACHDATADIR@"}
-: ${TFTPBOOT_DIR:="@TFTPBOOT_DIR@"}
 : ${PROJECT_TOPDIR:="@PROJECT_TOPDIR@"}
 : ${KERNEL_DIR:="@KERNEL_DIR@"}
 : ${KERNEL_DTREE_DIR:="@KERNEL_DTREE_DIR@"}
 : ${PKGDATA_DIR="@PKGDATA_DIR@"}
-: ${SOC:="@SOC@"}
 : ${MAKE:=make}
 : ${DTC_CPPFLAGS:=}
 : ${srcdir:=.}
 
 eval set -- `getopt -o 't:o:Pp:s' --long tftp:outdir:pins:nopins:pinflags:silent,overlay -- "$@"`
 
-arg_tftp=
 arg_out=.dtb
-arg_pins=
-arg_pinflags=
 arg_makeflags=( --no-print-directory )
 is_overlay=false
 
@@ -26,12 +21,12 @@ while true; do
     a=$1
     shift
     case $a in
-      -t|--tftp)	arg_tftp=$1; shift;;
+      -t|--tftp)	echo "DEPRECATED: '--tftp' is not supported anymore" >&2; shift;;
       -o|--outdir)	arg_out=$1; shift;;
-      -p|--pins)	arg_pins=$1; shift;;
+      -p|--pins)	echo "DEPRECATED: '--pins' is not supported anymore" >&2; shift;;
       -P|--nopins)	echo "WARNING: -P|--nopins are not supported anymore and will be removed in later versions" >&2;;
       -s|--silent)	arg_makeflags+=( -s );;
-      --pinflags)	arg_pinflags=$1; shift;;
+      --pinflags)	echo "DEPRECATED: '--pinflags' is not supported anymore" >&2; shift;;
       --overlay)	is_overlay=true;;
       --)		break;;
       *)		echo "internal error" >&2; exit 1;;
@@ -60,39 +55,6 @@ mx6_split_variants() {
     eval ${dstvar}_module+=$1
     eval ${dstvar}_soc+=$2
     eval ${dstvar}_memory+=$3
-}
-
-doit_mx6() {
-  local dts=$1
-  local variant_module variant_soc variant_memory
-  local pinfn
-
-  mx6_split_variants variant "$2"
-
-  case $variant_soc in
-    mx6s)	pinfn=mx6dl ;;
-    *)		pinfn=$variant_soc ;;
-  esac
-
-  local pinflags=(
-    VPATH="`pwd`:${srcdir}:${KERNEL_DTREE_DIR}"
-    VARIANTS="$variant_module"
-    SOC_DTREE_PINS_"${variant_module}=i${pinfn}-pinfunc.h"
-  )
-
-  eval pinflags+="( $arg_pinflags )"
-
-  local dtbflags=(
-    VPATH="`pwd`:${srcdir}:$MACHINCDIR"
-    VARIANTS="${dts%%.dts}"
-    MACHINE_INCDIR="${MACHINCDIR##$STAGINGDIR}"
-    KERNEL_DIR="${KERNEL_DIR}"
-    KERNEL_DTREE_DIR="${KERNEL_DTREE_DIR}"
-  )
-
-  local _make=( ${MAKE} "${arg_makeflags[@]}" -C "$arg_out" )
-
-  "${_make[@]}" -f "${PKGDATA_DIR}/devicetree.mk" "${dtbflags[@]}"
 }
 
 doit_generic() {
@@ -125,7 +87,7 @@ fi
 export DTC_CPPFLAGS
 _extend_dtc_cppflags "`pwd`" "${DTC_INC_PATH}"
 
-eval "doit_$SOC" "$@"
+doit_generic "$@"
 
 base=${1%%.dts}
 fname=${base##*/}
@@ -133,6 +95,3 @@ fname=${base##*/}
 rm -f "$arg_out/$fname-rev.dts"
 dtc -I dtb -O dts -q --sort -o "$arg_out/$fname-rev.dts" "$arg_out/$base.${DTB_SUFFIX}"
 chmod a-w "$arg_out/$fname-rev.dts"
-
-test -z "$arg_tftp" || \
-    cat "$arg_out/$base.${DTB_SUFFIX}" > "$TFTPBOOT_DIR/$arg_tftp"
