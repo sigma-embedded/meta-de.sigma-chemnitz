@@ -17,6 +17,10 @@ TOOL_TARGETS = "bareboxcrc32 bareboxenv kwboot imx-usb-loader omap3-usb-loader o
 
 DEPENDS += "libusb1 openssl"
 
+EXTRA_CFG = ""
+EXTRA_CFG:append:x86-64 = " CONFIG_64BIT=y"
+EXTRA_CFG:append:aarch64 = " CONFIG_64BIT=y"
+
 do_configure[vardeps] += "TOOL_TARGETS"
 do_configure() {
         ##
@@ -27,7 +31,10 @@ do_configure() {
 }
 
 do_compile() {
-	oe_runmake scripts/
+	## set 'pbl-y=' to override arch/x86/um/Makefile actions; we
+	## want to build the tools only and build of arch files will
+	## fail
+	oe_runmake pbl-y= scripts/
 }
 
 do_install[vardeps] += "TOOL_TARGETS TOOL_DIR"
@@ -43,6 +50,7 @@ def create_config(d):
         except Exception as e:
             bb.fatal("failed to create config for %s TOOL_TARGET: %s" % (t, e))
             raise e
+    cfg.extend(d.getVar('EXTRA_CFG').split())
     cfg.append('')
     return '\n'.join(cfg)
 
