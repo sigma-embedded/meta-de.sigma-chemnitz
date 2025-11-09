@@ -12,3 +12,6 @@ COMPATIBLE_MACHINE = "mx6q|mx6dl|mx6d"
 S = "${WORKDIR}/git"
 
 inherit autotools
+
+do_configure() {
+}
