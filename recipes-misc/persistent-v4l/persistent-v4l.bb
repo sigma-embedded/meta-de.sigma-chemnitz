@@ -7,9 +7,6 @@ SRC_URI = "\
 "
 
 do_install() {
-	install -D -p -m 0644 ${WORKDIR}/persistent-v4l.rules \
-		${D}${nonarch_base_libdir}/udev/rules.d/61-persistent-v4l.rules
-
 	d='${D}${nonarch_base_libdir}/udev/rules.d'
 	install -D -p -m 0644 ${WORKDIR}/persistent-v4l.rules   $d/61-persistent-v4l.rules
 	install -D -p -m 0644 ${WORKDIR}/persistent-media.rules $d/61-persistent-media.rules
