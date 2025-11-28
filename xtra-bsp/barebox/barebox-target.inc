@@ -45,7 +45,7 @@ _run_install() {
                 t=${BAREBOX_DEPLOY_NAME}-$tgt_b-${PV}-${PR}$img
 		l=${BAREBOX_DEPLOY_NAME}-$tgt_b$img
 
-		install -p -m 0644 "$s" "$1/$t"
+		install -D -p -m 0644 "$s" "$1/$t"
 		ln -sf "$t" "$1/$l"
 	    done
 
