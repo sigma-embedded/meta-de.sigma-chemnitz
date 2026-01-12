@@ -1,7 +1,7 @@
 # --*- bitbake -*--
 DESCRIPTION = "The barebox (formerly U-Boot v2) bootloader"
 
-BAREBOX_BASE_URI ??= "git+https://git.pengutronix.de/git/barebox.git"
+BAREBOX_BASE_URI ??= "git+https://github.com/barebox/barebox.git"
 BAREBOX_REFSPEC  ??= ";branch=v${BASE_PV}.0;nobranch=1"
 BAREBOX_URI      ??= "${BAREBOX_BASE_URI}${BAREBOX_REFSPEC}"
 
