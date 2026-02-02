@@ -53,6 +53,9 @@ cargo.%:		FORCE
 .cargo.test:		FORCE
 	${CARGO} test ${CARGO_BUILD_FLAGS}
 
+${BUILDVAR_CARGO_HOME}/.dirstamp:
+	mkdir -p '${@D}'
+	touch '$@'
 
 ## $(call cargo_local_conf,<cargo-local.conf>)
 cargo_local_conf = $(eval $(call _cargo_local_conf,$1))
