@@ -4,8 +4,8 @@ BASE_PV = "6.6"
 
 require kernel-common.inc
 
-# 6.6.119
-SRCREV_kernel_vanilla_6.6 ?= "5fa4793a2d2d70ad08b85387b41020f1fcc2d19e"
-SRCREV_kernel_uapihdr_6.6 ?= "650150cc9a3e0aacf0860a7c3f97fc103644ea7e"
+# 6.6.122
+SRCREV_kernel_vanilla_6.6 ?= "2cf6f68313dcc3c404f49fdee41bbf3c694ad75d"
+SRCREV_kernel_uapihdr_6.6 ?= "2cf6f68313dcc3c404f49fdee41bbf3c694ad75d"
 
 SRCREV_kernel_6.6         ?= "${SRCREV_kernel_vanilla_6.6}"
