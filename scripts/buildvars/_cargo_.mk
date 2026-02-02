@@ -27,6 +27,7 @@ export PKG_CONFIG_ALLOW_CROSS = 1
 
 CARGO_LOCAL_CONF ?=
 CARGO_BUILD_FLAGS = --offline --target ${BUILDVAR_RUST_HOST_SYS}
+CARGO_INSTALL_PATH ?= .
 
 all:	build
 
@@ -44,10 +45,10 @@ cargo.%:		FORCE
 	${CARGO} build --release ${CARGO_BUILD_FLAGS}
 
 .cargo.install:		FORCE
-	${CARGO} install ${CARGO_BUILD_FLAGS} --path '.' --root '${DESTDIR}/usr' --debug --force
+	${CARGO} install ${CARGO_BUILD_FLAGS} --path '${CARGO_INSTALL_PATH}' --root '${DESTDIR}/usr' --debug --force
 
 .cargo.install-release:	FORCE
-	${CARGO} install ${CARGO_BUILD_FLAGS} --path '.' --root '${DESTDIR}/usr' --force
+	${CARGO} install ${CARGO_BUILD_FLAGS} --path '${CARGO_INSTALL_PATH}' --root '${DESTDIR}/usr' --force
 
 .cargo.test:		FORCE
 	${CARGO} test ${CARGO_BUILD_FLAGS}
