@@ -27,6 +27,8 @@ BB_ENV_EXTRAWHITE +=	BB_GENERATE_MIRROR_TARBALLS BBMULTICONFIG
 
 TEMPLATECONF ?=		${META_SIGMA_DIR}/conf/templates/generic
 
+META_SIGMA_SSTATE_SERVER_DIR ?= $(patsubst %.core,%.sstate-server,${META_SIGMA_DIR})
+
 export BB_ENV_PASSTHROUGH_ADDITIONS = ${BB_ENV_EXTRAWHITE}
 unexport BB_ENV_EXTRAWHITE
 
@@ -136,7 +138,7 @@ BITBAKE_FLAGS += ${BO}
 ifeq (${NO_LATE_IMPORTS},)
 
 ###### optional SIGMA setup
--include ${META_SIGMA_DIR}/mk/sstate-server.mk
+-include ${META_SIGMA_SSTATE_SERVER_DIR}/mk/sstate-server.mk
 
 ###### internal overrides
 
