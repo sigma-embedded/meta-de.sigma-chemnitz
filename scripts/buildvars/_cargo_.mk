@@ -18,7 +18,6 @@ _vars = \
 
 $(call export_vars,${_vars},\
 	${SHELL_TARGET} \
-	cargo.build cargo.build-release cargo.install cargo.install-release cargo.test \
 	.cargo.build .cargo.build-release .cargo.install .cargo.install-release .cargo.test \
 	.cargo.cbuild .cargo.cbuild-release .cargo.cinstall .cargo.cinstall-release .cargo.ctest \
 )
@@ -40,10 +39,7 @@ CARGO_CBUILD_FLAGS += \
 	--prefix '${BUILDVAR_prefix}' \
 	--libdir='${BUILDVAR_libdir}' \
 
-all:	build
-
-build build-release install install-release test:%:	cargo.%
-	@:
+all:
 
 cargo.%:			FORCE
 	@$(if ${ORIG_MAKE},true,echo "***** ORIG_MAKE not defined *****"; exit 1)
