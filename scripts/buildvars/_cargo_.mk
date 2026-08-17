@@ -26,31 +26,36 @@ export CARGO_TARGET_DIR = ${BUILDVAR_B}/local-build
 export PKG_CONFIG_ALLOW_CROSS = 1
 
 CARGO_LOCAL_CONF ?=
-CARGO_BUILD_FLAGS = --offline --target ${BUILDVAR_RUST_HOST_SYS}
 CARGO_INSTALL_PATH ?= .
+
+CARGO_BUILD_FLAGS += \
+	--target ${BUILDVAR_RUST_HOST_SYS} \
+	--offline \
 
 all:	build
 
 build build-release install install-release test:%:	cargo.%
 	@:
 
-cargo.%:		FORCE
+cargo.%:			FORCE
 	@$(if ${ORIG_MAKE},true,echo "***** ORIG_MAKE not defined *****"; exit 1)
 	+${ORIG_MAKE} -e .$@
 
-.cargo.build:		FORCE
+### default 'build' + 'install' targets
+
+.cargo.build:			FORCE
 	${CARGO} build ${CARGO_BUILD_FLAGS}
 
-.cargo.build-release:	FORCE
+.cargo.build-release:		FORCE
 	${CARGO} build --release ${CARGO_BUILD_FLAGS}
 
-.cargo.install:		FORCE
+.cargo.install:			FORCE
 	${CARGO} install ${CARGO_BUILD_FLAGS} --path '${CARGO_INSTALL_PATH}' --root '${DESTDIR}/usr' --debug --force
 
-.cargo.install-release:	FORCE
+.cargo.install-release:		FORCE
 	${CARGO} install ${CARGO_BUILD_FLAGS} --path '${CARGO_INSTALL_PATH}' --root '${DESTDIR}/usr' --force
 
-.cargo.test:		FORCE
+.cargo.test:			FORCE
 	${CARGO} test ${CARGO_BUILD_FLAGS}
 
 ${BUILDVAR_CARGO_HOME}/.dirstamp:
@@ -77,11 +82,11 @@ $${BUILDVAR_CARGO_HOME}/config.toml: $${ORIG_CARGO_CONFIG} $1
 	} > '$$@'.tmp
 	mv '$$@'.tmp '$$@'
 
-.SECONDARY: $${BUILDVAR_CARGO_HOME}/config.toml
+.SECONDARY:		$${BUILDVAR_CARGO_HOME}/config.toml
 
 .cargo.build \
 .cargo.build-release \
 .cargo.install \
 .cargo.install-release \
-.cargo.test:	$${BUILDVAR_CARGO_HOME}/config.toml
+.cargo.test:		$${BUILDVAR_CARGO_HOME}/config.toml
 endef				# cargo_local_conf
