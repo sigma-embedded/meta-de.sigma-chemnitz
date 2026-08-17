@@ -20,6 +20,7 @@ $(call export_vars,${_vars},\
 	${SHELL_TARGET} \
 	cargo.build cargo.build-release cargo.install cargo.install-release cargo.test \
 	.cargo.build .cargo.build-release .cargo.install .cargo.install-release .cargo.test \
+	.cargo.cbuild .cargo.cbuild-release .cargo.cinstall .cargo.cinstall-release .cargo.ctest \
 )
 
 export CARGO_TARGET_DIR = ${BUILDVAR_B}/local-build
@@ -31,6 +32,13 @@ CARGO_INSTALL_PATH ?= .
 CARGO_BUILD_FLAGS += \
 	--target ${BUILDVAR_RUST_HOST_SYS} \
 	--offline \
+
+CARGO_CBUILD_FLAGS += \
+	--target '${BUILDVAR_RUST_TARGET_SYS}' \
+	--offline \
+	--destdir '${DESTDIR}' \
+	--prefix '${BUILDVAR_prefix}' \
+	--libdir='${BUILDVAR_libdir}' \
 
 all:	build
 
@@ -57,6 +65,23 @@ cargo.%:			FORCE
 
 .cargo.test:			FORCE
 	${CARGO} test ${CARGO_BUILD_FLAGS}
+
+### cargo-c 'build' + 'install' targets
+
+.cargo.cbuild:			FORCE
+	${CARGO} cbuild ${CARGO_CBUILD_FLAGS}
+
+.cargo.cbuild-release:		FORCE
+	${CARGO} build --release ${CARGO_CBUILD_FLAGS}
+
+.cargo.cinstall:		FORCE
+	${CARGO} cinstall ${CARGO_CBUILD_FLAGS}
+
+.cargo.cinstall-release:	FORCE
+	${CARGO} cinstall ${CARGO_CBUILD_FLAGS}
+
+.cargo.ctest:			FORCE
+	${CARGO} ctest ${CARGO_CBUILD_FLAGS}
 
 ${BUILDVAR_CARGO_HOME}/.dirstamp:
 	mkdir -p '${@D}'
@@ -88,5 +113,9 @@ $${BUILDVAR_CARGO_HOME}/config.toml: $${ORIG_CARGO_CONFIG} $1
 .cargo.build-release \
 .cargo.install \
 .cargo.install-release \
+.cargo.cbuild \
+.cargo.cbuild-release \
+.cargo.cinstall \
+.cargo.cinstall-release \
 .cargo.test:		$${BUILDVAR_CARGO_HOME}/config.toml
 endef				# cargo_local_conf
