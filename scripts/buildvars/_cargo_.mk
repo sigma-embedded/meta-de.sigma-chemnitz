@@ -28,6 +28,7 @@ export PKG_CONFIG_ALLOW_CROSS = 1
 
 CARGO_LOCAL_CONF ?=
 CARGO_INSTALL_PATH ?= .
+X_CARGO_LOCKFILE_PATH ?= ${CARGO_TARGET_DIR}/Cargo.lock
 
 CARGO_BUILD_FLAGS += \
 	--target ${BUILDVAR_RUST_HOST_SYS} \
@@ -99,13 +100,14 @@ BUILDVAR_CARGO_HOME = $${CARGO_TARGET_DIR}/.home
 
 _SED_CARGO_LOCAL_CONF = sed \
 	-e '/^\[patch\./,$$$$d' \
+	-e 's!@CARGO_LOCKFILE_PATH@!$${X_CARGO_LOCKFILE_PATH}!g' \
 
 $${BUILDVAR_CARGO_HOME}/config.toml: | $${BUILDVAR_CARGO_HOME}/.dirstamp
 $${BUILDVAR_CARGO_HOME}/config.toml: $${ORIG_CARGO_CONFIG} $1
 	rm -f $$@ $$@.tmp
 	{ \
 		$${_SED_CARGO_LOCAL_CONF} < '$$(filter %/config.toml,$$^)' && \
-		cat '$$(filter %$1,$$^)'; \
+		$${_SED_CARGO_LOCAL_CONF} < '$$(filter %$1,$$^)'; \
 	} > '$$@'.tmp
 	mv '$$@'.tmp '$$@'
 
