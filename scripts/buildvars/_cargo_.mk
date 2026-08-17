@@ -103,6 +103,10 @@ $${BUILDVAR_CARGO_HOME}/config.toml: $${ORIG_CARGO_CONFIG} $1
 	} > '$$@'.tmp
 	mv '$$@'.tmp '$$@'
 
+$${BUILDVAR_CARGO_HOME}/.dirstamp:
+	mkdir -p '$${@D}'
+	touch '$$@'
+
 .SECONDARY:		$${BUILDVAR_CARGO_HOME}/config.toml
 
 .cargo.build \
