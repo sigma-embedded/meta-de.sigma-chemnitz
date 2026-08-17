@@ -20,6 +20,7 @@ $(call export_vars,${_vars},\
 	${SHELL_TARGET} \
 	.cargo.build .cargo.build-release .cargo.install .cargo.install-release .cargo.test \
 	.cargo.cbuild .cargo.cbuild-release .cargo.cinstall .cargo.cinstall-release .cargo.ctest \
+	.cargo.prepare \
 )
 
 export CARGO_TARGET_DIR = ${BUILDVAR_B}/local-build
@@ -79,6 +80,11 @@ cargo.%:			FORCE
 .cargo.ctest:			FORCE
 	${CARGO} ctest ${CARGO_CBUILD_FLAGS}
 
+### misc targets
+
+.cargo.prepare:			FORCE
+	@:
+
 ${BUILDVAR_CARGO_HOME}/.dirstamp:
 	mkdir -p '${@D}'
 	touch '$@'
@@ -106,6 +112,8 @@ $${BUILDVAR_CARGO_HOME}/config.toml: $${ORIG_CARGO_CONFIG} $1
 $${BUILDVAR_CARGO_HOME}/.dirstamp:
 	mkdir -p '$${@D}'
 	touch '$$@'
+
+.cargo.prepare:		$${BUILDVAR_CARGO_HOME}/config.toml
 
 .SECONDARY:		$${BUILDVAR_CARGO_HOME}/config.toml
 
