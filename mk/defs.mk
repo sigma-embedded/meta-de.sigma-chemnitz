@@ -29,6 +29,8 @@ TEMPLATECONF ?=		${META_SIGMA_DIR}/conf/templates/generic
 
 META_SIGMA_SSTATE_SERVER_DIR ?= $(patsubst %.core,%.sstate-server,${META_SIGMA_DIR})
 
+export PYTHONPYCACHEPREFIX = ${TMPDIR}/.pycache
+
 export BB_ENV_PASSTHROUGH_ADDITIONS = ${BB_ENV_EXTRAWHITE}
 unexport BB_ENV_EXTRAWHITE
 
